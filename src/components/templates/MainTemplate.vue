@@ -60,6 +60,5 @@ export default {
     margin-left: 25px;
     width: 590px;
     height: 900px;
-    border: 1px solid #d7d7d7;
   }
 </style>
