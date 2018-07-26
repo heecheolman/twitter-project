@@ -10,8 +10,8 @@ export default {
     initTextArea() {
       const editableDiv = document.querySelector('.tweet-textarea');
       const content = editableDiv.textContent.replace(/(\s*)/g, "");
-
       const form = document.querySelector('.tweet-form');
+
       form.style.boxShadow = "none";
 
       if(content.length === 0) {

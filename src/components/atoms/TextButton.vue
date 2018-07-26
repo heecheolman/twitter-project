@@ -40,4 +40,25 @@ export default {
     box-shadow: 0 0 0 2px #fff, 0 0 0 4px #71c9f8;
     color: #fff;
   }
+
+  .button--tweet:hover {
+    background-color: #1DA1F2;
+    border-color: #1DA1F2;
+  }
+
+  .button--addtweet {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    border-color: #1DA1F2;
+    color: #1DA1F2;
+    cursor: pointer;
+    text-align: center;
+    background-color: #fff;
+  }
+  .button--addtweet:hover {
+    background-color: #E8F5FD;
+  }
 </style>
