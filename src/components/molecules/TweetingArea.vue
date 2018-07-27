@@ -1,7 +1,8 @@
 <template>
   <form action="" class="tweet-form">
     <div class="tweet-container">
-      <editable-div :class="editableDivStyle"/>
+      <!--<editable-div :class="editableDivStyle"/>-->
+      <tweet-text-area :placeholder="placeholder"/>
     </div>
     <div class="tweet-toolbar-container">
       <div class="tweet-toolbar--left">
@@ -13,7 +14,7 @@
       </div>
       <div class="tweet-toolbar--right">
         <add-tweet-button />
-        <tweet-button/>
+        <tweet-button />
       </div>
     </div>
 

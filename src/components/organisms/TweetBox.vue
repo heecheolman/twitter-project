@@ -15,6 +15,7 @@ import TweetingArea from './../molecules/TweetingArea';
 export default {
   name: 'TweetBox',
   components: {
+
     ProfileButton,
     TweetingArea,
   },
