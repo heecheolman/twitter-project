@@ -1,6 +1,6 @@
 <template>
   <div class="tweet-button-container">
-    <text-button :label="label" :class="buttonStyle"/>
+    <text-button :label="label" :class="buttonStyle" @click=""/>
   </div>
 </template>
 <script>
@@ -16,6 +16,9 @@ export default {
       label: '트윗하기',
       buttonStyle: 'button--tweet',
     };
+  },
+  methods: {
+
   },
 };
 </script>

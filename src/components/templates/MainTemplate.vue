@@ -7,6 +7,9 @@
       </div>
       <div class="timeline-container">
         <tweet-box />
+        <ol>
+          <tweet-component/>
+        </ol>
       </div>
       <div class="section">
       </div>
@@ -17,12 +20,15 @@
 <script>
 import HeaderSection from './../organisms/HeaderSection';
 import TweetBox from './../organisms/TweetBox';
+import TweetComponent from './../organisms/TweetComponent';
+
 
 export default {
   name: 'MainTemplate',
   components: {
     HeaderSection,
     TweetBox,
+    TweetComponent,
   },
 }
 </script>
@@ -60,5 +66,11 @@ export default {
     margin-left: 25px;
     width: 590px;
     height: 900px;
+  }
+
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 </style>

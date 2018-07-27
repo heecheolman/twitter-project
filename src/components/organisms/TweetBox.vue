@@ -34,7 +34,4 @@ export default {
     border: 1px solid #e6ecf0;
     background-color: #E8F5FD;
   }
-
-
-
 </style>
