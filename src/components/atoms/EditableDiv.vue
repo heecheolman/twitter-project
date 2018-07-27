@@ -1,10 +1,20 @@
 <template>
-  <div contenteditable="true" class="tweet-textarea is-show-placeholder" placeholder="무슨 일이 일어나고 있나요?" @focus="extendTextArea" @blur="initTextArea">
+  <div contenteditable="true"
+       class="tweet-textarea is-show-placeholder"
+       placeholder="무슨 일이 일어나고 있나요?"
+       @focus="extendTextArea"
+       @blur="initTextArea"
+       v-model="text">
   </div>
 </template>
 <script>
 export default {
   name: 'EditableDiv',
+  data: function() {
+    return {
+      text: '',
+    };
+  },
   methods: {
     // 폼에서 포커싱 빠졌을 시
     initTextArea() {
@@ -20,6 +30,7 @@ export default {
       } else {
         editableDiv.style.minHeight = "80px";
       }
+      console.log(this.text);
     },
 
     // 폼에 포커싱 될 때

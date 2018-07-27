@@ -8,7 +8,11 @@
       <div class="timeline-container">
         <tweet-box />
         <ol>
-          <tweet-component/>
+          <tweet-component
+            v-for="(content, index) in contentList"
+            :key="index"
+            :id="content.id"
+            :content-text="content.text" />
         </ol>
       </div>
       <div class="section">
@@ -21,7 +25,8 @@
 import HeaderSection from './../organisms/HeaderSection';
 import TweetBox from './../organisms/TweetBox';
 import TweetComponent from './../organisms/TweetComponent';
-
+import axios from 'axios';
+import Eventbus from './../../lib/Eventbus';
 
 export default {
   name: 'MainTemplate',
@@ -30,6 +35,23 @@ export default {
     TweetBox,
     TweetComponent,
   },
+  created() {
+    this.contentList = [];
+    Eventbus.$on('getTimelines', this.getTimelines);
+  },
+  data: function() {
+    return {
+      contentList: [],
+    };
+  },
+  methods: {
+    getTimelines() {
+      axios.get('/api/timelines')
+        .then((result) => {
+          this.contentList = result.data;
+        });
+    },
+  }
 }
 </script>
 

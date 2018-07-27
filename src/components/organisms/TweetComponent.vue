@@ -4,8 +4,8 @@
       :image-path="imagePath"
       :avatar-size="avatarSize" />
     <tweet-content
-      :id="content.id"
-      :content-text="content.text" />
+      :id="id"
+      :content-text="contentText" />
   </li>
 </template>
 
@@ -16,6 +16,14 @@ import TweetContent from './../molecules/TweetContent';
 
 export default {
   name: 'TweetComponent',
+  props: {
+    id: {
+      type: String,
+    },
+    contentText: {
+      type: String,
+    },
+  },
   components: {
     ProfileButton,
     TweetContent,
@@ -24,11 +32,6 @@ export default {
     return {
       imagePath: ProfileImage,
       avatarSize: 'avatar--size48',
-      content: {
-        // temp
-        id: '김희철',
-        text: 'awefewafewfwefewfwf',
-      },
     };
   },
 };
