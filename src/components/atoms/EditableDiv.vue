@@ -21,13 +21,11 @@ export default {
         editableDiv.style.minHeight = "80px";
       }
     },
+
     // 폼에 포커싱 될 때
     extendTextArea() {
       const editableDiv = document.querySelector('.tweet-textarea');
-      const form = document.querySelector('.tweet-form');
-
       editableDiv.style.minHeight = "80px";
-      form.style.boxShadow = "0 0 0 1px #A4D9F9";
     }
   }
 };

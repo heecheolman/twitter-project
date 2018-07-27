@@ -19,6 +19,10 @@ export default {
 </script>
 
 <style scoped>
+  svg {
+    width: inherit;
+    height: inherit;
+  }
   .svg--search {
     width: 14px;
     height: 14px;
@@ -32,4 +36,16 @@ export default {
     cursor: pointer;
   }
 
+  .svg--reply {
+    width: 18px;
+    height: 18px;
+    fill: #657786;
+  }
+  .svg--reply:hover {
+    fill: #1da1fe
+  }
 </style>
+
+
+
+

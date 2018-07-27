@@ -82,13 +82,11 @@ export default {
     margin-top: 10px;
     width: 100%;
     height: 37px;
-    border: 1px solid #d7d7d7;
   }
 
   .tweet-toolbar--left {
     width: 208px;
     height: 100%;
-    /*border: 1px solid #d7d7d7;*/
   }
   .tweet-toolbar--right {
     margin-left: auto;
@@ -97,6 +95,5 @@ export default {
     justify-content: space-around;
     width: 128px;
     height: 100%;
-    border: 1px solid #d7d7d7;
   }
 </style>
