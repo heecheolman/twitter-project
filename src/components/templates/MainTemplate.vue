@@ -48,6 +48,7 @@ export default {
     getTimelines() {
       axios.get('/api/timelines')
         .then((result) => {
+          console.log(result.data);
           this.contentList = result.data;
         });
     },

@@ -96,7 +96,7 @@ export default {
   }
   .tweet-body {
     width: 100%;
-    height: auto;
+    /*height: auto;*/
   }
   .tweet-action {
     padding-top: 1px;

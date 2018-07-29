@@ -7,8 +7,6 @@
       v-model="content"
       @blur="initTextArea"
       @keydown="autoSizing">
-      <!-- ** content ** -->
-
     </textarea>
   </div>
 </template>
@@ -53,6 +51,7 @@ export default {
 
 <style scoped>
   textarea {
+    white-space: pre-wrap;
     display: block;
     margin: 0;
     padding: 8px 31px 8px 8px;
