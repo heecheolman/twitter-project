@@ -1,16 +1,27 @@
 <template>
   <div class="logo-container">
-    <h1 class="logo-container">Twitter</h1>
+    <h1-tag
+      :label="label"
+      :class="h1Style" />
   </div>
 </template>
 
 <script>
+import H1Tag from './../atoms/H1Tag';
+
 export default {
   name: 'Logo',
+  components: {
+    H1Tag,
+  },
+  data: function() {
+    return {
+      label: 'Twitter',
+      h1Style: 'logo',
+    };
+  }
 }
-
 </script>
-
 <style scoped>
   .logo-container {
     position: relative;
@@ -18,14 +29,5 @@ export default {
     width: auto;
     height: 100%;
     line-height: 44px;
-  }
-
-  h1 {
-    user-select: none;
-    cursor: default;
-    font-size: 1.2rem;
-    color: #4AB3F4;
-    margin: 0;
-    padding: 0;
   }
 </style>

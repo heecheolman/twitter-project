@@ -1,6 +1,8 @@
 <template>
   <li>
-    <text-a :label="label" :a-style="aStyle" />
+    <text-a
+      :label="label"
+      :a-style="aStyle" />
   </li>
 </template>
 <script>

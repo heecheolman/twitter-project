@@ -28,7 +28,6 @@ export default {
     initTextArea() {
       const content = this.content.replace(/(\s*)/g, "");
       const textarea = document.querySelector('textarea');
-
       if(content.length === 0) {
         this.content = '';
         textarea.style.height = '100%';
@@ -43,10 +42,8 @@ export default {
         textarea.style.cssText = 'height:' + textarea.scrollHeight + 'px';
       }, 0);
     },
-    // 콘텐츠를 가져옴
   },
 };
-
 </script>
 
 <style scoped>

@@ -1,8 +1,8 @@
 <template>
   <form action="" class="tweet-form">
     <div class="tweet-container">
-      <!--<editable-div :class="editableDivStyle"/>-->
-      <tweet-text-area :placeholder="placeholder"/>
+      <tweet-text-area
+        :placeholder="placeholder" />
     </div>
     <div class="tweet-toolbar-container">
       <div class="tweet-toolbar--left">
@@ -10,7 +10,7 @@
           v-for="(button, index) in mediaButtonList"
           :key="index"
           :media-type="button.mediaType"
-          :svg="button.svg"/>
+          :svg="button.svg" />
       </div>
       <div class="tweet-toolbar--right">
         <add-tweet-button />
@@ -22,18 +22,16 @@
 </template>
 
 <script>
-import EditableDiv from './../atoms/EditableDiv';
 import TweetTextArea from './../atoms/TweetTextArea';
 import InputMedia from './../atoms/InputMedia';
-import TweetButton from './TweetButton';
-import AddTweetButton from './AddTweetButton';
+import TweetButton from '../atoms/TweetButton';
+import AddTweetButton from '../atoms/AddTweetButton';
 
 
 export default {
   name: 'TweetingArea',
   components: {
     TweetTextArea,
-    EditableDiv,
     InputMedia,
     TweetButton,
     AddTweetButton,
