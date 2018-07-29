@@ -1,5 +1,5 @@
 <template>
-  <a href="" :class="aStyle">
+  <a href="#" :class="aStyle">
     {{ label }}
   </a>
 </template>

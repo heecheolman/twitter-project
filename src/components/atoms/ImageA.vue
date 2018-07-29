@@ -1,6 +1,8 @@
 <template>
     <a href="#" class="btn">
-      <img :src="imagePath" alt="" :class="avatarSize">
+      <img
+        :src="imagePath"
+        :class="avatarSize">
     </a>
 </template>
 

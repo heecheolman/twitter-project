@@ -3,7 +3,7 @@
     <input-field
       :class="fieldStyle"
       :placeholder="placeholder" />
-    <div class="svg-container">
+    <div class="form--search__svg">
       <svg-button
         :svg-button-style="svgButtonStyle"
         :svg="svg" />
@@ -42,7 +42,7 @@ export default {
     font-size: 12px;
     width: 221px;
   }
-  .svg-container {
+  .form--search__svg {
     display: block;
     position: absolute;
     right: 10px;

@@ -21,7 +21,7 @@ export default {
     word-wrap: break-word;
   }
 
-  .tweet-text {
+  .text--tweet {
     white-space: pre-wrap;
     color: #14171a;
     font-size: 14px;

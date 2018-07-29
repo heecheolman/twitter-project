@@ -1,5 +1,8 @@
 <template>
-  <input type="text" :class="fieldStyle" :placeholder="placeholder">
+  <input
+    type="text"
+    :class="fieldStyle"
+    :placeholder="placeholder">
 </template>
 
 <script>

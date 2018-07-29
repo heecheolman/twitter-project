@@ -1,17 +1,17 @@
 <template>
-  <div class="tweet-content-container">
-    <div class="tweet-header">
+  <div class="tweet-content">
+    <div class="tweet-content__header">
       <span-text
         :class="idStyle"
         :text="id" />
     </div>
-    <div class="tweet-body">
+    <div class="tweet-content__body">
       <p-text
         :class="pStyle"
         :content-text="contentText" />
     </div>
-    <div class="tweet-action">
-      <div class="tweet-action-list">
+    <div class="tweet-content__action">
+      <div class="tweet-content__action__list">
         <svg-button
           v-for="(button, index) in svgList"
           :class="svgButtonStyle"
@@ -45,7 +45,7 @@ export default {
   data: function() {
     return {
       idStyle: 'text--id',
-      pStyle: 'tweet-text',
+      pStyle: 'text--tweet',
       svgButtonStyle: 'svg--reply',
       svgList: [
         {
@@ -88,21 +88,21 @@ export default {
 }
 </script>
 <style scoped>
-  .tweet-content-container {
+  .tweet-content {
     width: 506px;
     height: auto;
     margin-left: 58px;
   }
-  .tweet-body {
+  tweet-content__body {
     width: 100%;
     /*height: auto;*/
   }
-  .tweet-action {
+  .tweet-content__action {
     padding-top: 1px;
     width: 100%;
     height: 30px;
   }
-  .tweet-action-list {
+  .tweet-content__action__list {
     display: flex;
     align-items: center;
     justify-content: space-between;
