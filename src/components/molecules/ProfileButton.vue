@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-button-container">
+  <div class="profile-button">
     <image-a
       :image-path="imagePath"
       :avatar-size="avatarSize" />
@@ -24,7 +24,7 @@ export default {
 };
 </script>
 <style scoped>
-  .profile-button-container {
+  .profile-button {
     margin-top: 2px;
     float: left;
   }

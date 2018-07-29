@@ -2,10 +2,10 @@
   <div>
     <header-section/>
     <!-- ------ Main Content ------ -->
-    <div class="content-container wrapper">
-      <div class="section">
+    <div class="content wrapper">
+      <div class="content__section">
       </div>
-      <div class="timeline-container">
+      <div class="content__timeline">
         <tweet-box />
         <ol>
           <timeline-list
@@ -15,7 +15,7 @@
             :content-text="content.text" />
         </ol>
       </div>
-      <div class="section">
+      <div class="content__section">
       </div>
     </div>
   </div>
@@ -58,17 +58,17 @@ export default {
 
 <style scoped>
   @media screen and (min-width: 1236px) {
-    .main-wrap .content-container {
+    .main-wrap .content {
       width: 1190px;
       padding: 56px 20px 15px;
     }
 
-    .main-wrap .content-container .timeline-container {
+    .main-wrap .content .content__timeline {
       margin: 0 10px;
     }
   }
 
-  .content-container {
+  .content {
     position: relative;
     padding: 56px 0 0 15px;
     height: 100%;
@@ -77,14 +77,14 @@ export default {
     min-height: 0;
   }
 
-  .section {
+  .content__section {
     float: left;
     width: 270px;
     height: 900px;
     border: 1px solid #d7d7d7;
   }
 
-  .timeline-container {
+  .content__timeline {
     float: left;
     margin-left: 25px;
     width: 590px;

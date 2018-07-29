@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet__area">
+  <div>
     <textarea
       cols="30"
       rows="1"

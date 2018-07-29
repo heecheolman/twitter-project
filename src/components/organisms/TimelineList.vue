@@ -1,5 +1,5 @@
 <template>
-  <li class="tweet-container">
+  <li class="timeline-list__list">
     <profile-button
       :image-path="imagePath"
       :avatar-size="avatarSize" />
@@ -39,7 +39,7 @@ export default {
 </script>
 
 <style scoped>
-  .tweet-container {
+  .timeline-list__list {
     width: 100%;
     position: relative;
     padding: 9px 12px;
@@ -49,7 +49,7 @@ export default {
     background-color: #fff;
   }
 
-  .tweet-container:hover {
+  .timeline-list__list:hover {
     background-color: #f5f8fa;
   }
 </style>
