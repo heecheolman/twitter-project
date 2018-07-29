@@ -1,7 +1,5 @@
 <template>
-  <p class="p--base" :class="pStyle">
-    {{ contentText }}
-  </p>
+  <p class="p--base" :class="pStyle">{{contentText}}</p>
 </template>
 <script>
 export default {
@@ -24,6 +22,7 @@ export default {
   }
 
   .tweet-text {
+    white-space: pre-wrap;
     color: #14171a;
     font-size: 14px;
     line-height: 20px;

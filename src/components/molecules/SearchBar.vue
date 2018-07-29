@@ -1,8 +1,12 @@
 <template>
   <form action="" class="form--search">
-    <input-field :class="fieldStyle" :placeholder="placeholder"/>
+    <input-field
+      :class="fieldStyle"
+      :placeholder="placeholder" />
     <div class="svg-container">
-      <svg-button :svg-button-style="svgButtonStyle" :svg="svg"/>
+      <svg-button
+        :svg-button-style="svgButtonStyle"
+        :svg="svg" />
     </div>
   </form>
 </template>

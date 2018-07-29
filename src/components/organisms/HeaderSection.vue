@@ -3,16 +3,22 @@
     <div class="header__container">
       <div class="left-tooltip-container">
         <ul>
-          <menu-tooltip v-for="(tooltip, index) in tooltipList" :key="index" :label="tooltip.label" :a-style="tooltipStyle" />
+          <menu-tooltip
+            v-for="(tooltip, index) in tooltipList"
+            :key="index"
+            :label="tooltip.label"
+            :a-style="tooltipStyle" />
         </ul>
       </div>
       <logo/>
       <div class="right-tooltip-container">
         <div class="search-bar-container">
-          <search-bar/>
+          <search-bar />
         </div>
         <div class="right-tooltip-container__right">
-          <profile-button :image-path="imagePath" :avatar-size="avatarSize"/>
+          <profile-button
+            :image-path="imagePath"
+            :avatar-size="avatarSize" />
           <tweet-button />
         </div>
       </div>
@@ -25,7 +31,7 @@ import MenuTooltip from './../molecules/MenuTooltip';
 import Logo from './../molecules/Logo';
 import SearchBar from './../molecules/SearchBar';
 import ProfileButton from './../molecules/ProfileButton';
-import TweetButton from './../molecules/TweetButton';
+import TweetButton from '../atoms/TweetButton';
 import ProfileImage from './../../assets/default_profile.png';
 
 export default {

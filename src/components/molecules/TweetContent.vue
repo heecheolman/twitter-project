@@ -8,7 +8,7 @@
     <div class="tweet-body">
       <p-text
         :class="pStyle"
-        :content-text="contentText"/>
+        :content-text="contentText" />
     </div>
     <div class="tweet-action">
       <div class="tweet-action-list">
@@ -16,7 +16,7 @@
           v-for="(button, index) in svgList"
           :class="svgButtonStyle"
           :key="index"
-          :svg="button.svg"/>
+          :svg="button.svg" />
       </div>
     </div>
   </div>
@@ -87,7 +87,6 @@ export default {
   },
 }
 </script>
-<!--#065778-->
 <style scoped>
   .tweet-content-container {
     width: 506px;
@@ -96,7 +95,7 @@ export default {
   }
   .tweet-body {
     width: 100%;
-    height: auto;
+    /*height: auto;*/
   }
   .tweet-action {
     padding-top: 1px;

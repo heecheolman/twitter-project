@@ -1,24 +1,37 @@
 <template>
-    <button :class="buttonStyle">
-      {{ this.label }}
+  <div class="tweet-button-container" @click="tweet">
+    <button class="button--tweet">
+      {{ label }}
     </button>
+  </div>
 </template>
-
 <script>
-export default {
-  name: 'TextButton',
-  props: {
-    label: {
-      type: String,
-    },
-    buttonStyle: {
-      type: String,
-    },
-  },
-}
-</script>
+import axios from 'axios';
+import Eventbus from '../../lib/Eventbus';
 
+export default {
+  name: 'TweetButton',
+  data: function() {
+    return {
+      label: '트윗하기',
+    };
+  },
+  methods: {
+    tweet() {
+      const content = document.querySelector('textarea').value;
+      axios.post('/api/tweet', {
+        id: '김희철',
+        text: content,
+      }).then(Eventbus.$emit('getTimelines'));
+    },
+  }
+};
+</script>
 <style scoped>
+  .tweet-button-container {
+    margin-left: 16px;
+    float: left;
+  }
   .button--tweet {
     border: none;
     outline: none;
@@ -44,21 +57,5 @@ export default {
   .button--tweet:hover {
     background-color: #1DA1F2;
     border-color: #1DA1F2;
-  }
-
-  .button--addtweet {
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    font-size: 1.4rem;
-    border-color: #1DA1F2;
-    color: #1DA1F2;
-    cursor: pointer;
-    text-align: center;
-    background-color: #fff;
-  }
-  .button--addtweet:hover {
-    background-color: #E8F5FD;
   }
 </style>

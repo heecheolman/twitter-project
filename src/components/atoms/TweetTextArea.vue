@@ -7,8 +7,6 @@
       v-model="content"
       @blur="initTextArea"
       @keydown="autoSizing">
-      <!-- ** content ** -->
-
     </textarea>
   </div>
 </template>
@@ -30,7 +28,6 @@ export default {
     initTextArea() {
       const content = this.content.replace(/(\s*)/g, "");
       const textarea = document.querySelector('textarea');
-
       if(content.length === 0) {
         this.content = '';
         textarea.style.height = '100%';
@@ -45,14 +42,13 @@ export default {
         textarea.style.cssText = 'height:' + textarea.scrollHeight + 'px';
       }, 0);
     },
-    // 콘텐츠를 가져옴
   },
 };
-
 </script>
 
 <style scoped>
   textarea {
+    white-space: pre-wrap;
     display: block;
     margin: 0;
     padding: 8px 31px 8px 8px;

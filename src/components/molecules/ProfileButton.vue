@@ -1,6 +1,8 @@
 <template>
   <div class="profile-button-container">
-    <image-a :image-path="imagePath" :avatar-size="avatarSize" />
+    <image-a
+      :image-path="imagePath"
+      :avatar-size="avatarSize" />
   </div>
 </template>
 <script>

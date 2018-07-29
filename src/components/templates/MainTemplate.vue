@@ -8,7 +8,7 @@
       <div class="timeline-container">
         <tweet-box />
         <ol>
-          <tweet-component
+          <timeline-list
             v-for="(content, index) in contentList"
             :key="index"
             :id="content.id"
@@ -24,16 +24,16 @@
 <script>
 import HeaderSection from './../organisms/HeaderSection';
 import TweetBox from './../organisms/TweetBox';
-import TweetComponent from './../organisms/TweetComponent';
-import axios from 'axios';
+import TimelineList from '../organisms/TimelineList';
 import Eventbus from './../../lib/Eventbus';
+import axios from 'axios';
 
 export default {
   name: 'MainTemplate',
   components: {
     HeaderSection,
     TweetBox,
-    TweetComponent,
+    TimelineList,
   },
   created() {
     this.contentList = [];
@@ -48,6 +48,7 @@ export default {
     getTimelines() {
       axios.get('/api/timelines')
         .then((result) => {
+          console.log(result.data);
           this.contentList = result.data;
         });
     },

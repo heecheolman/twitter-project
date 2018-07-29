@@ -15,7 +15,11 @@ import ProfileImage from './../../assets/default_profile.png';
 import TweetContent from './../molecules/TweetContent';
 
 export default {
-  name: 'TweetComponent',
+  name: 'TimelineList',
+  components: {
+    ProfileButton,
+    TweetContent,
+  },
   props: {
     id: {
       type: String,
@@ -23,10 +27,6 @@ export default {
     contentText: {
       type: String,
     },
-  },
-  components: {
-    ProfileButton,
-    TweetContent,
   },
   data: function() {
     return {
@@ -52,6 +52,4 @@ export default {
   .tweet-container:hover {
     background-color: #f5f8fa;
   }
-
-
 </style>

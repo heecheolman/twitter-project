@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="timeline__tweet-box">
-      <profile-button :image-path="imagePath" :avatar-size="avatarSize" :style="{ marginLeft: '10px' }"/>
+      <profile-button
+        :image-path="imagePath"
+        :avatar-size="avatarSize"
+        :style="{ marginLeft: '10px' }" />
       <tweeting-area/>
     </div>
   </div>
@@ -15,7 +18,6 @@ import TweetingArea from './../molecules/TweetingArea';
 export default {
   name: 'TweetBox',
   components: {
-
     ProfileButton,
     TweetingArea,
   },

@@ -35,7 +35,6 @@ export default {
     background-color: transparent;
     cursor: pointer;
   }
-
   .svg--reply {
     width: 18px;
     height: 18px;
