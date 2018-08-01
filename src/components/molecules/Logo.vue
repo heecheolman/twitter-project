@@ -2,7 +2,7 @@
   <div class="logo-container">
     <h1-tag
       :label="label"
-      :class="h1Style" />
+      :class="logoStyle" />
   </div>
 </template>
 
@@ -11,13 +11,17 @@ import H1Tag from './../atoms/H1Tag';
 
 export default {
   name: 'Logo',
+  props: {
+    logoStyle: {
+      type: String,
+    },
+  },
   components: {
     H1Tag,
   },
   data: function() {
     return {
       label: 'Twitter',
-      h1Style: 'logo',
     };
   }
 }

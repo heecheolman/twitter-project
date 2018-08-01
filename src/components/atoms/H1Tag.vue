@@ -24,4 +24,12 @@ export default {
     color: #4AB3F4;
     margin: 0;
   }
+
+  .logo--login {
+    user-select: none;
+    cursor: default;
+    font-size: 2rem;
+    color: #4AB3F4;
+    margin: 0;
+  }
 </style>

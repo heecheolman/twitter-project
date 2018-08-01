@@ -22,6 +22,7 @@ export default {
       axios.post('/api/tweet', {
         id: '김희철',
         text: content,
+        date: new Date(),
       }).then(Eventbus.$emit('getTimelines'));
     },
   }

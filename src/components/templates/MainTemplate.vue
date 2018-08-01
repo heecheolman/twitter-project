@@ -4,6 +4,7 @@
     <!-- ------ Main Content ------ -->
     <div class="content wrapper">
       <div class="content__section">
+        <dash-board-profile />
       </div>
       <div class="content__timeline">
         <tweet-box />
@@ -12,7 +13,8 @@
             v-for="(content, index) in contentList"
             :key="index"
             :id="content.id"
-            :content-text="content.text" />
+            :content-text="content.text"
+            :content-date="content.date" />
         </ol>
       </div>
       <div class="content__section">
@@ -25,6 +27,9 @@
 import HeaderSection from './../organisms/HeaderSection';
 import TweetBox from './../organisms/TweetBox';
 import TimelineList from '../organisms/TimelineList';
+import DashBoardProfile from './../organisms/DashBoardProfile';
+
+
 import Eventbus from './../../lib/Eventbus';
 import axios from 'axios';
 
@@ -34,6 +39,7 @@ export default {
     HeaderSection,
     TweetBox,
     TimelineList,
+    DashBoardProfile,
   },
   created() {
     this.contentList = [];
@@ -48,7 +54,7 @@ export default {
     getTimelines() {
       axios.get('/api/timelines')
         .then((result) => {
-          console.log(result.data);
+          // console.log(result.data);
           this.contentList = result.data;
         });
     },
@@ -81,7 +87,6 @@ export default {
     float: left;
     width: 270px;
     height: 900px;
-    border: 1px solid #d7d7d7;
   }
 
   .content__timeline {

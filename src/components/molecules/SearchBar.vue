@@ -2,7 +2,8 @@
   <form action="" class="form--search">
     <input-field
       :class="fieldStyle"
-      :placeholder="placeholder" />
+      :placeholder="placeholder"
+      :type="inputType"/>
     <div class="form--search__svg">
       <svg-button
         :svg-button-style="svgButtonStyle"
@@ -11,7 +12,7 @@
   </form>
 </template>
 <script>
-import InputField from './../atoms/InputFiled';
+import InputField from '../atoms/InputField';
 import SvgButton from './../atoms/SvgButton';
 
 export default {
@@ -22,6 +23,7 @@ export default {
   },
   data: function() {
     return {
+      inputType: 'text',
       fieldStyle: 'input--search',
       placeholder: '트위터 검색하기',
       svgButtonStyle: 'svg--search',

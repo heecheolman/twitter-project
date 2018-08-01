@@ -1,10 +1,8 @@
 .flex-container {
   display: flex;
-  width: 100%;
-  height: 100%;
 }
 
-.flex-center-sort {
+.flex-center {
   justify-content: center;
   align-items: center;
 }

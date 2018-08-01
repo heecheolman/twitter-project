@@ -32,6 +32,39 @@ export default {
   .a--tooltip:visited {
     color: #4AB3F4;
   }
+  .text--id {
+    font-weight: bold;
+    font-size: 18px;
+    color: #14171a;
+  }
+  .text--id:visited {
+    color: #14171a;
+  }
+  .text--id:hover {
+    text-decoration: underline;
+  }
+
+  .text--hash {
+    font-size: 14px;
+    color: #657786;
+  }
+  .text--hash:visited {
+    color: #657786;
+  }
+  .text--hash:hover {
+    text-decoration: underline;
+  }
+
+  .text--support {
+    font-size: 0.8rem;
+    color: #007aa8;
+    text-decoration: underline;
+  }
+
+  .text--support:visited {
+    color: #007aa8;
+  }
+
   a {
     text-decoration: none;
   }

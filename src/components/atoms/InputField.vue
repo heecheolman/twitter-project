@@ -1,14 +1,17 @@
 <template>
   <input
-    type="text"
+    :type="type"
     :class="fieldStyle"
-    :placeholder="placeholder">
+    :placeholder="placeholder" >
 </template>
 
 <script>
 export default {
   name: 'InputField',
   props: {
+    type: {
+      type: String,
+    },
     fieldStyle: {
       type: String,
     },
