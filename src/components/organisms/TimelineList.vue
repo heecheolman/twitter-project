@@ -5,7 +5,8 @@
       :avatar-size="avatarSize" />
     <tweet-content
       :id="id"
-      :content-text="contentText" />
+      :content-text="contentText"
+      :content-date="contentDate"/>
   </li>
 </template>
 
@@ -25,6 +26,9 @@ export default {
       type: String,
     },
     contentText: {
+      type: String,
+    },
+    contentDate: {
       type: String,
     },
   },

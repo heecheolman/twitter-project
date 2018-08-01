@@ -4,6 +4,12 @@
       <span-text
         :class="idStyle"
         :text="id" />
+      <text-a
+        :label="hash"
+        :a-style="hashStyle" />
+      <span-text
+        :class="dateStyle"
+        :text="date" />
     </div>
     <div class="tweet-content__body">
       <p-text
@@ -23,7 +29,10 @@
 </template>
 
 <script>
+import DateCalculator from './../../lib/DateCalculator';
+
 import SpanText from './../atoms/SpanText';
+import TextA from './../atoms/TextA';
 import PText from './../atoms/PText';
 import SvgButton from './../atoms/SvgButton';
 
@@ -31,8 +40,12 @@ export default {
   name: 'TweetContent',
   components: {
     SpanText,
+    TextA,
     PText,
     SvgButton,
+  },
+  mounted() {
+    this.updateTimelineDate();
   },
   props: {
     id: {
@@ -41,11 +54,20 @@ export default {
     contentText: {
       type: String,
     },
+    contentDate: {
+      type: String,
+    },
   },
   data: function() {
     return {
       idStyle: 'text--id',
+      hash: '@fMUmSjMbVbjhqBO',
+      hashStyle: 'text--hash',
       pStyle: 'text--tweet',
+
+      date: '• ' + DateCalculator(this.contentDate),
+      dateStyle: 'text--date',
+
       svgButtonStyle: 'svg--reply',
       svgList: [
         {
@@ -85,6 +107,13 @@ export default {
       ],
     };
   },
+  methods: {
+    updateTimelineDate() {
+      setInterval(() => {
+        this.date = '• ' + DateCalculator(this.contentDate);
+      }, 30000);
+    },
+  },
 }
 </script>
 <style scoped>
@@ -93,9 +122,8 @@ export default {
     height: auto;
     margin-left: 58px;
   }
-  tweet-content__body {
+  .tweet-content__body {
     width: 100%;
-    /*height: auto;*/
   }
   .tweet-content__action {
     padding-top: 1px;

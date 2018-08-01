@@ -10,7 +10,7 @@
             :a-style="tooltipStyle" />
         </ul>
       </div>
-      <logo/>
+      <logo :logo-style="logoStyle"/>
       <div class="right-tooltip-container">
         <div class="search-bar-container">
           <search-bar />
@@ -49,6 +49,7 @@ export default {
       tooltipStyle: 'a--tooltip',
       avatarSize: 'avatar--size32',
       imagePath: ProfileImage,
+      logoStyle: 'logo',
     };
   },
 };

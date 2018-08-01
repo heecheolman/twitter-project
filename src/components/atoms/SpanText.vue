@@ -24,4 +24,8 @@ export default  {
     font-size: 14px;
     color: #14171a;
   }
+  .text--date {
+    font-size: 14px;
+    color: #657786;
+  }
 </style>
