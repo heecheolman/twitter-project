@@ -19,11 +19,50 @@ export default {
   methods: {
     tweet() {
       const content = document.querySelector('textarea').value;
-      axios.post('/api/tweet', {
-        id: '김희철',
-        text: content,
-        date: new Date(),
-      }).then(Eventbus.$emit('getTimelines'));
+      const inputfile = document.querySelector('#media-file');
+      let formData = null;
+      let filename = '';
+
+      if(inputfile.files.length !== 0) {
+        alert('1');
+        formData = new FormData();
+        formData.append(inputfile.name, inputfile.files[0], inputfile.files[0].name);
+        filename = inputfile.files[0].name;
+        axios.post('/api/upload', formData);
+        axios.post('/api/tweet', {
+          id: '김희철',
+          text: content,
+          date: new Date(),
+          filename: filename,
+        })
+          .then(Eventbus.$emit('getTimelines'));
+      } else {
+        alert('2');
+        axios.post('/api/tweet', {
+          id: '김희철',
+          text: content,
+          date: new Date(),
+          filename: filename,
+        })
+          .then(Eventbus.$emit('getTimelines'));
+      }
+      // const content = document.querySelector('textarea').value;
+      // const inputfile = document.querySelector('#media-file');
+      // const formData = null;
+      //
+      // if(inputfile.files.length !== 0) {
+      //   const formData = new FormData();
+      //   formData.append(inputfile.name, inputfile.files[0], inputfile.files[0].name);
+      //   axios.post('/api/upload', formData).then(response => {
+      //     console.log(response);
+      //   });
+      // }
+      //
+      // axios.post('/api/tweet', {
+      //   id: '김희철',
+      //   text: content,
+      //   date: new Date(),
+      // }).then(Eventbus.$emit('getTimelines'));
     },
   }
 };

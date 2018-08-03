@@ -1,5 +1,5 @@
 <template>
-  <form action="" class="tweet-form">
+  <form action="localhost:8080" class="tweet-form" enctype="multipart/form-data">
     <div class="tweet-container">
       <tweet-text-area
         :placeholder="placeholder" />
@@ -17,7 +17,6 @@
         <tweet-button />
       </div>
     </div>
-
   </form>
 </template>
 

@@ -3,7 +3,10 @@
     <label for="media-file">
       <svg v-html="svg"></svg>
     </label>
-    <input type="file" id="media-file">
+    <input
+      type="file"
+      id="media-file"
+      name="userfile" />
   </div>
 </template>
 
@@ -16,7 +19,7 @@ export default {
     },
     mediaType: {
       type: String,
-    }
+    },
   },
 };
 </script>
