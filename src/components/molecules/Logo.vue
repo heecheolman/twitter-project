@@ -19,7 +19,7 @@ export default {
   components: {
     H1Tag,
   },
-  data: function() {
+  data() {
     return {
       label: 'Twitter',
     };

@@ -1,4 +1,5 @@
 <template>
+  <!-- form action 의 주소는 추후 변경,  -->
   <form action="localhost:8080" class="tweet-form" enctype="multipart/form-data">
     <div class="tweet-container">
       <tweet-text-area
@@ -35,18 +36,26 @@ export default {
     TweetButton,
     AddTweetButton,
   },
-  data: function() {
+  data() {
     return {
       placeholder: '무슨 일이 일어나고 있나요?',
       editableDivStyle: 'tweet-textarea',
       svgButtonStyle: 'button--media--svg',
       mediaButtonList: [
         {
-          svg: `<svg viewBox="0 0 384 512"><path fill="currentColor" d="M369.9 97.9L286 14C277 5 264.8-.1 252.1-.1H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48V131.9c0-12.7-5.1-25-14.1-34zM332.1 128H256V51.9l76.1 76.1zM48 464V48h160v104c0 13.3 10.7 24 24 24h104v288H48zm32-48h224V288l-23.5-23.5c-4.7-4.7-12.3-4.7-17 0L176 352l-39.5-39.5c-4.7-4.7-12.3-4.7-17 0L80 352v64zm48-240c-26.5 0-48 21.5-48 48s21.5 48 48 48 48-21.5 48-48-21.5-48-48-48z"></path></svg>`,
+          svg: `<svg x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+	<path fill="none" d="M0,0h24v24H0V0z"/>
+		<path fill="currentColor" d="M18,20H4V6h9V4H4C2.9,4,2,4.9,2,6v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-9h-2V20z"/>
+		<polygon fill="currentColor" points="10.21,16.83 8.25,14.47 5.5,18 16.5,18 12.96,13.29 		"/>
+		<path fill="currentColor" d="M20,4V1h-2v3h-3c0.01,0.01,0,2,0,2h3v2.99c0.01,0.01,2,0,2,0V6h3V4H20z"/>
+</svg>`,
           mediaType: 'image',
         },
         {
-          svg: `<svg viewBox="0 0 384 512"><path fill="currentColor" d="M369.941 97.941l-83.882-83.882A48 48 0 0 0 252.118 0H48C21.49 0 0 21.49 0 48v416c0 26.51 21.49 48 48 48h288c26.51 0 48-21.49 48-48V131.882a48 48 0 0 0-14.059-33.941zM332.118 128H256V51.882L332.118 128zM48 464V48h160v104c0 13.255 10.745 24 24 24h104v288H48zm228.687-211.303L224 305.374V268c0-11.046-8.954-20-20-20H100c-11.046 0-20 8.954-20 20v104c0 11.046 8.954 20 20 20h104c11.046 0 20-8.954 20-20v-37.374l52.687 52.674C286.704 397.318 304 390.28 304 375.986V264.011c0-14.311-17.309-21.319-27.313-11.314z"></path></svg>`,
+          svg: `<svg x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+	<path fill="none" d="M0,0h24v24H0V0z"/>
+	<path fill="currentColor" d="M15,8v8H5V8H15 M16,6H4C3.45,6,3,6.45,3,7v10c0,0.55,0.45,1,1,1h12c0.55,0,1-0.45,1-1v-3.5l4,4v-11l-4,4V7 C17,6.45,16.55,6,16,6L16,6z"/>
+</svg>`,
           mediaType: 'video',
         },
       ],
@@ -75,7 +84,6 @@ export default {
 
   .tweet-toolbar-container {
     display: flex;
-    /*display: none;*/
     align-items: center;
     margin-top: 10px;
     width: 100%;

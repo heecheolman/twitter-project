@@ -21,7 +21,7 @@ export default {
       type: Object,
     },
   },
-  data: function() {
+  data() {
     return {
       value: '',
       fieldStyle: 'input--info',

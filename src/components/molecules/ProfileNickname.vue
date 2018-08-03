@@ -16,7 +16,7 @@ export default {
   components: {
     TextA,
   },
-  data: function() {
+  data() {
     return {
       id: '김희철',
       idStyle: 'text--id',

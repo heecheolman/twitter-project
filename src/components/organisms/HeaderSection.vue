@@ -10,7 +10,8 @@
             :a-style="tooltipStyle" />
         </ul>
       </div>
-      <logo :logo-style="logoStyle"/>
+      <logo
+        :logo-style="logoStyle"/>
       <div class="right-tooltip-container">
         <div class="search-bar-container">
           <search-bar />
@@ -43,9 +44,13 @@ export default {
     ProfileButton,
     TweetButton,
   },
-  data: function() {
+  data() {
     return {
-      tooltipList: [{ label: '홈' }, { label: '알림' }, { label: '쪽지'}],
+      tooltipList: [
+        { label: '홈' },
+        { label: '알림' },
+        { label: '쪽지'}
+        ],
       tooltipStyle: 'a--tooltip',
       avatarSize: 'avatar--size32',
       imagePath: ProfileImage,

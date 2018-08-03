@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'AddTweetButton',
-  data: function() {
+  data() {
     return {
       label: '+',
     };

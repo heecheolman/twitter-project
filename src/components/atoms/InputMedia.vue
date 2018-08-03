@@ -6,7 +6,8 @@
     <input
       type="file"
       id="media-file"
-      name="userfile" />
+      name="userfile"
+      multiple />
   </div>
 </template>
 

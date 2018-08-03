@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'JoinButton',
-  data: function() {
+  data() {
     return {
       label: '회원가입'
     };

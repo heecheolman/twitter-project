@@ -21,7 +21,7 @@ export default {
     ProfileButton,
     TweetingArea,
   },
-  data: function() {
+  data() {
     return {
       imagePath: ProfileImage,
       avatarSize: 'avatar--size32',

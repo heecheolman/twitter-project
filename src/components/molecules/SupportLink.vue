@@ -18,7 +18,7 @@ export default {
       type: String,
     },
   },
-  data: function() {
+  data() {
     return {
       aStyle: 'text--support',
     };

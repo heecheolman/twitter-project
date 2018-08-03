@@ -19,7 +19,7 @@ export default {
       type: String,
     },
   },
-  data: function() {
+  data() {
     return {
       content: '',
     };

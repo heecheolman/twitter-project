@@ -15,7 +15,7 @@
             :id="content.id"
             :content-text="content.text"
             :content-date="content.date"
-            :content-filename="content.filename" />
+            :content-filename-list="content.filenameList" />
         </ol>
       </div>
       <div class="content__section">
@@ -40,10 +40,6 @@ export default {
     TweetBox,
     TimelineList,
     DashBoardProfile,
-  },
-  updated() {
-    console.log('this is updated');
-    console.log(this.contentList);
   },
   created() {
     this.contentList = [];
