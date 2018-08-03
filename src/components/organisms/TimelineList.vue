@@ -7,7 +7,7 @@
       :id="id"
       :content-text="contentText"
       :content-date="contentDate"
-      :content-filename="contentFilename" />
+      :content-filename-list="contentFilenameList" />
   </li>
 </template>
 
@@ -27,7 +27,7 @@ export default {
     console.log(`id: ${this.id}`);
     console.log(`content-text: ${this.contentText}`);
     console.log(`content-date: ${this.contentDate}`);
-    console.log(`content-filename: ${this.contentFilename}`);
+    console.log(`content-filename-list: ${this.contentFilenameList}`);
   },
   props: {
     id: {
@@ -39,8 +39,8 @@ export default {
     contentDate: {
       type: String,
     },
-    contentFilename: {
-      type: String,
+    contentFilenameList: {
+      type: Array,
     },
   },
   data() {

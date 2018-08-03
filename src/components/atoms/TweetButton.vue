@@ -19,50 +19,27 @@ export default {
   methods: {
     tweet() {
       const content = document.querySelector('textarea').value;
-      const inputfile = document.querySelector('#media-file');
-      let formData = null;
-      let filename = '';
+      const mediaFile = document.querySelector('#media-file');
+      let filenameList = [];
 
-      if(inputfile.files.length !== 0) {
-        alert('1');
-        formData = new FormData();
-        formData.append(inputfile.name, inputfile.files[0], inputfile.files[0].name);
-        filename = inputfile.files[0].name;
+      // 파일이 하나라도 존재한다면 upload
+      if(mediaFile.files.length !== 0) {
+        let formData = new FormData();
+        for(let i = 0; i < mediaFile.files.length; i++) {
+          let file = mediaFile.files[i];
+          filenameList.push({ filename: file.name });
+          formData.append(mediaFile.name, file);
+        }
         axios.post('/api/upload', formData);
-        axios.post('/api/tweet', {
-          id: '김희철',
-          text: content,
-          date: new Date(),
-          filename: filename,
-        })
-          .then(Eventbus.$emit('getTimelines'));
-      } else {
-        alert('2');
-        axios.post('/api/tweet', {
-          id: '김희철',
-          text: content,
-          date: new Date(),
-          filename: filename,
-        })
-          .then(Eventbus.$emit('getTimelines'));
       }
-      // const content = document.querySelector('textarea').value;
-      // const inputfile = document.querySelector('#media-file');
-      // const formData = null;
-      //
-      // if(inputfile.files.length !== 0) {
-      //   const formData = new FormData();
-      //   formData.append(inputfile.name, inputfile.files[0], inputfile.files[0].name);
-      //   axios.post('/api/upload', formData).then(response => {
-      //     console.log(response);
-      //   });
-      // }
-      //
-      // axios.post('/api/tweet', {
-      //   id: '김희철',
-      //   text: content,
-      //   date: new Date(),
-      // }).then(Eventbus.$emit('getTimelines'));
+      // tweet
+      axios.post('/api/tweet', {
+        id: '김희철',
+        text: content,
+        date: new Date(),
+        filenameList: filenameList,
+      })
+        .then(Eventbus.$emit('getTimelines'));
     },
   }
 };
@@ -99,3 +76,7 @@ export default {
     border-color: #1DA1F2;
   }
 </style>
+
+
+
+

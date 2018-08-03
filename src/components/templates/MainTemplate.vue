@@ -15,7 +15,7 @@
             :id="content.id"
             :content-text="content.text"
             :content-date="content.date"
-            :content-filename="content.filename" />
+            :content-filename-list="content.filenameList" />
         </ol>
       </div>
       <div class="content__section">
