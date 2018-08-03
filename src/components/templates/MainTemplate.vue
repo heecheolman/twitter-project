@@ -14,7 +14,8 @@
             :key="index"
             :id="content.id"
             :content-text="content.text"
-            :content-date="content.date" />
+            :content-date="content.date"
+            :content-filename="content.filename" />
         </ol>
       </div>
       <div class="content__section">
@@ -29,7 +30,6 @@ import TweetBox from './../organisms/TweetBox';
 import TimelineList from '../organisms/TimelineList';
 import DashBoardProfile from './../organisms/DashBoardProfile';
 
-
 import Eventbus from './../../lib/Eventbus';
 import axios from 'axios';
 
@@ -41,11 +41,15 @@ export default {
     TimelineList,
     DashBoardProfile,
   },
+  updated() {
+    console.log('this is updated');
+    console.log(this.contentList);
+  },
   created() {
     this.contentList = [];
     Eventbus.$on('getTimelines', this.getTimelines);
   },
-  data: function() {
+  data() {
     return {
       contentList: [],
     };
@@ -54,8 +58,9 @@ export default {
     getTimelines() {
       axios.get('/api/timelines')
         .then((result) => {
-          // console.log(result.data);
           this.contentList = result.data;
+          console.log('this is');
+          console.log(this.contentList);
         });
     },
   }

@@ -12,6 +12,12 @@
         :text="date" />
     </div>
     <div class="tweet-content__body">
+      <span v-if="contentFilename.length === 0">
+        <h1> 파일없다 </h1>
+      </span>
+      <span v-if="contentFilename.length !== 0">
+        <img :src="srcPath" class="img--default-size">
+      </span>
       <p-text
         :class="pStyle"
         :content-text="contentText" />
@@ -35,7 +41,6 @@ import SpanText from './../atoms/SpanText';
 import TextA from './../atoms/TextA';
 import PText from './../atoms/PText';
 import SvgButton from './../atoms/SvgButton';
-
 export default {
   name: 'TweetContent',
   components: {
@@ -47,6 +52,20 @@ export default {
   mounted() {
     this.updateTimelineDate();
   },
+  updated() {
+    console.log('this is updated for TweetContent');
+    console.log(this.contentFilename);
+  },
+  computed: {
+    srcPath() {
+      if(this.contentFilename.length !== 0) {
+        this.src = '../../../static/' + this.contentFilename;
+      } else {
+        this.src = '';
+      }
+      return this.src;
+    },
+  },
   props: {
     id: {
       type: String,
@@ -57,8 +76,11 @@ export default {
     contentDate: {
       type: String,
     },
+    contentFilename: {
+      type: String,
+    },
   },
-  data: function() {
+  data() {
     return {
       idStyle: 'text--id',
       hash: '@fMUmSjMbVbjhqBO',
@@ -67,6 +89,8 @@ export default {
 
       date: '• ' + DateCalculator(this.contentDate),
       dateStyle: 'text--date',
+
+      src: '',
 
       svgButtonStyle: 'svg--reply',
       svgList: [
@@ -140,6 +164,11 @@ export default {
     line-height: 1;
     margin-bottom: 2px;
     margin-top: 10px;
+  }
+
+  .img--default-size {
+    width: 100%;
+    height: auto;
   }
 </style>
 
