@@ -53,10 +53,6 @@ export default {
   mounted() {
     this.updateTimelineDate();
   },
-  updated() {
-    console.log('this is updated for TweetContent');
-    console.log(this.contentFilenameList);
-  },
   props: {
     id: {
       type: String,

@@ -11,7 +11,7 @@ import Eventbus from '../../lib/Eventbus';
 
 export default {
   name: 'TweetButton',
-  data: function() {
+  data() {
     return {
       label: '트윗하기',
     };

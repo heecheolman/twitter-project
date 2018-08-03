@@ -8,7 +8,7 @@
 <script>
 export default {
   name: 'LoginButton',
-  data: function() {
+  data() {
     return {
       label: '로그인'
     };

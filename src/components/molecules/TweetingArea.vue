@@ -1,4 +1,5 @@
 <template>
+  <!-- form action 의 주소는 추후 변경,  -->
   <form action="localhost:8080" class="tweet-form" enctype="multipart/form-data">
     <div class="tweet-container">
       <tweet-text-area
@@ -35,7 +36,7 @@ export default {
     TweetButton,
     AddTweetButton,
   },
-  data: function() {
+  data() {
     return {
       placeholder: '무슨 일이 일어나고 있나요?',
       editableDivStyle: 'tweet-textarea',

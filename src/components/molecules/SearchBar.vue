@@ -21,7 +21,7 @@ export default {
     InputField,
     SvgButton,
   },
-  data: function() {
+  data() {
     return {
       inputType: 'text',
       fieldStyle: 'input--search',

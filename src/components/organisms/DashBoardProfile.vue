@@ -13,7 +13,6 @@
 <script>
 import ProfileButton from './../molecules/ProfileButton';
 import ProfileNickname from './../molecules/ProfileNickname';
-
 import ProfileImage from './../../assets/default_profile.png';
 
 export default {
@@ -22,7 +21,7 @@ export default {
     ProfileButton,
     ProfileNickname,
   },
-  data: function() {
+  data() {
     return {
       imagePath: ProfileImage,
       avatarSize: 'avatar--size32',

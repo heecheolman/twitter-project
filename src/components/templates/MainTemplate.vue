@@ -41,10 +41,6 @@ export default {
     TimelineList,
     DashBoardProfile,
   },
-  updated() {
-    console.log('this is updated');
-    console.log(this.contentList);
-  },
   created() {
     this.contentList = [];
     Eventbus.$on('getTimelines', this.getTimelines);

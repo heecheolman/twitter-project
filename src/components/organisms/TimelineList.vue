@@ -22,13 +22,6 @@ export default {
     ProfileButton,
     TweetContent,
   },
-  updated() {
-    console.log('this is updated for TimelineList');
-    console.log(`id: ${this.id}`);
-    console.log(`content-text: ${this.contentText}`);
-    console.log(`content-date: ${this.contentDate}`);
-    console.log(`content-filename-list: ${this.contentFilenameList}`);
-  },
   props: {
     id: {
       type: String,

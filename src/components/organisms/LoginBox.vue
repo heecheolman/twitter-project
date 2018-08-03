@@ -35,7 +35,7 @@ export default {
     LoginButton,
     JoinButton,
   },
-  data: function() {
+  data() {
     return {
       logoStyle: 'logo--login',
       inputComponents: [
