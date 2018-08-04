@@ -9,10 +9,10 @@ export default  {
   name: 'SpanText',
   props: {
     textStyle: {
-      type: String,
+      // type: String,
     },
     text: {
-      type: String,
+      // type: String,
     },
   },
 };
