@@ -12,10 +12,10 @@
           <timeline-list
             v-for="(content, index) in contentList"
             :key="index"
-            :id="content.id"
-            :content-text="content.text"
-            :content-date="content.date"
-            :content-filename-list="content.filenameList" />
+            :id="content.userid"
+            :content-text="content.contents"
+            :content-date="content.updated_at"
+            :content-filename-list="content.images" />
         </ol>
       </div>
       <div class="content__section">

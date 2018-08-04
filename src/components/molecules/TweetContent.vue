@@ -51,11 +51,13 @@ export default {
     ImageContent,
   },
   mounted() {
-    this.updateTimelineDate();
+    this.updateTimelineId = this.updateTimelineDate();
+  },
+  destroyed() {
+    clearInterval(this.updateTimelineId);
   },
   props: {
     id: {
-      type: String,
     },
     contentText: {
       type: String,
@@ -76,6 +78,7 @@ export default {
       date: '• ' + DateCalculator(this.contentDate),
       dateStyle: 'text--date',
       svgButtonStyle: 'svg--reply',
+      updateTimelineId: null,
       svgList: [
         {
           svg: `<svg x="0px" y="0px" viewBox="0 0 30.333 30.333">
@@ -119,6 +122,7 @@ export default {
       setInterval(() => {
         this.date = '• ' + DateCalculator(this.contentDate);
       }, 30000);
+
     },
   },
 }
@@ -148,13 +152,4 @@ export default {
     margin-bottom: 2px;
     margin-top: 10px;
   }
-
 </style>
-
-
-
-
-
-
-
-
