@@ -38,5 +38,5 @@ export default {
     background-color: #fff;
     border: 2px solid #4AB3F4;
   }
-
+  /**/
 </style>
