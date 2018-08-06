@@ -17,7 +17,7 @@ export default {
     };
   },
   methods: {
-    tweet() {
+    async tweet() {
       const content = document.querySelector('textarea').value;
       const mediaFile = document.querySelector('#media-file');
       let filenameList = [];
@@ -26,20 +26,30 @@ export default {
       if(mediaFile.files.length !== 0) {
         let formData = new FormData();
         for(let i = 0; i < mediaFile.files.length; i++) {
-          let file = mediaFile.files[i];
+          const file = mediaFile.files[i];
           filenameList.push({ filename: file.name });
           formData.append(mediaFile.name, file);
         }
         axios.post('/api/upload', formData);
       }
-      // tweet
-      axios.post('/api/tweet', {
-        id: '김희철',
-        text: content,
-        date: new Date(),
-        filenameList: filenameList,
-      })
-        .then(Eventbus.$emit('getTimelines'));
+      // post 가 된 후에 getTimelines 를 얻어오는걸로
+
+      try {
+        await axios.post('/api/tweet', {
+          id: '김희철',
+          text: content,
+          filenameList: filenameList,
+        });
+      } catch(err) {
+        console.error(err);
+      }
+
+      try {
+        await Eventbus.$emit('getTimelines');
+      } catch(err) {
+        console.error(err);
+      }
+
     },
   }
 };

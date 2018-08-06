@@ -14,7 +14,7 @@
             :key="index"
             :id="content.userid"
             :content-text="content.contents"
-            :content-date="content.updated_at"
+            :content-date="content.created_at"
             :content-filename-list="content.images" />
         </ol>
       </div>
@@ -41,7 +41,11 @@ export default {
     TimelineList,
     DashBoardProfile,
   },
+  updated() {
+    console.log('updated');
+  },
   created() {
+    this.getTimelines();
     this.contentList = [];
     Eventbus.$on('getTimelines', this.getTimelines);
   },
@@ -51,13 +55,15 @@ export default {
     };
   },
   methods: {
-    getTimelines() {
-      axios.get('/api/timelines')
-        .then((result) => {
-          this.contentList = result.data;
-          console.log('this is');
-          console.log(this.contentList);
-        });
+    async getTimelines() {
+      try {
+        const result = await axios.get('/api/timelines');
+        this.contentList = result.data.reverse();
+        console.log('this is');
+        console.log(this.contentList);
+      } catch(err) {
+        console.error(err);
+      }
     },
   }
 }

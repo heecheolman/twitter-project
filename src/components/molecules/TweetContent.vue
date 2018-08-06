@@ -9,7 +9,7 @@
         :a-style="hashStyle" />
       <span-text
         :class="dateStyle"
-        :text="date" />
+        :text="contentDate" />
     </div>
     <div class="tweet-content__body">
       <image-content
@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import DateCalculator from './../../lib/DateCalculator';
-
 import SpanText from './../atoms/SpanText';
 import TextA from './../atoms/TextA';
 import PText from './../atoms/PText';
@@ -49,12 +47,6 @@ export default {
     PText,
     SvgButton,
     ImageContent,
-  },
-  mounted() {
-    this.updateTimelineId = this.updateTimelineDate();
-  },
-  destroyed() {
-    clearInterval(this.updateTimelineId);
   },
   props: {
     id: {
@@ -75,7 +67,6 @@ export default {
       hash: '@fMUmSjMbVbjhqBO',
       hashStyle: 'text--hash',
       pStyle: 'text--tweet',
-      date: '• ' + DateCalculator(this.contentDate),
       dateStyle: 'text--date',
       svgButtonStyle: 'svg--reply',
       updateTimelineId: null,
@@ -116,14 +107,6 @@ export default {
         },
       ],
     };
-  },
-  methods: {
-    updateTimelineDate() {
-      setInterval(() => {
-        this.date = '• ' + DateCalculator(this.contentDate);
-      }, 30000);
-
-    },
   },
 }
 </script>
