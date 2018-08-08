@@ -7,11 +7,14 @@
       type="file"
       id="media-file"
       name="userfile"
-      multiple />
+      multiple
+      @change="inputFileUpdate"/>
   </div>
 </template>
 
 <script>
+import Eventbus from './../../lib/Eventbus';
+
 export default {
   name: 'InputMedia',
   props: {
@@ -20,6 +23,52 @@ export default {
     },
     mediaType: {
       type: String,
+    },
+  },
+  created() {
+
+  },
+  data() {
+    return {
+      inputFileList: [],
+    };
+  },
+  methods: {
+    handlingFile(file) {
+      const fileReader = new FileReader();
+      const image = new Image();
+      fileReader.addEventListener('load', () => {
+        image.height = 100;
+        image.title = file.name;
+        image.src = fileReader.result;
+      }, false);
+      fileReader.readAsDataURL(file);
+      return image;
+    },
+    inputFileUpdate() {
+      // 파일 업데이트해주는 함수
+      const inputDOM = document.querySelector('#media-file');
+      const filebox = document.querySelector('.file-box');
+
+      if(inputDOM.files.length !== 0) { // 파일이 하나라도 존재할 시에
+        Eventbus.$on('fileBoxOn');
+        filebox.style.height = '100%';
+        filebox.style.display = 'block';
+        for(let i = 0; i < inputDOM.files.length; i++) {
+          const file = inputDOM.files[i];
+          const imagePreview = this.handlingFile(file);
+          filebox.appendChild(imagePreview);
+        }
+      } else if(inputDOM.files.length === 0) {
+        Eventbus.$on('fileBoxOff');
+        filebox.style.height = '100%';
+        filebox.style.display = 'none';
+      }
+    },
+    getInputFileList() {
+      // 파일리스트를 보내는 함수
+      // 과연 필요한가?
+      // Eventbus 등록
     },
   },
 };
@@ -36,7 +85,10 @@ export default {
     z-index: 1000;
   }
   .media__container:hover {
-    border: 1px solid rgba(74, 179, 244, 0.1);
+    /*border: 1px solid rgba(74, 179, 244, 0.1);*/
+    /*box-shadow: inset 0 0 1px rgba(22, 53, 72, 0.1);*/
+    box-shadow: inset 0 0 1px #ccd6dd;
+
     background-color: rgba(74, 179, 244, 0.1);
   }
 

@@ -4,6 +4,8 @@
     <div class="tweet-container">
       <tweet-text-area
         :placeholder="placeholder" />
+      <div class="file-box">
+      </div>
     </div>
     <div class="tweet-toolbar-container">
       <div class="tweet-toolbar--left">
@@ -26,6 +28,7 @@ import TweetTextArea from './../atoms/TweetTextArea';
 import InputMedia from './../atoms/InputMedia';
 import TweetButton from '../atoms/TweetButton';
 import AddTweetButton from '../atoms/AddTweetButton';
+import Eventbus from '../../lib/Eventbus';
 
 
 export default {
@@ -36,11 +39,21 @@ export default {
     TweetButton,
     AddTweetButton,
   },
+  created() {
+    Eventbus.$on('fileBoxOn', this.fileBoxOn);
+    Eventbus.$on('fileBoxOff', this.fileBoxOff);
+  },
+  computed: {
+    hasFileCompute() {
+      return this.hasFile;
+    },
+  },
   data() {
     return {
       placeholder: '무슨 일이 일어나고 있나요?',
       editableDivStyle: 'tweet-textarea',
       svgButtonStyle: 'button--media--svg',
+      hasFile:  false,
       mediaButtonList: [
         {
           svg: `<svg x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
@@ -59,7 +72,19 @@ export default {
           mediaType: 'video',
         },
       ],
+      fileboxDOM: document.querySelector('.file-box'),
     };
+  },
+  methods: {
+    fileBoxOn() {
+      this.fileboxDOM.style.display = 'block';
+      // const filebox = document.querySelector('.file-box');
+      this.fileboxDOM.style.height = '100%';
+    },
+    fileBoxOff() {
+      this.fileboxDOM.style.height = '100%';
+      this.fileboxDOM.style.display = 'none';
+    }
   },
 };
 </script>
@@ -101,5 +126,12 @@ export default {
     justify-content: space-around;
     width: 128px;
     height: 100%;
+  }
+  .file-box {
+    display: none;
+    padding: 15px;
+    border-top: 1px solid #ccd6dd;
+    width: 100%;
+    background-color: #f5f8fa;
   }
 </style>

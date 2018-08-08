@@ -1,6 +1,7 @@
 <template>
-  <div class="tweet-button-container" @click="tweet">
-    <button class="button--tweet">
+  <div class="tweet-button-container">
+    <clip-loader :loading="loading" :size="spinnerSize"/>
+    <button class="button--tweet" v-show="!loading" @click="tweet">
       {{ label }}
     </button>
   </div>
@@ -8,21 +9,40 @@
 <script>
 import axios from 'axios';
 import Eventbus from '../../lib/Eventbus';
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
+
 
 export default {
   name: 'TweetButton',
+  components: {
+    ClipLoader,
+  },
   data() {
     return {
       label: '트윗하기',
+      loading: false,
     };
   },
+  computed: {
+    spinnerSize() {
+      return '20px';
+    },
+  },
   methods: {
+    loadingSpinnerOn() {
+      this.loading = true;
+    },
+    loadingSpinnerOff() {
+      this.loading = false;
+    },
     async tweet() {
-      const content = document.querySelector('textarea').value;
+      this.loadingSpinnerOn();
+      const serverTimeout = 500;
       const mediaFile = document.querySelector('#media-file');
+      const content = document.querySelector('textarea').value;
       let filenameList = [];
 
-      // 파일이 하나라도 존재한다면 upload
+      // upload file 이 1개라도 존재한다면 다음 구문 실행
       if(mediaFile.files.length !== 0) {
         let formData = new FormData();
         for(let i = 0; i < mediaFile.files.length; i++) {
@@ -30,26 +50,37 @@ export default {
           filenameList.push({ filename: file.name });
           formData.append(mediaFile.name, file);
         }
-        axios.post('/api/upload', formData);
-      }
-      // post 가 된 후에 getTimelines 를 얻어오는걸로
-
-      try {
-        await axios.post('/api/tweet', {
-          id: '김희철',
-          text: content,
-          filenameList: filenameList,
-        });
-      } catch(err) {
-        console.error(err);
+        try {
+          axios.post('/api/upload', formData, { timeout: 1000, });
+        } catch (err) {
+          console.error(err);
+        }
       }
 
-      try {
-        await Eventbus.$emit('getTimelines');
-      } catch(err) {
-        console.error(err);
-      }
+      setTimeout(async () => {
+        try {
+          await axios.post('/api/tweet', {
+            id: '김희철',
+            text: content,
+            filenameList: filenameList,
+          }, {
+            timeout: serverTimeout,
+          });
+        } catch (err) {
+          console.error(err);
+        }
+        Eventbus.$emit('getTimelines');
+        this.contentInit();
+        this.loadingSpinnerOff();
+      }, serverTimeout);
+    },
 
+    // tweetBtn 을 누른 후 콘텐츠 초기화
+    contentInit() {
+      const textarea = document.querySelector('textarea');
+      document.querySelector('#media-file').value = '';
+      textarea.value = '';
+      textarea.style.height = 'auto';
     },
   }
 };
