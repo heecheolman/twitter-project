@@ -4,6 +4,8 @@
     <div class="tweet-container">
       <tweet-text-area
         :placeholder="placeholder" />
+      <div class="file-box" :class="activeFilebox">
+      </div>
     </div>
     <div class="tweet-toolbar-container">
       <div class="tweet-toolbar--left">
@@ -25,7 +27,8 @@
 import TweetTextArea from './../atoms/TweetTextArea';
 import InputMedia from './../atoms/InputMedia';
 import TweetButton from '../atoms/TweetButton';
-import AddTweetButton from '../atoms/AddTweetButton';
+import AddTweetButton from './../atoms/AddTweetButton';
+import Eventbus from '../../lib/Eventbus';
 
 
 export default {
@@ -36,11 +39,24 @@ export default {
     TweetButton,
     AddTweetButton,
   },
+  created() {
+    Eventbus.$on('extendFileBox', this.extendFileBox);
+    Eventbus.$on('initFileBox', this.initFileBox);
+  },
+  computed: {
+    activeFilebox() {
+      return {
+        'file-box--extend': this.hasFile,
+        'file-box--reduce': !this.hasFile,
+      }
+    },
+  },
   data() {
     return {
       placeholder: '무슨 일이 일어나고 있나요?',
       editableDivStyle: 'tweet-textarea',
       svgButtonStyle: 'button--media--svg',
+      hasFile:  false,
       mediaButtonList: [
         {
           svg: `<svg x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
@@ -60,6 +76,15 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    extendFileBox() {
+      this.hasFile = true;
+    },
+    initFileBox() {
+      document.querySelector('.file-box').innerHTML = '';
+      this.hasFile = false;
+    },
   },
 };
 </script>
@@ -101,5 +126,25 @@ export default {
     justify-content: space-around;
     width: 128px;
     height: 100%;
+  }
+  .file-box {
+    display: none;
+    float: left;
+    padding: 8px 16px;
+    position: relative;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    border-top: 1px solid #ccd6dd;
+    width: 100%;
+    background-color: #f5f8fa;
+  }
+  .file-box--extend {
+    display: block !important;
+    height: 100%;
+  }
+  .file-box--reduce {
+    display: none !important;
+    /*height: 100%;*/
   }
 </style>

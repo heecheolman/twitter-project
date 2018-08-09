@@ -5,19 +5,24 @@
       rows="1"
       :placeholder="placeholder"
       v-model="content"
-      @blur="initTextArea"
+      @blur="textAreaCheck"
       @keydown="autoSizing">
     </textarea>
   </div>
 </template>
 
 <script>
+import Eventbus from './../../lib/Eventbus';
+
 export default {
   name: 'TweetTextArea',
   props: {
     placeholder: {
       type: String,
     },
+  },
+  created() {
+    Eventbus.$on('initTextArea', this.initTextArea);
   },
   data() {
     return {
@@ -26,6 +31,11 @@ export default {
   },
   methods: {
     initTextArea() {
+      const textarea = document.querySelector('textarea');
+      textarea.value = '';
+      textarea.style.height = 'auto';
+    },
+    textAreaCheck() {
       const content = this.content.replace(/(\s*)/g, "");
       const textarea = document.querySelector('textarea');
       if(content.length === 0) {

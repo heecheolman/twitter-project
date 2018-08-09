@@ -6,7 +6,7 @@
     <tweet-content
       :id="id"
       :content-text="contentText"
-      :content-date="contentDate"
+      :content-date="stringifyDate"
       :content-filename-list="contentFilenameList" />
   </li>
 </template>
@@ -16,15 +16,23 @@ import ProfileButton from './../molecules/ProfileButton';
 import ProfileImage from './../../assets/default_profile.png';
 import TweetContent from './../molecules/TweetContent';
 
+import DateCalculator from './../../lib/DateCalculator';
+
 export default {
   name: 'TimelineList',
   components: {
     ProfileButton,
     TweetContent,
   },
+  mounted() {
+    this.updateTimelineId = this.updateTimelineDate();
+  },
+  destroyed() {
+    clearInterval(this.updateTimelineId);
+  },
   props: {
     id: {
-      // type: String,
+      type: String,
     },
     contentText: {
       type: String,
@@ -36,12 +44,26 @@ export default {
       type: Array,
     },
   },
+  computed: {
+    stringifyDate() {
+      this.date = '• ' + DateCalculator(this.contentDate);
+      return this.date;
+    },
+  },
   data() {
     return {
       imagePath: ProfileImage,
       avatarSize: 'avatar--size48',
+      date: '',
     };
   },
+  methods: {
+    updateTimelineDate() {
+      setInterval(() => {
+        this.date = '• ' + DateCalculator(this.contentDate);
+      }, 30000);
+    },
+  }
 };
 
 </script>

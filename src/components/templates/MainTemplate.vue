@@ -8,13 +8,13 @@
       </div>
       <div class="content__timeline">
         <tweet-box />
-        <ol>
+        <ol v-show="!loading">
           <timeline-list
             v-for="(content, index) in contentList"
             :key="index"
             :id="content.userid"
             :content-text="content.contents"
-            :content-date="content.updated_at"
+            :content-date="content.created_at"
             :content-filename-list="content.images" />
         </ol>
       </div>
@@ -29,6 +29,7 @@ import HeaderSection from './../organisms/HeaderSection';
 import TweetBox from './../organisms/TweetBox';
 import TimelineList from '../organisms/TimelineList';
 import DashBoardProfile from './../organisms/DashBoardProfile';
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
 import Eventbus from './../../lib/Eventbus';
 import axios from 'axios';
@@ -40,24 +41,27 @@ export default {
     TweetBox,
     TimelineList,
     DashBoardProfile,
+    ClipLoader,
   },
   created() {
+    this.getTimelines();
     this.contentList = [];
     Eventbus.$on('getTimelines', this.getTimelines);
   },
   data() {
     return {
       contentList: [],
+      loading: false,
     };
   },
   methods: {
-    getTimelines() {
-      axios.get('/api/timelines')
-        .then((result) => {
-          this.contentList = result.data;
-          console.log('this is');
-          console.log(this.contentList);
-        });
+    async getTimelines() {
+      try {
+        const result = await axios.get('/api/timelines', { timeout:  0 });
+        this.contentList = result.data.reverse();
+      } catch(err) {
+        console.error(err);
+      }
     },
   }
 }
@@ -101,5 +105,14 @@ export default {
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .spinner-wrap {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 200px;
   }
 </style>

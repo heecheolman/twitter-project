@@ -1,6 +1,7 @@
 <template>
-  <div class="tweet-button-container" @click="tweet">
-    <button class="button--tweet">
+  <div class="tweet-button-container">
+    <clip-loader :loading="loading" :size="spinnerSize"/>
+    <button class="button--tweet" v-show="!loading" @click="tweet">
       {{ label }}
     </button>
   </div>
@@ -8,38 +9,101 @@
 <script>
 import axios from 'axios';
 import Eventbus from '../../lib/Eventbus';
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
+
 
 export default {
   name: 'TweetButton',
+  components: {
+    ClipLoader,
+  },
+  created() {
+    Eventbus.$on('addFormImageList', this.addFormImageList);
+    Eventbus.$on('removeFormImageList', this.removeFormImageList);
+  },
+  computed: {
+    spinnerSize() {
+      return '20px';
+    },
+  },
   data() {
     return {
       label: '트윗하기',
+      loading: false,
+      previewList: [],
     };
   },
   methods: {
-    tweet() {
-      const content = document.querySelector('textarea').value;
+    addFormImageList(fileId, file) {
+      this.previewList.unshift({
+        id: fileId,
+        file: file,
+      });
+    },
+    removeFormImageList(fileId) {
+      for(let it = 0; it < this.previewList.length; it++) {
+        if(this.previewList[it].id === fileId) {
+          this.previewList.splice(it, 1);
+        }
+      }
+      if(this.previewList.length === 0) {
+        Eventbus.$emit('initFileBox');
+        Eventbus.$emit('initPreviewList');
+      }
+    },
+    loadingSpinnerOn() {
+      this.loading = true;
+    },
+    loadingSpinnerOff() {
+      this.loading = false;
+    },
+    async tweet() {
+      this.loadingSpinnerOn();
+      const serverTimeout = 500;
       const mediaFile = document.querySelector('#media-file');
+      const content = document.querySelector('textarea').value;
       let filenameList = [];
 
-      // 파일이 하나라도 존재한다면 upload
-      if(mediaFile.files.length !== 0) {
+      if(this.previewList.length !== 0) {
         let formData = new FormData();
-        for(let i = 0; i < mediaFile.files.length; i++) {
-          let file = mediaFile.files[i];
-          filenameList.push({ filename: file.name });
-          formData.append(mediaFile.name, file);
+        for(let it = 0; it < this.previewList.length; it++) {
+          filenameList.push({ filename: this.previewList[it].file.name });
+          formData.append(mediaFile.name, this.previewList[it].file);
         }
-        axios.post('/api/upload', formData);
+        try {
+          axios.post('/api/upload',
+            formData, {
+            timeout: 1000,
+            });
+        } catch (err) {
+          console.error(err);
+        }
       }
-      // tweet
-      axios.post('/api/tweet', {
-        id: '김희철',
-        text: content,
-        date: new Date(),
-        filenameList: filenameList,
-      })
-        .then(Eventbus.$emit('getTimelines'));
+
+      setTimeout(async () => {
+        try {
+          await axios.post('/api/tweet', {
+            id: '김희철',
+            text: content,
+            filenameList: filenameList,
+          }, {
+            timeout: serverTimeout,
+          });
+        } catch (err) {
+          console.error(err);
+        }
+        Eventbus.$emit('getTimelines');
+        this.contentsInit();
+        this.loadingSpinnerOff();
+      }, serverTimeout);
+    },
+
+    // 트윗버튼을 누르면 콘텐츠들은 트윗되고 초기화 진행
+    // textarea, inputfile 초기화
+    contentsInit() {
+      this.previewList = [];
+      Eventbus.$emit('initTextArea');
+      Eventbus.$emit('initFileBox');
     },
   }
 };

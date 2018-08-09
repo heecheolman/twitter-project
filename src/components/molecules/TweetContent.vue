@@ -9,11 +9,11 @@
         :a-style="hashStyle" />
       <span-text
         :class="dateStyle"
-        :text="date" />
+        :text="contentDate" />
     </div>
     <div class="tweet-content__body">
       <image-content
-        v-for="(img, index) in contentFilenameList"
+        v-for="(img, index) in reverseList"
         :key="index"
         :filename="img.filename" />
       <p-text
@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import DateCalculator from './../../lib/DateCalculator';
-
 import SpanText from './../atoms/SpanText';
 import TextA from './../atoms/TextA';
 import PText from './../atoms/PText';
@@ -50,12 +48,6 @@ export default {
     SvgButton,
     ImageContent,
   },
-  mounted() {
-    this.updateTimelineId = this.updateTimelineDate();
-  },
-  destroyed() {
-    clearInterval(this.updateTimelineId);
-  },
   props: {
     id: {
     },
@@ -69,13 +61,17 @@ export default {
       type: Array,
     },
   },
+  computed: {
+    reverseList() {
+      return this.contentFilenameList.reverse();
+    }
+  },
   data() {
     return {
       idStyle: 'text--id',
       hash: '@fMUmSjMbVbjhqBO',
       hashStyle: 'text--hash',
       pStyle: 'text--tweet',
-      date: '• ' + DateCalculator(this.contentDate),
       dateStyle: 'text--date',
       svgButtonStyle: 'svg--reply',
       updateTimelineId: null,
@@ -116,14 +112,6 @@ export default {
         },
       ],
     };
-  },
-  methods: {
-    updateTimelineDate() {
-      setInterval(() => {
-        this.date = '• ' + DateCalculator(this.contentDate);
-      }, 30000);
-
-    },
   },
 }
 </script>
