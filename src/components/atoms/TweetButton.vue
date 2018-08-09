@@ -17,18 +17,40 @@ export default {
   components: {
     ClipLoader,
   },
-  data() {
-    return {
-      label: '트윗하기',
-      loading: false,
-    };
+  created() {
+    Eventbus.$on('addFormImageList', this.addFormImageList);
+    Eventbus.$on('removeFormImageList', this.removeFormImageList);
   },
   computed: {
     spinnerSize() {
       return '20px';
     },
   },
+  data() {
+    return {
+      label: '트윗하기',
+      loading: false,
+      previewList: [],
+    };
+  },
   methods: {
+    addFormImageList(fileId, file) {
+      this.previewList.unshift({
+        id: fileId,
+        file: file,
+      });
+    },
+    removeFormImageList(fileId) {
+      for(let it = 0; it < this.previewList.length; it++) {
+        if(this.previewList[it].id === fileId) {
+          this.previewList.splice(it, 1);
+        }
+      }
+      if(this.previewList.length === 0) {
+        Eventbus.$emit('initFileBox');
+        Eventbus.$emit('initPreviewList');
+      }
+    },
     loadingSpinnerOn() {
       this.loading = true;
     },
@@ -42,16 +64,17 @@ export default {
       const content = document.querySelector('textarea').value;
       let filenameList = [];
 
-      // upload file 이 1개라도 존재한다면 다음 구문 실행
-      if(mediaFile.files.length !== 0) {
+      if(this.previewList.length !== 0) {
         let formData = new FormData();
-        for(let i = 0; i < mediaFile.files.length; i++) {
-          const file = mediaFile.files[i];
-          filenameList.push({ filename: file.name });
-          formData.append(mediaFile.name, file);
+        for(let it = 0; it < this.previewList.length; it++) {
+          filenameList.push({ filename: this.previewList[it].file.name });
+          formData.append(mediaFile.name, this.previewList[it].file);
         }
         try {
-          axios.post('/api/upload', formData, { timeout: 1000, });
+          axios.post('/api/upload',
+            formData, {
+            timeout: 1000,
+            });
         } catch (err) {
           console.error(err);
         }
@@ -70,17 +93,17 @@ export default {
           console.error(err);
         }
         Eventbus.$emit('getTimelines');
-        this.contentInit();
+        this.contentsInit();
         this.loadingSpinnerOff();
       }, serverTimeout);
     },
 
-    // tweetBtn 을 누른 후 콘텐츠 초기화
-    contentInit() {
-      const textarea = document.querySelector('textarea');
-      document.querySelector('#media-file').value = '';
-      textarea.value = '';
-      textarea.style.height = 'auto';
+    // 트윗버튼을 누르면 콘텐츠들은 트윗되고 초기화 진행
+    // textarea, inputfile 초기화
+    contentsInit() {
+      this.previewList = [];
+      Eventbus.$emit('initTextArea');
+      Eventbus.$emit('initFileBox');
     },
   }
 };

@@ -4,7 +4,7 @@
     <div class="tweet-container">
       <tweet-text-area
         :placeholder="placeholder" />
-      <div class="file-box">
+      <div class="file-box" :class="activeFilebox">
       </div>
     </div>
     <div class="tweet-toolbar-container">
@@ -27,7 +27,7 @@
 import TweetTextArea from './../atoms/TweetTextArea';
 import InputMedia from './../atoms/InputMedia';
 import TweetButton from '../atoms/TweetButton';
-import AddTweetButton from '../atoms/AddTweetButton';
+import AddTweetButton from './../atoms/AddTweetButton';
 import Eventbus from '../../lib/Eventbus';
 
 
@@ -40,12 +40,15 @@ export default {
     AddTweetButton,
   },
   created() {
-    Eventbus.$on('fileBoxOn', this.fileBoxOn);
-    Eventbus.$on('fileBoxOff', this.fileBoxOff);
+    Eventbus.$on('extendFileBox', this.extendFileBox);
+    Eventbus.$on('initFileBox', this.initFileBox);
   },
   computed: {
-    hasFileCompute() {
-      return this.hasFile;
+    activeFilebox() {
+      return {
+        'file-box--extend': this.hasFile,
+        'file-box--reduce': !this.hasFile,
+      }
     },
   },
   data() {
@@ -72,19 +75,16 @@ export default {
           mediaType: 'video',
         },
       ],
-      fileboxDOM: document.querySelector('.file-box'),
     };
   },
   methods: {
-    fileBoxOn() {
-      this.fileboxDOM.style.display = 'block';
-      // const filebox = document.querySelector('.file-box');
-      this.fileboxDOM.style.height = '100%';
+    extendFileBox() {
+      this.hasFile = true;
     },
-    fileBoxOff() {
-      this.fileboxDOM.style.height = '100%';
-      this.fileboxDOM.style.display = 'none';
-    }
+    initFileBox() {
+      document.querySelector('.file-box').innerHTML = '';
+      this.hasFile = false;
+    },
   },
 };
 </script>
@@ -129,9 +129,22 @@ export default {
   }
   .file-box {
     display: none;
-    padding: 15px;
+    float: left;
+    padding: 8px 16px;
+    position: relative;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
     border-top: 1px solid #ccd6dd;
     width: 100%;
     background-color: #f5f8fa;
+  }
+  .file-box--extend {
+    display: block !important;
+    height: 100%;
+  }
+  .file-box--reduce {
+    display: none !important;
+    /*height: 100%;*/
   }
 </style>

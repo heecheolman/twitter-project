@@ -34,7 +34,6 @@ export default {
   .timeline__tweet-box {
     width: 100%;
     padding: 10px 12px;
-    border: 1px solid #e6ecf0;
     background-color: #E8F5FD;
   }
 </style>

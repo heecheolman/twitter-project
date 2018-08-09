@@ -13,7 +13,7 @@
     </div>
     <div class="tweet-content__body">
       <image-content
-        v-for="(img, index) in contentFilenameList"
+        v-for="(img, index) in reverseList"
         :key="index"
         :filename="img.filename" />
       <p-text
@@ -60,6 +60,11 @@ export default {
     contentFilenameList: {
       type: Array,
     },
+  },
+  computed: {
+    reverseList() {
+      return this.contentFilenameList.reverse();
+    }
   },
   data() {
     return {
