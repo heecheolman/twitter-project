@@ -1,18 +1,17 @@
 <template>
   <div>
-    <login-box />
+    <join-box />
   </div>
 </template>
 <script>
-import LoginBox from './../organisms/LoginBox';
+import JoinBox from './../organisms/JoinBox';
 
 export default {
-  name: 'LoginTemplate',
+  name: 'JoinTemplate',
   components: {
-    LoginBox,
+    JoinBox,
   },
 };
 </script>
 <style scoped>
-
 </style>

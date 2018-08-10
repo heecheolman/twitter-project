@@ -1,17 +1,24 @@
 <template>
   <div class="button-wrap flex-container flex-center">
-    <button class="button--base button--login">
+    <button class="button--base button--login" @click="login">
       {{ label }}
     </button>
   </div>
 </template>
 <script>
+import Eventbus from '../../lib/Eventbus';
+
 export default {
   name: 'LoginButton',
   data() {
     return {
       label: '로그인'
     };
+  },
+  methods: {
+    login() {
+      Eventbus.$emit('login');
+    },
   },
 };
 </script>

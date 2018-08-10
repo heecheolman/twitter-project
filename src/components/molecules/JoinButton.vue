@@ -1,17 +1,24 @@
 <template>
   <div class="button-wrap flex-container flex-center">
-    <button class="button--base button--join">
+    <button class="button--base button--join" @click="showJoinBox">
       {{ label }}
     </button>
   </div>
 </template>
 <script>
+import Eventbus from '../../lib/Eventbus';
+
 export default {
   name: 'JoinButton',
   data() {
     return {
       label: '회원가입'
     };
+  },
+  methods: {
+    showJoinBox() {
+      Eventbus.$emit('clickJoinButton');
+    },
   },
 };
 </script>
