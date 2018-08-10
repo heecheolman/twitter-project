@@ -21,6 +21,7 @@
       <div class="content__section">
       </div>
     </div>
+    <!--<alert-section />-->
   </div>
 </template>
 
@@ -29,6 +30,8 @@ import HeaderSection from './../organisms/HeaderSection';
 import TweetBox from './../organisms/TweetBox';
 import TimelineList from '../organisms/TimelineList';
 import DashBoardProfile from './../organisms/DashBoardProfile';
+// import AlertSection from './../organisms/AlertSection';
+
 import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
 import Eventbus from './../../lib/Eventbus';
@@ -42,6 +45,7 @@ export default {
     TimelineList,
     DashBoardProfile,
     ClipLoader,
+    // AlertSection,
   },
   created() {
     this.getTimelines();
@@ -107,12 +111,4 @@ export default {
     list-style: none;
   }
 
-  .spinner-wrap {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-    height: 200px;
-  }
 </style>
