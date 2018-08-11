@@ -2,28 +2,38 @@
   <div class="input-wrap">
     <label
       class="label--base"
-      :class="{ typed: this.value.length !== 0 }">
-      {{ component.placeholder }}
-    </label>
+      :class="isTypedLabel">{{component.placeholder}}</label>
     <input
       class="input--info"
       :type="component.type"
-      v-model="value">
+      required
+      :value="data" @input="$emit('update:data', $event.target.value)">
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'LoginInput',
   props: {
     component: {
       type: Object,
     },
+    data: {
+      type: String,
+    },
+  },
+  computed: {
+    isTypedLabel() {
+      return {
+        'typed-label': this.data.length !== 0,
+        'valid': this.component.placeholder === '사용 가능합니다!',
+        'not-valid': this.component.placeholder === '이미 있어요!',
+        'error' : this.component.placeholder === '제대로 입력해주세요!'
+      };
+    },
   },
   data() {
     return {
-      value: '',
       fieldStyle: 'input--info',
     };
   },
@@ -32,7 +42,7 @@ export default {
 <style scoped>
   .input-wrap {
     width: 250px;
-    height: 80px;
+    height: 70px;
     position: relative;
   }
   .label--base {
@@ -62,8 +72,18 @@ export default {
 
   .input--info:hover {
     border: 1px solid #00aced;
+    box-shadow: 0 2px 4px rgba(0, 172, 237, 0.63), 0 3px 6px rgba(0, 172, 237, 0.08);
   }
-  .typed {
-    transform: scale(.7333) translateX(-6px) translateY(-17px);
+  .input--info:focus {
+    border: 1px solid #00aced;
+    box-shadow: 0 2px 4px rgba(0, 172, 237, 0.35), 0 3px 6px rgba(0, 172, 237, 0.08);
+
   }
+  .typed-label {
+    transform: scale(.7333) translateX(-20%) translateY(-17px);
+  }
+
+  .valid { color: #1DA1F2 !important; }
+  .not-valid { color: #ff2128 !important; }
+  .error { color: #ff2128 !important; }
 </style>
