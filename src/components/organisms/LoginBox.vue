@@ -16,7 +16,7 @@
     </div>
     <div class="login-body__button-body flex-container flex-center flex-column">
       <login-button />
-      <join-button />
+      <join-form-button />
     </div>
   </div>
 </template>
@@ -25,7 +25,8 @@ import Logo from './../molecules/Logo';
 import LoginInput from './../molecules/LoginInput';
 import SupportLink from './../molecules/SupportLink';
 import LoginButton from './../molecules/LoginButton';
-import JoinButton from './../molecules/JoinButton';
+import JoinFormButton from '../molecules/JoinFormButton';
+
 
 import Eventbus from './../../lib/Eventbus';
 
@@ -36,7 +37,7 @@ export default {
     LoginInput,
     SupportLink,
     LoginButton,
-    JoinButton,
+    JoinFormButton,
   },
   created() {
     Eventbus.$on('login', this.login);
@@ -90,10 +91,10 @@ export default {
   }
   .login-body__support-body {
     width: 100%;
-    height: 50px;
+    height: 70px;
   }
   .login-body__button-body {
     width: 100%;
-    height: 250px;
+    height: 230px;
   }
 </style>

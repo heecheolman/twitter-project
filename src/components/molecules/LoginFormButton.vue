@@ -1,6 +1,6 @@
 <template>
   <div class="button-wrap flex-container flex-center">
-    <button class="button--base button--login" @click="login">
+    <button class="button--base button--join" @click="showLoginForm">
       {{ label }}
     </button>
   </div>
@@ -9,15 +9,15 @@
 import Eventbus from '../../lib/Eventbus';
 
 export default {
-  name: 'LoginButton',
+  name: 'LoginFormButton',
   data() {
     return {
-      label: '로그인'
+      label: '뒤로가기'
     };
   },
   methods: {
-    login() {
-      Eventbus.$emit('login');
+    showLoginForm() {
+      Eventbus.$emit('showLoginForm');
     },
   },
 };
@@ -38,11 +38,12 @@ export default {
     font-weight: 400;
     transition: 0.3s;
   }
-  .button--login {
-    background-color: #00aced;
-    color: #ffffff;
+  .button--join {
+    border: 1px solid #ececec;
+    color: #737373;
   }
-  .button--login:hover {
-    background-color: #00b9ff;
+  .button--join:hover {
+    border: 1px solid transparent;
+    background-color: #ececec;
   }
 </style>

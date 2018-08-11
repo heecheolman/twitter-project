@@ -8,6 +8,7 @@
     <input
       class="input--info"
       :type="component.type"
+      required
       :value="data" @input="$emit('update:data', $event.target.value)">
   </div>
 </template>
@@ -51,7 +52,7 @@ export default {
 <style scoped>
   .input-wrap {
     width: 250px;
-    height: 80px;
+    height: 70px;
     position: relative;
   }
   .label--base {

@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import LoginTemplate from './../components/templates/LoginTemplate';
+import LoginTemplate from '../components/templates/LoginTemplate';
 import JoinTemplate from './../components/templates/JoinTemplate';
 
 import Eventbus from './../lib/Eventbus';
@@ -21,8 +21,8 @@ export default {
   },
   name: 'LoginPage',
   created() {
-    Eventbus.$on('clickJoinButton', this.clickJoinButton);
-    Eventbus.$on('clickBackButton', this.clickBackButton);
+    Eventbus.$on('showJoinForm', this.showJoinForm);
+    Eventbus.$on('showLoginForm', this.showLoginForm);
   },
   data() {
     return {
@@ -30,10 +30,10 @@ export default {
     }
   },
   methods: {
-    clickJoinButton() {
+    showJoinForm() {
       this.isJoinClicked = true;
     },
-    clickBackButton() {
+    showLoginForm() {
       this.isJoinClicked = false;
     },
   }
