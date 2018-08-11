@@ -2,9 +2,7 @@
   <div class="input-wrap">
     <label
       class="label--base"
-      :class="isTyped">
-      {{ component.placeholder }}
-    </label>
+      :class="isTypedLabel">{{component.placeholder}}</label>
     <input
       class="input--info"
       :type="component.type"
@@ -14,7 +12,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'LoginInput',
   props: {
@@ -26,25 +23,18 @@ export default {
     },
   },
   computed: {
-    isTyped() {
+    isTypedLabel() {
       return {
-        'typed': this.data.length !== 0,
-      }
+        'typed-label': this.data.length !== 0,
+        'valid': this.component.placeholder === '사용 가능합니다!',
+        'not-valid': this.component.placeholder === '이미 있어요!',
+        'error' : this.component.placeholder === '제대로 입력해주세요!'
+      };
     },
   },
   data() {
     return {
       fieldStyle: 'input--info',
-      inputComponents: [
-        {
-          placeholder: '아이디',
-          type: 'text',
-        },
-        {
-          placeholder: '패스워드',
-          type: 'password',
-        },
-      ],
     };
   },
 };
@@ -89,7 +79,11 @@ export default {
     box-shadow: 0 2px 4px rgba(0, 172, 237, 0.35), 0 3px 6px rgba(0, 172, 237, 0.08);
 
   }
-  .typed {
-    transform: scale(.7333) translateX(-6px) translateY(-17px);
+  .typed-label {
+    transform: scale(.7333) translateX(-20%) translateY(-17px);
   }
+
+  .valid { color: #1DA1F2 !important; }
+  .not-valid { color: #ff2128 !important; }
+  .error { color: #ff2128 !important; }
 </style>
