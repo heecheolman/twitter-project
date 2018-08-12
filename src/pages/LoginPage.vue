@@ -2,9 +2,9 @@
   <div class="login-wrap flex-container flex-center">
     <transition name="fade" mode="out-in">
       <login-template
-        v-if="!isJoinClicked"/>
-    <join-template
-      v-else/>
+        v-if="showLoginTemplate"/>
+      <join-template
+        v-else/>
     </transition>
   </div>
 </template>
@@ -26,15 +26,15 @@ export default {
   },
   data() {
     return {
-      isJoinClicked: false,
+      showLoginTemplate: true,
     }
   },
   methods: {
     showJoinForm() {
-      this.isJoinClicked = true;
+      this.showLoginTemplate = false;
     },
     showLoginForm() {
-      this.isJoinClicked = false;
+      this.showLoginTemplate = true;
     },
   }
 };
