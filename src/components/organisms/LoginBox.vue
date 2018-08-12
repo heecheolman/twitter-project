@@ -27,8 +27,8 @@ import SupportLink from './../molecules/SupportLink';
 import LoginButton from './../molecules/LoginButton';
 import JoinFormButton from '../molecules/JoinFormButton';
 
-
 import Eventbus from './../../lib/Eventbus';
+import axios from 'axios';
 
 export default {
   name: 'LoginBox',
@@ -58,12 +58,8 @@ export default {
         },
       ],
       buttonComponents: [
-        {
-          text: '로그인'
-        },
-        {
-          text: '회원가입'
-        },
+        { text: '로그인' },
+        { text: '회원가입' },
       ],
       support: { text: '비밀번호를 잊으셨나요?' },
     };

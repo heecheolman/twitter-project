@@ -169,7 +169,6 @@ export default {
     checkPhoneNumber() {
       const isPhoneNumber = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/;
       const phoneNumber = this.inputComponents[2].data.replace(/ /gi, '').split('-').join('');
-      console.log(phoneNumber);
       if(isPhoneNumber.test(phoneNumber)) {
         this.userData.phoneNumber = phoneNumber;
         return true;
@@ -191,53 +190,91 @@ export default {
       }
     },
 
-    // lodash의 debounce 를 통해 입력된 값을 500ms 마다 db 에서 확인함
+    // lodash의 debounce 를 통해 입력된 값을 300ms 마다 db 에서 확인함
     confirmNickname: _.debounce(function() {
       const vm = this;
       vm.inputComponents[1].data = vm.nicknameArea.replace(/ /gi, '');
-      axios.get('/api/nicknames')
-        .then((result) => {
-          // db에서 얻어온 result 배열에 { key: value } 존재하는지 여부 return 값이 -1이라면 db에서 존재하지 않으니 유효한 닉네임
-          const index = _.findIndex(result.data, { nickname: vm.nicknameArea });
-          const isValid = vm.checkNickname();
-          if(index === -1 && isValid) {
-            this.nicknameValid = true;
-            vm.inputComponents[1].placeholder = '사용 가능합니다!';
-          } else if(index !== -1 && isValid){
-            this.nicknameValid = false;
-            vm.inputComponents[1].placeholder = '이미 있어요!';
-          } else if(!isValid) {
-            this.nicknameValid = false;
-            vm.inputComponents[1].placeholder = '제대로 입력해주세요!';
-          }
-          if(vm.nicknameArea.length === 0) {
-            this.nicknameValid = false;
-            vm.inputComponents[1].placeholder = '닉네임';
-          }
+      const isValid = vm.checkNickname();
+      if(isValid && vm.inputComponents[1].data.length !== 0) {
+        axios.get('/api/nicknames/' + vm.inputComponents[1].data, {
+          params: {
+            nickname: vm.inputComponents[1].data,
+          },
         })
-        .catch((err) => {
-          console.error(err);
-        });
-      }, 500),
+          .then((result) => {
+            if(isValid && result.data.length === 0) {
+              this.nicknameValid = true;
+              vm.inputComponents[1].placeholder = '사용 가능합니다!';
+            } else if(isValid && result.data.length !== 0) {
+              this.nicknameValid = false;
+              vm.inputComponents[1].placeholder = '이미 있어요!';
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else if(!isValid) {
+        this.nicknameValid = false;
+        vm.inputComponents[1].placeholder = '제대로 입력해주세요!';
+      }
+      if(vm.inputComponents[1].data.length === 0) {
+        this.nicknameValid = false;
+        vm.inputComponents[1].placeholder = '닉네임';
+      }
+
+
+
+      // axios.get('/api/nicknames')
+      //   .then((result) => {
+      //     // db에서 얻어온 result 배열에 { key: value } 존재하는지 여부 return 값이 -1이라면 db에서 존재하지 않으니 유효한 닉네임
+      //     const index = _.findIndex(result.data, { nickname: vm.nicknameArea });
+      //     const isValid = vm.checkNickname();
+      //     if(index === -1 && isValid) {
+      //       this.nicknameValid = true;
+      //       vm.inputComponents[1].placeholder = '사용 가능합니다!';
+      //     } else if(index !== -1 && isValid){
+      //       this.nicknameValid = false;
+      //       vm.inputComponents[1].placeholder = '이미 있어요!';
+      //     } else if(!isValid) {
+      //       this.nicknameValid = false;
+      //       vm.inputComponents[1].placeholder = '제대로 입력해주세요!';
+      //     }
+      //     if(vm.nicknameArea.length === 0) {
+      //       this.nicknameValid = false;
+      //       vm.inputComponents[1].placeholder = '닉네임';
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.error(err);
+      //   });
+      }, 300),
 
     confirmPhoneNumber: _.debounce(function() {
       const vm = this;
       vm.inputComponents[2].data = vm.phoneNumberArea.replace(/ /gi, '').split('-').join('');
-      axios.get('/api/phone-numbers')
+
+      axios.get('/api/phone-numbers/' + vm.inputComponents[2].data, {
+        params: {
+          phoneNumber: vm.inputComponents[2].data,
+        },
+      })
         .then((result) => {
-          const index = _.findIndex(result.data, { phone_number: vm.phoneNumberArea });
           const isValid = vm.checkPhoneNumber();
-          if(index === -1 && isValid) {
+          if(isValid && result.data.length === 0) {
+            console.log('1');
             this.phoneNumberValid = true;
             vm.inputComponents[2].placeholder = '사용 가능합니다!';
-          } else if(index !== -1 && isValid) {
+          } else if(isValid && result.data.length !== 0) {
+            console.log('2');
             this.phoneNumberValid = false;
             vm.inputComponents[2].placeholder = '이미 있어요!';
-          } else if(!isValid){
+          } else if(!isValid) {
+            console.log('3');
             this.phoneNumberValid = false;
             vm.inputComponents[2].placeholder = '제대로 입력해주세요!';
           }
-          if(vm.phoneNumberArea.length === 0){
+          if(vm.phoneNumberArea.length === 0) {
+            console.log('4');
             this.phoneNumberValid = false;
             vm.inputComponents[2].placeholder = '휴대폰번호';
           }
@@ -245,7 +282,30 @@ export default {
         .catch((err) => {
           console.error(err);
         });
-    }, 500),
+
+      // axios.get('/api/phone-numbers')
+      //   .then((result) => {
+      //     const index = _.findIndex(result.data, { phone_number: vm.phoneNumberArea });
+      //     const isValid = vm.checkPhoneNumber();
+      //     if(index === -1 && isValid) {
+      //       this.phoneNumberValid = true;
+      //       vm.inputComponents[2].placeholder = '사용 가능합니다!';
+      //     } else if(index !== -1 && isValid) {
+      //       this.phoneNumberValid = false;
+      //       vm.inputComponents[2].placeholder = '이미 있어요!';
+      //     } else if(!isValid){
+      //       this.phoneNumberValid = false;
+      //       vm.inputComponents[2].placeholder = '제대로 입력해주세요!';
+      //     }
+      //     if(vm.phoneNumberArea.length === 0){
+      //       this.phoneNumberValid = false;
+      //       vm.inputComponents[2].placeholder = '휴대폰번호';
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.error(err);
+      //   });
+    }, 100),
 
     // 회원가입하기
     async join() {
