@@ -24,14 +24,30 @@
       <login-form-button />
       <join-button />
     </div>
-    <modal v-if="showOkModal" @close="showOkModal = false">
-      <h3 slot="header" class="modal-header--ok">축하드립니다! 🎉</h3>
-      <p slot="body" class="modal-body--ok">
+    <!-- 회원가입성공 Modal -->
+    <modal v-if="showLoginModal" @close="showLoginModal = false">
+      <h3 slot="header" class="modal-header--base modal-header--ok">
+        축하드립니다! 🎉
+      </h3>
+      <p slot="body" class="modal-body--base">
         회원님의 회원가입을 진심으로 축하드립니다!<br/>
         로그인 후 이용 가능해요!
       </p>
-      <button slot="button" @click="goLogin" class="modal-button--ok">
+      <button slot="button" @click="goLogin" class="modal-button--base">
         확인
+      </button>
+    </modal>
+    <!-- 회원가입실패 Modal -->
+    <modal v-if="showErrorModal" @close="showErrorModal = false">
+      <h3 slot="header" class="modal-header--base modal-header--err">
+        양식을 확인해보세요!
+      </h3>
+      <p slot="body" class="modal-body--base">
+        양식이 어딘가 잘못됐어요!<br>
+        다시 한 번 확인해주세요 : )
+      </p>
+      <button slot="button" @click="returnForm" class="modal-button--base">
+        돌아가기
       </button>
     </modal>
   </div>
@@ -99,7 +115,8 @@ export default {
   },
   data() {
     return {
-      showOkModal: false,
+      showLoginModal: false,
+      showErrorModal: false,
       logoStyle: 'logo--login',
       inputComponents: [
         {
@@ -235,33 +252,35 @@ export default {
       const isName = this.checkName();
       const isNickname = this.nicknameValid;
       const isPhoneNumber = this.phoneNumberValid;
-      this.showOkModal = true;
       if(isName && isNickname && isPhoneNumber && this.checkPassword) {
+        this.showLoginModal = true;
         try {
-          // await axios.post('/api/join', {
-          //   phone_number: this.userData.phoneNumber,
-          //   user_password: this.userData.password,
-          //   real_name: this.userData.name,
-          //   nickname: this.userData.nickname,
-          //   /* userData: {
-          //       nickname:
-          //       phoneNumber:
-          //       name:
-          //       password:
-          //    } */
-          //
-          //   // 정상적으로 가입이 되면 알림을 보여주고
-          // });
+          await axios.post('/api/join', {
+            phone_number: this.userData.phoneNumber,
+            user_password: this.userData.password,
+            real_name: this.userData.name,
+            nickname: this.userData.nickname,
+            /* userData: {
+                nickname:
+                phoneNumber:
+                name:
+                password:
+             } */
+          });
         } catch(err) {
           console.error(err);
         }
       } else {
-
+        this.showErrorModal = true;
       }
     },
 
+    returnForm() {
+      this.showErrorModal = false;
+    },
+
     goLogin() {
-      this.showOkModal = false;
+      this.showLoginModal = false;
       Eventbus.$emit('showLoginForm', this.showLoginForm);
     },
   },
@@ -300,16 +319,27 @@ export default {
     opacity: 0;
   }
 
+  .modal-header--base {
+    padding: 10px 0;
+  }
+
   .modal-header--ok {
     color: #4AB3F4;
+    border-bottom: 2px solid #4AB3F4;
   }
-  .modal-body--ok {
+  .modal-header--err {
+    color: #ff2128;
+    border-bottom: 2px solid #ff2128;
+  }
+
+  .modal-body--base {
     line-height: 180%;
     text-align: center;
     font-size: 0.8rem;
     color: #737373;
   }
-  .modal-button--ok {
+
+  .modal-button--base {
     width: 80px;
     height: 35px;
     outline: none;
@@ -319,11 +349,10 @@ export default {
     font-size: 0.7rem;
     font-weight: 600;
     background-color: #fff;
-    color: #4AB3F4;
-
+    color: #737373;
     transition: 0.3s;
   }
-  .modal-button--ok:hover {
+  .modal-button--base:hover {
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   }
 </style>
