@@ -26,9 +26,14 @@ export default {
     isTypedLabel() {
       return {
         'typed-label': this.data.length !== 0,
-        'valid': this.component.placeholder === '사용 가능합니다!',
-        'not-valid': this.component.placeholder === '이미 있어요!',
-        'error' : this.component.placeholder === '제대로 입력해주세요!'
+
+        'valid': this.component.placeholder === '사용 가능합니다!'||
+                 this.component.placeholder === '유효한 형식입니다!' ||
+                 this.component.placeholder === '유효한 형식입니다!',
+
+        'not-valid': this.component.placeholder === '이미 있어요!' ||
+                     this.component.placeholder === '형식이 틀립니다!' ||
+                     this.component.placeholder === '제대로 입력해주세요!',
       };
     },
   },
