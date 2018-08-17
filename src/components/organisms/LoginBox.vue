@@ -40,7 +40,8 @@ import JoinFormButton from './../molecules/JoinFormButton';
 import Modal from './../molecules/Modal';
 
 import Eventbus from './../../lib/Eventbus';
-import axios from 'axios';
+import Auth from './../../api';
+
 import _ from 'lodash';
 
 export default {
@@ -74,7 +75,6 @@ export default {
       if(this.phoneNumberArea.length === 0) {
         this.inputComponents[0].placeholder = '휴대폰 번호';
       }
-      console.log(this.isPhoneNumber);
     }, 300),
   },
   data() {
@@ -98,43 +98,61 @@ export default {
       ],
       support: { text: '비밀번호를 잊으셨나요?' },
       isPhoneNumber: false,
-      isLogin: false,
+      // isLogin: false,
       showErrorModal: false,
     };
   },
   methods: {
-    login() {
-      if(this.isPhoneNumber && this.inputComponents[0].data.length !== 0) {
-        axios.get('/api/phone-numbers/' + this.inputComponents[0].data, {
-          params: { phoneNumber: this.inputComponents[0].data, },
-        })
-          .then((result) => {
-            if(this.inputComponents[1].data.length !== 0 && result.data.length !== 0) {
-              return this.passwordCheck();
-            }
-          })
-          // db 의 패스워드와 입력된 패스워드가 같다면 this.isLogin 에 저장
-          .then((dbPassword) => {
-            this.isLogin = dbPassword.data[0].user_password === this.inputComponents[1].data;
-            this.showErrorModal = !this.isLogin;
-          })
-          .catch(() => {
-            this.showErrorModal = true;
-          });
-      } else {
-        this.showErrorModal = true;
-      }
+    async login() {
+      if(this.isPhoneNumber && this.inputComponents[0].data.length !== 0 && this.inputComponents[1].data.length !== 0) {
+        const userId = this.inputComponents[0].data;
+        const userPw = this.inputComponents[1].data;
+
+        await Auth.login.checkId(userId);
+        if(Auth.login.hasId) {
+          await Auth.login.checkPw(userId, userPw);
+          if(Auth.login.isLogin) {
+
+            // login true then routing
+            console.log('login true');
+
+          } else { this.showErrorModal = true; }
+        } else { this.showErrorModal = true; }
+      } else { this.showErrorModal = true; }
+      // if(this.isPhoneNumber && this.inputComponents[0].data.length !== 0) {
+      //   axios.get('/api/phone-numbers/' + this.inputComponents[0].data, {
+      //     params: { phoneNumber: this.inputComponents[0].data, },
+      //   })
+      //     .then((result) => {
+      //       if(this.inputComponents[1].data.length !== 0 && result.data.length !== 0) {
+      //         return this.passwordCheck();
+      //       }
+      //     })
+      //     // db 의 패스워드와 입력된 패스워드가 같다면 this.isLogin 에 저장
+      //     .then((dbPassword) => {
+      //       this.isLogin = dbPassword.data[0].user_password === this.inputComponents[1].data;
+      //       this.showErrorModal = !this.isLogin;
+      //       if(this.isLogin) {
+      //         // 로그인 되었을 시 해야할 행동
+      //       }
+      //     })
+      //     .catch(() => {
+      //       this.showErrorModal = true;
+      //     });
+      // } else {
+      //   this.showErrorModal = true;
+      // }
     },
 
-    passwordCheck() {
-      const passwordPromise = axios.get(`/api/password/${this.inputComponents[0].data}/${this.inputComponents[1].data}`, {
-        params: {
-          phoneNumber: this.inputComponents[0].data,
-          userPassword: this.inputComponents[1].data,
-        },
-      });
-      return passwordPromise;
-    }
+    // passwordCheck() {
+    //   const passwordPromise = axios.get(`/api/password/${this.inputComponents[0].data}/${this.inputComponents[1].data}`, {
+    //     params: {
+    //       phoneNumber: this.inputComponents[0].data,
+    //       userPassword: this.inputComponents[1].data,
+    //     },
+    //   });
+    //   return passwordPromise;
+    // }
   }
 };
 </script>

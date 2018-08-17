@@ -21,7 +21,6 @@
       <div class="content__section">
       </div>
     </div>
-    <!--<alert-section />-->
   </div>
 </template>
 
@@ -30,7 +29,6 @@ import HeaderSection from './../organisms/HeaderSection';
 import TweetBox from './../organisms/TweetBox';
 import TimelineList from '../organisms/TimelineList';
 import DashBoardProfile from './../organisms/DashBoardProfile';
-// import AlertSection from './../organisms/AlertSection';
 
 import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
@@ -45,7 +43,6 @@ export default {
     TimelineList,
     DashBoardProfile,
     ClipLoader,
-    // AlertSection,
   },
   created() {
     this.getTimelines();
@@ -61,7 +58,7 @@ export default {
   methods: {
     async getTimelines() {
       try {
-        const result = await axios.get('/api/timelines', { timeout:  0 });
+        const result = await axios.get('/api/timelines');
         this.contentList = result.data.reverse();
       } catch(err) {
         console.error(err);
