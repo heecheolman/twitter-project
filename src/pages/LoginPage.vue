@@ -2,9 +2,9 @@
   <div class="login-wrap flex-container flex-center">
     <transition name="fade" mode="out-in">
       <login-template
-        v-if="!isJoinClicked"/>
-    <join-template
-      v-else/>
+        v-if="showLoginTemplate"/>
+      <join-template
+        v-else/>
     </transition>
   </div>
 </template>
@@ -26,15 +26,15 @@ export default {
   },
   data() {
     return {
-      isJoinClicked: false,
+      showLoginTemplate: true,
     }
   },
   methods: {
     showJoinForm() {
-      this.isJoinClicked = true;
+      this.showLoginTemplate = false;
     },
     showLoginForm() {
-      this.isJoinClicked = false;
+      this.showLoginTemplate = true;
     },
   }
 };
@@ -48,7 +48,7 @@ export default {
   }
 
   .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s ease;
+    transition: opacity .4s ease;
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
@@ -56,12 +56,13 @@ export default {
 
   .slide-leave-active,
   .slide-enter-active {
-    transition: 0.6s;
+    transition: 0.5s;
   }
   .slide-enter {
-    transform: translate(100vw, 0);
+    transform: translate(200%, 0);
   }
   .slide-leave-to {
-    transform: translate(-100vw, 0);
+    opacity: 0;
+    transform: translate(200%, 0);
   }
 </style>
