@@ -1,7 +1,7 @@
 <template>
   <div class="profile__nickname">
     <text-a
-      :label="id"
+      :label="nickname"
       :a-style="idStyle" />
     <text-a
       :label="hash"
@@ -16,9 +16,13 @@ export default {
   components: {
     TextA,
   },
+  props: {
+    nickname: {
+      type: String,
+    }
+  },
   data() {
     return {
-      id: '김희철',
       idStyle: 'text--id',
       hash: '@fMUmSjMbVbjhqBO',
       hashStyle: 'text--hash',

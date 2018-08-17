@@ -75,6 +75,10 @@ export default {
   },
   created() {
     Eventbus.$on('join', this.join);
+    this.nicknameValid = false;
+    this.phoneNumberValid = false;
+    console.log('this.nicknameValid: ' + this.nicknameValid);
+    console.log('this.phoneNumberValid: ' + this.phoneNumberValid);
   },
   computed: {
     checkPassword() {
@@ -259,6 +263,8 @@ export default {
       const isName = this.checkName();
       const isNickname = this.nicknameValid;
       const isPhoneNumber = this.phoneNumberValid;
+      console.log(isNickname);
+      console.log(isPhoneNumber);
       if(isName && isNickname && isPhoneNumber && this.checkPassword) {
         this.showLoginModal = true;
         try {

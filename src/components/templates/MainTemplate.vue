@@ -4,7 +4,8 @@
     <!-- ------ Main Content ------ -->
     <div class="content wrapper">
       <div class="content__section">
-        <dash-board-profile />
+        <dash-board-profile
+          :nickname="userData.nickname" />
       </div>
       <div class="content__timeline">
         <tweet-box />
@@ -44,10 +45,15 @@ export default {
     DashBoardProfile,
     ClipLoader,
   },
+  props: {
+    userData: {
+      type: Object,
+    },
+  },
   created() {
-    this.getTimelines();
-    this.contentList = [];
-    Eventbus.$on('getTimelines', this.getTimelines);
+    // this.getTimelines();
+    // this.contentList = [];
+    // Eventbus.$on('getTimelines', this.getTimelines);
   },
   data() {
     return {
