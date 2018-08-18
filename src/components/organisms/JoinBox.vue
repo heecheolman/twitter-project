@@ -75,10 +75,12 @@ export default {
   },
   created() {
     Eventbus.$on('join', this.join);
-    this.nicknameValid = false;
-    this.phoneNumberValid = false;
-    console.log('this.nicknameValid: ' + this.nicknameValid);
-    console.log('this.phoneNumberValid: ' + this.phoneNumberValid);
+  },
+  destroyed() {
+    this.join = null;
+    for(let i = 0; i < this.inputComponents.length; i++) {
+      this.inputComponents[i].data = '';
+    }
   },
   computed: {
     checkPassword() {
@@ -261,10 +263,11 @@ export default {
     // 회원가입하기
     async join() {
       const isName = this.checkName();
-      const isNickname = this.nicknameValid;
-      const isPhoneNumber = this.phoneNumberValid;
-      console.log(isNickname);
-      console.log(isPhoneNumber);
+      const isNickname = this.checkNickname();
+      const isPhoneNumber = this.checkPhoneNumber();
+      // console.log(isName);
+      // console.log(isNickname);
+      // console.log(isPhoneNumber);
       if(isName && isNickname && isPhoneNumber && this.checkPassword) {
         this.showLoginModal = true;
         try {

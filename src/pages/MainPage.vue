@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import store from './../lib/Storage';
 import MainTemplate from './../components/templates/MainTemplate';
 import axios from 'axios';
 
@@ -14,10 +15,22 @@ export default {
   components: {
     MainTemplate,
   },
+  beforeRouteEnter(to, from, next) {
+    axios.get(`/api/phone-numbers/${to.params.phoneNumber}/user-data`, {
+      params: {
+        phone_number: to.params.phoneNumber,
+      },
+    })
+      .then((result) => {
+        store.user = result.data[0];
+        next();
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+  },
   created() {
-    this.userData = {};
-    this.fetchData();
-    console.log(this.userData);
+    this.userData = store.user;
   },
   props: {
     phoneNumber: {
@@ -29,23 +42,6 @@ export default {
       userData: {},
     }
   },
-  methods: {
-    fetchData() {
-      // 유저 데이터를 가져온다.
-      axios.get(`/api/phone-numbers/${this.$route.params.phoneNumber}/user-data`, {
-        params: {
-          phone_number: this.$route.params.phoneNumber,
-        },
-      })
-        .then((result) => {
-          console.log(result);
-          this.userData = result.data[0];
-        })
-        .catch((err) => {
-          console.error(err);
-        })
-    },
-  }
 }
 </script>
 
