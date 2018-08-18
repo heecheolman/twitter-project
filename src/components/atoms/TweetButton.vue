@@ -10,6 +10,7 @@
 import axios from 'axios';
 import Eventbus from '../../lib/Eventbus';
 import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
+import store from './../../lib/Storage';
 
 
 export default {
@@ -83,7 +84,8 @@ export default {
       setTimeout(async () => {
         try {
           await axios.post('/api/tweet', {
-            id: '김희철',
+            user_id: store.user.id,
+            nickname: store.user.nickname,
             text: content,
             filenameList: filenameList,
           }, {

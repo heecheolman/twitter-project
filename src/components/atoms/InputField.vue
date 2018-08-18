@@ -2,10 +2,16 @@
   <input
     :type="type"
     :class="fieldStyle"
-    :placeholder="placeholder" >
+    :placeholder="placeholder"
+    @input="searching"
+    v-model="inputValue">
 </template>
 
 <script>
+import Eventbus from './../../lib/Eventbus';
+import axios from 'axios';
+import _ from 'lodash';
+
 export default {
   name: 'InputField',
   props: {
@@ -19,6 +25,40 @@ export default {
       type: String,
     }
   },
+  watch: {
+    inputValue: function() {
+      this.searchUserData();
+    }
+  },
+  data() {
+    return {
+      inputValue: '',
+    }
+  },
+  methods: {
+    searching() {
+      if(this.inputValue.length !== 0) {
+        Eventbus.$emit('toggleOn');
+      } else {
+        Eventbus.$emit('toggleOff');
+      }
+    },
+    searchUserData: _.debounce(function() {
+      if(this.inputValue.length !== 0) {
+        axios.get(`/api/nicknames/input/${this.inputValue}`, {
+          params: {
+            input: this.inputValue,
+          },
+        })
+          .then((result) => {
+            Eventbus.$emit('updateNicknameList', result.data);
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+      }
+    }, 500),
+  }
 };
 </script>
 

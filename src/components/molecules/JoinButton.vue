@@ -17,6 +17,7 @@ export default {
   },
   methods: {
     join() {
+      console.log('emit join');
       Eventbus.$emit('join');
     },
   },

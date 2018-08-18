@@ -117,7 +117,9 @@ export default {
             console.log('login true');
             // 여기에서 유저에대한 db 정보를 넘겨줘야함, 일단 라우팅은 성공됐으니
             // navigation guard 가 필요함 ok
-            this.$router.replace({ name: 'MainPage', });
+
+            // userData 를 가져오는 api
+            this.$router.replace({ name: 'MainPage', params: { phoneNumber: userId}},);
 
           } else { this.showErrorModal = true; }
         } else { this.showErrorModal = true; }

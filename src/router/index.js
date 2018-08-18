@@ -20,8 +20,6 @@ export default new Router({
         requiresAuth: true,
       },
     },
-
-
     // 404 not found
     {
       path: '*',

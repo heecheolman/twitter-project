@@ -4,7 +4,8 @@
     <!-- ------ Main Content ------ -->
     <div class="content wrapper">
       <div class="content__section">
-        <dash-board-profile />
+        <dash-board-profile
+          :nickname="userData.nickname" />
       </div>
       <div class="content__timeline">
         <tweet-box />
@@ -12,7 +13,7 @@
           <timeline-list
             v-for="(content, index) in contentList"
             :key="index"
-            :id="content.userid"
+            :id="content.nickname"
             :content-text="content.contents"
             :content-date="content.created_at"
             :content-filename-list="content.images" />
@@ -34,6 +35,7 @@ import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
 import Eventbus from './../../lib/Eventbus';
 import axios from 'axios';
+import store from './../../lib/Storage';
 
 export default {
   name: 'MainTemplate',
@@ -44,10 +46,15 @@ export default {
     DashBoardProfile,
     ClipLoader,
   },
+  props: {
+    userData: {
+      type: Object,
+    },
+  },
   created() {
-    this.getTimelines();
     this.contentList = [];
     Eventbus.$on('getTimelines', this.getTimelines);
+    this.getTimelines();
   },
   data() {
     return {
@@ -58,7 +65,11 @@ export default {
   methods: {
     async getTimelines() {
       try {
-        const result = await axios.get('/api/timelines');
+        const result = await axios.get('/api/timelines/' + this.userData.id, {
+          params: {
+            user_id: this.userData.id,
+          }
+        });
         this.contentList = result.data.reverse();
       } catch(err) {
         console.error(err);

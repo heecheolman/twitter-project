@@ -74,7 +74,7 @@ export default {
       pStyle: 'text--tweet',
       dateStyle: 'text--date',
       svgButtonStyle: 'svg--reply',
-      updateTimelineId: null,
+      // updateTimelineId: null,
       svgList: [
         {
           svg: `<svg x="0px" y="0px" viewBox="0 0 30.333 30.333">

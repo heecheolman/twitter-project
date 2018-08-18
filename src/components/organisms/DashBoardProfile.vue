@@ -6,7 +6,8 @@
       <profile-button
         :imagePath="imagePath"
         :avatarSize="avatarSize" />
-      <profile-nickname />
+      <profile-nickname
+        :nickname="nickname" />
     </div>
   </div>
 </template>
@@ -20,6 +21,11 @@ export default {
   components: {
     ProfileButton,
     ProfileNickname,
+  },
+  props: {
+    nickname: {
+      type: String,
+    }
   },
   data() {
     return {
