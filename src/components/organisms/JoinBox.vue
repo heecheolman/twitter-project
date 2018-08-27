@@ -265,9 +265,6 @@ export default {
       const isName = this.checkName();
       const isNickname = this.checkNickname();
       const isPhoneNumber = this.checkPhoneNumber();
-      // console.log(isName);
-      // console.log(isNickname);
-      // console.log(isPhoneNumber);
       if(isName && isNickname && isPhoneNumber && this.checkPassword) {
         this.showLoginModal = true;
         try {
