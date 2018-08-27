@@ -26,21 +26,22 @@ export default {
     }
   },
   mounted() {
-    if(store.user.follow !== null) {
-      for(let i = 0; i < store.user.follow.length; i++) {
-        if(store.user.follow[i] === this.user.id) {
+    if(store.user.following !== null) {
+      for(let i = 0; i < store.user.following.length; i++) {
+        if(store.user.following[i] === this.user.id) {
           this.$refs.followButton.classList.add('disabled');
           this.ableClick = false;
         }
       }
     } else {
-      store.user.follow = [];
+      store.user.following = [];
     }
   },
   methods: {
     linkToProfile() {
       // 프로필화면 으로
       // console.log(store.user);
+
     },
     async follow() {
       if(this.ableClick) {
@@ -68,7 +69,9 @@ export default {
         .then(() => {
           this.ableClick = false;
           this.$refs.followButton.classList.add('disabled');
-          store.user.follow.push(this.listId);
+          console.log(store.user.following);
+          console.log(typeof store.user.following);
+          store.user.following.push(this.listId);
         })
         .catch((err) => {
           console.error(err);

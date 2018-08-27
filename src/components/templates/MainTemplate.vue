@@ -64,16 +64,18 @@ export default {
   },
   methods: {
     async getTimelines() {
-      try {
-        const result = await axios.get('/api/timelines/' + this.userData.id, {
-          params: {
-            user_id: this.userData.id,
-          }
+      await axios.get(`/api/timelines/${store.user.id}`, {
+        params: {
+          user_id: store.user.id,
+        },
+      })
+        .then((result) => {
+          console.log(result);
+          this.contentList = result.data.reverse();
+        })
+        .catch((err) => {
+          console.error(err);
         });
-        this.contentList = result.data.reverse();
-      } catch(err) {
-        console.error(err);
-      }
     },
   }
 }

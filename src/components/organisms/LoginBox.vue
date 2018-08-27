@@ -56,6 +56,14 @@ export default {
   },
   created() {
     Eventbus.$on('login', this.login);
+    for(let i = 0; i < this.inputComponents.length; i++) {
+      this.inputComponents[i].data = '';
+    }
+  },
+  destroyed() {
+    for(let i = 0; i < this.inputComponents.length; i++) {
+      this.inputComponents[i] = null;
+    }
   },
   computed: {
     phoneNumberArea() {
