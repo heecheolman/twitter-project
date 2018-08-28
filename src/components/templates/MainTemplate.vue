@@ -14,6 +14,8 @@
             v-for="(content, index) in contentList"
             :key="index"
             :id="content.nickname"
+            :content-serial="content.id"
+            :content-user-id="content.user_id"
             :content-text="content.contents"
             :content-date="content.created_at"
             :content-filename-list="content.images" />

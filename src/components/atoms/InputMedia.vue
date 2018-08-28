@@ -21,9 +21,6 @@ export default {
     svg: {
       type: String,
     },
-    mediaType: {
-      type: String,
-    },
   },
   created() {
     this.fileIdCounter = 0;
@@ -126,7 +123,6 @@ export default {
     /*border: 1px solid rgba(74, 179, 244, 0.1);*/
     /*box-shadow: inset 0 0 1px rgba(22, 53, 72, 0.1);*/
     box-shadow: inset 0 0 1px #ccd6dd;
-
     background-color: rgba(74, 179, 244, 0.1);
   }
 

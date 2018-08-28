@@ -10,7 +10,7 @@
 import axios from 'axios';
 import Eventbus from '../../lib/Eventbus';
 import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
-import store from './../../lib/Storage';
+import store from '../../lib/Storage';
 
 
 export default {

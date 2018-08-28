@@ -32,7 +32,8 @@ import MenuTooltip from './../molecules/MenuTooltip';
 import Logo from './../molecules/Logo';
 import SearchBar from './../molecules/SearchBar';
 import ProfileButton from './../molecules/ProfileButton';
-import TweetButton from '../atoms/TweetButton';
+import TweetButton from '../molecules/TweetButton';
+
 import ProfileImage from './../../assets/default_profile.png';
 
 export default {
@@ -118,5 +119,56 @@ export default {
     display: inline-flex;
     align-items: center;
     height: 100%;
+  }
+
+
+
+
+
+  .dropdown {
+  }
+  .arrow-box {
+    /*width: 18px;*/
+    /*height: 10px;*/
+    /*position: absolute;*/
+    /*top: -10px;*/
+    /*left: 12px;*/
+    width: 18px;
+    height: 10px;
+    /*float: left;*/
+    overflow: hidden;
+  }
+  .searched-box {
+    width: 316px;
+    border-radius: 4px;
+    background-color: #fff;
+    background-clip: padding-box;
+    z-index: 999;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  }
+
+  .arrow-box--base {
+    position: absolute;
+    display: inline-block;
+    margin-left: -1px;
+  }
+  .arrow-box__outer {
+    border-bottom: 10px solid #657786;
+    border-bottom-color: rgba(0,0,0,0.1);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: auto;
+    width: auto;
+  }
+  .arrow-box__inner {
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 9px solid #fff;
+    border-bottom-color: #fff;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 </style>

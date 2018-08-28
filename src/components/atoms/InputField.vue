@@ -10,6 +10,7 @@
 <script>
 import Eventbus from './../../lib/Eventbus';
 import axios from 'axios';
+import store from './../../lib/Storage';
 import _ from 'lodash';
 
 export default {
@@ -43,11 +44,11 @@ export default {
         Eventbus.$emit('toggleOff');
       }
     },
-    // follow 배열에 닉네임의 id 가 존재하면 버튼 비활성화 시켜야
     searchUserData: _.debounce(function() {
       if(this.inputValue.length !== 0) {
-        axios.get(`/api/nicknames/input/${this.inputValue}`, {
+        axios.get(`/api/${store.user.id}/nickname-list/${this.inputValue}`, {
           params: {
+            id: store.user.id,
             input: this.inputValue,
           },
         })

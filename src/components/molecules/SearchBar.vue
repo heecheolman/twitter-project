@@ -11,10 +11,6 @@
     </div>
     <div class="dropdown">
       <div class="arrow-box">
-        <!--<div class="arrow-box&#45;&#45;base arrow-box__outer">-->
-        <!--</div>-->
-        <!--<div class="arrow-box&#45;&#45;base arrow-box__inner">-->
-        <!--</div>-->
       </div>
       <div class="searched-box" v-show="showDropDown">
         <div class="list-box">
@@ -88,8 +84,6 @@ export default {
     position: absolute;
     right: 10px;
     top: 9px;
-  }
-  .dropdown {
   }
   .arrow-box {
     /*width: 18px;*/
