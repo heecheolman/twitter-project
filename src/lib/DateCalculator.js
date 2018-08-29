@@ -32,7 +32,7 @@ function calculateSince(datetime) {
     else
       since = '약 ' + sinceHr + '시간 전';
   }
-  else if(sinceMin > 1439 && sinceMin < 2880)
+  else if(1439 < sinceMin && sinceMin < 2880)
     since = '1일 전';
   else {
     let sinceDay = Math.round(sinceMin / 1440);

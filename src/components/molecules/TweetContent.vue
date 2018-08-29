@@ -39,6 +39,20 @@
         게시글 수정
       </h3>
       <textarea slot="body">{{ contentText }}</textarea>
+      <div class="edit-file-box" slot="edit-file-box">
+
+      </div>
+      <div class="media__container" slot="edit-media">
+        <label for="edit-media-file">
+          <svg v-html="svg"></svg>
+        </label>
+        <input
+          type="file"
+          id="edit-media-file"
+          name="userfile"
+          multiple
+          @change="editFile" />
+      </div>
       <button slot="cancel" @click="showEditor = false" class="button button--cancel">취소</button>
       <button slot="confirm" @click="showEditor = false" class="button button--confirm">수정</button>
       <button slot="remove" @click="showEditor = false" class="button button--remove">삭제</button>
@@ -47,68 +61,71 @@
 </template>
 
 <script>
-import SpanText from './../atoms/SpanText';
-import TextA from './../atoms/TextA';
-import PText from './../atoms/PText';
-import SvgButton from './../atoms/SvgButton';
-import ImageContent from './../atoms/ImageContent';
-import Editor from './../atoms/Editor';
+  import SpanText from './../atoms/SpanText';
+  import TextA from './../atoms/TextA';
+  import PText from './../atoms/PText';
+  import SvgButton from './../atoms/SvgButton';
+  import ImageContent from './../atoms/ImageContent';
+  import Editor from './../atoms/Editor';
 
-import store from './../../lib/Storage';
+  import store from './../../lib/Storage';
+  import Eventbus from './../../lib/Eventbus';
 
-export default {
-  name: 'TweetContent',
-  components: {
-    SpanText,
-    TextA,
-    PText,
-    SvgButton,
-    ImageContent,
-    Editor,
-  },
-  props: {
-    id: {
-      type: String,
+  export default {
+    name: 'TweetContent',
+    components: {
+      SpanText,
+      TextA,
+      PText,
+      SvgButton,
+      ImageContent,
+      Editor,
     },
-    contentSerial: {
-      type: Number,
-    },
-    contentUserId: {
-      type: Number,
-    },
-    contentText: {
-      type: String,
-    },
-    contentDate: {
-      type: String,
-    },
-    contentFilenameList: {
-      type: Array,
-    },
-  },
-  computed: {
-    reverseList() {
-      return this.contentFilenameList.reverse();
-    },
-    me() {
-      return store.user.id === this.contentUserId;
-    }
-  },
-  data() {
-    return {
-      cssStyle: {
-        nicknameStyle: 'text--nickname',
-        hashStyle: 'text--hash',
-        dateStyle: 'text--date',
-        editStyle: 'text--edit',
-        svgButtonStyle: 'svg--reply',
-        pStyle: 'text--tweet',
+    props: {
+      id: {
+        type: String,
       },
-      showEditor: false,
-      hash: '@fMUmSjMbVbjhqBO',
-      editText: '수정',
-      svgList: [
-        { svg: `<svg x="0px" y="0px" viewBox="0 0 30.333 30.333">
+      contentSerial: {
+        type: Number,
+      },
+      contentUserId: {
+        type: Number,
+      },
+      contentText: {
+        type: String,
+      },
+      contentDate: {
+        type: String,
+      },
+      contentFilenameList: {
+        type: Array,
+      },
+    },
+    computed: {
+      reverseList() {
+        return this.contentFilenameList.reverse();
+      },
+      me() {
+        return store.user.id === this.contentUserId;
+      }
+    },
+    created() {
+    },
+    data() {
+      return {
+        cssStyle: {
+          nicknameStyle: 'text--nickname',
+          hashStyle: 'text--hash',
+          dateStyle: 'text--date',
+          editStyle: 'text--edit',
+          svgButtonStyle: 'svg--reply',
+          pStyle: 'text--tweet',
+        },
+        showEditor: false,
+        hash: '@fMUmSjMbVbjhqBO',
+        editText: '수정',
+        svgList: [
+          { svg: `<svg x="0px" y="0px" viewBox="0 0 30.333 30.333">
                     <path d="M0,26.75V11.908c0-4.59,3.735-8.325,8.325-8.325h13.681c4.591,0,8.327,3.735,8.327,8.325v2.56
                       c0,4.59-3.735,8.325-8.325,8.325H8.518L0,26.75z M8.325,5.439c-3.567,0-6.469,2.902-6.469,6.469v11.933l6.253-2.905h13.899
                       c3.567,0,6.469-2.902,6.469-6.469v-2.56c0-3.567-2.903-6.469-6.471-6.469H8.325V5.439z M8.937,11.767
@@ -116,11 +133,11 @@ export default {
                       c0.975,0,1.765,0.79,1.765,1.765s-0.79,1.765-1.765,1.765s-1.765-0.79-1.765-1.765S20.42,11.767,21.395,11.767z M15.165,11.767
                       c0.975,0,1.765,0.79,1.765,1.765s-0.79,1.765-1.765,1.765s-1.765-0.79-1.765-1.765S14.19,11.767,15.165,11.767z"/>
                 </svg>`, },
-        { svg: `<svg width="18px" height="18px" viewBox="0 0 64 64">
+          { svg: `<svg width="18px" height="18px" viewBox="0 0 64 64">
                     <path d="m15.486,25.515c0.398,0.454 0.952,0.687 1.507,0.687 0.478,0 0.958-0.172 1.345-0.518 0.832-0.75 0.906-2.043 0.165-2.887l-7.488-8.528c-0.014-0.015-0.032-0.021-0.046-0.034-0.029-0.031-0.057-0.06-0.088-0.088-0.016-0.015-0.02-0.033-0.035-0.047-0.073-0.066-0.163-0.09-0.241-0.144-0.093-0.062-0.177-0.142-0.275-0.187-0.037-0.018-0.075-0.027-0.112-0.041-0.108-0.041-0.219-0.052-0.331-0.074-0.108-0.021-0.211-0.057-0.323-0.06-0.021-0.001-0.038-0.012-0.058-0.012s-0.037,0.011-0.058,0.012c-0.112,0.003-0.217,0.038-0.327,0.06-0.112,0.022-0.221,0.033-0.327,0.074-0.037,0.014-0.074,0.023-0.11,0.041-0.101,0.045-0.184,0.124-0.278,0.187-0.08,0.054-0.171,0.078-0.244,0.144-0.016,0.015-0.02,0.034-0.035,0.049-0.03,0.027-0.058,0.056-0.085,0.086-0.014,0.014-0.031,0.02-0.046,0.034l-7.486,8.528c-0.741,0.844-0.666,2.137 0.168,2.887 0.385,0.346 0.863,0.518 1.34,0.518 0.557,0 1.11-0.232 1.509-0.687l3.96-4.511v23.445c0,3.383 2.717,6.134 6.058,6.134h29.14c1.115,0 2.019-0.915 2.019-2.044 0-1.13-0.903-2.045-2.019-2.045h-29.14c-1.115,0-2.02-0.918-2.02-2.045v-23.445l3.961,4.511z"/>
                     <path d="m60.473,38.652l-3.959,4.51v-23.445c0-3.383-2.718-6.134-6.058-6.134h-28.415c-1.117,0-2.02,0.915-2.02,2.044 0,1.13 0.902,2.045 2.02,2.045h28.415c1.115,0 2.02,0.918 2.02,2.045v23.445l-3.962-4.51c-0.742-0.844-2.016-0.92-2.852-0.168-0.832,0.75-0.906,2.043-0.166,2.886l7.489,8.527c0.012,0.015 0.032,0.019 0.044,0.032 0.029,0.032 0.059,0.062 0.09,0.092 0.014,0.013 0.02,0.031 0.035,0.045 0.095,0.084 0.206,0.125 0.309,0.189 0.033,0.021 0.062,0.048 0.1,0.066 0.047,0.025 0.085,0.07 0.134,0.092 0.018,0.008 0.037,0.01 0.055,0.018 0.241,0.096 0.49,0.151 0.744,0.151 0.251,0 0.504-0.055 0.743-0.151 0.018-0.008 0.037-0.01 0.056-0.018 0.049-0.021 0.086-0.065 0.131-0.09 0.033-0.019 0.059-0.044 0.091-0.062 0.109-0.064 0.226-0.109 0.321-0.195 0.016-0.015 0.02-0.034 0.035-0.049 0.03-0.028 0.058-0.058 0.087-0.088 0.012-0.014 0.031-0.018 0.043-0.032l7.488-8.527c0.74-0.843 0.665-2.136-0.169-2.886-0.835-0.752-2.11-0.675-2.849,0.168z"/>
                 </svg>` },
-        { svg: `<svg x="0px" y="0px" width="18px" height="18px" viewBox="0 0 979.494 979.494">
+          { svg: `<svg x="0px" y="0px" width="18px" height="18px" viewBox="0 0 979.494 979.494">
                     <path d="M964.616,227.519c-15.63-44.595-43.082-84.824-79.389-116.338c-36.341-31.543-80.051-53.048-126.404-62.188
                       c-17.464-3.444-35.421-5.19-53.371-5.19c-52.371,0-103.306,14.809-147.296,42.827c-26.482,16.867-49.745,38.022-68.908,62.484
                       c-19.158-24.415-42.405-45.53-68.859-62.364C376.42,58.773,325.52,43.985,273.189,43.985c-0.003,0,0.001,0-0.001,0
@@ -136,22 +153,50 @@ export default {
                       c8.547,24.385,12.164,50.811,10.75,78.542c-2.772,54.379-24.017,114.42-64.944,183.553
                       C773.338,635.262,656.457,747.659,489.322,855.248z"/>
                 </svg>`, },
-      ],
-    };
-  },
-  methods: {
-    edit() {
-      this.showEditor = true;
+        ],
+        svg: `<svg x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+	<path fill="none" d="M0,0h24v24H0V0z"/>
+		<path fill="currentColor" d="M18,20H4V6h9V4H4C2.9,4,2,4.9,2,6v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-9h-2V20z"/>
+		<polygon fill="currentColor" points="10.21,16.83 8.25,14.47 5.5,18 16.5,18 12.96,13.29 		"/>
+		<path fill="currentColor" d="M20,4V1h-2v3h-3c0.01,0.01,0,2,0,2h3v2.99c0.01,0.01,2,0,2,0V6h3V4H20z"/>
+</svg>`
+      };
     },
-    loadFile() {
+    methods: {
+      edit() {
+        this.showEditor = true;
+        this.loadFile();
+      },
+      loadFile() {
+        // 수정 버튼을 눌렀을 시 파일이 존재한다면 loadFile 을 실행해야함
+        // created 는 Editor.vue 에서 되므로
+        // Eventbus 로 등록
+        this.$nextTick(function() {
+          const editFileBox = document.querySelector('.edit-file-box');
+          console.log(editFileBox);
+          console.log(this.contentFilenameList);
+          console.log(this.contentFilenameList[0].filename);
+          console.log(this.contentFilenameList[1].filename);
+          /*
+          목표 : 최대한 서버에 부담이 가지않게 클라이언트에서 처리를 한다.
+          [어떻게]
+          1. 이미지파일이 존재하지않는 게시글이라면 애초에 loadFile 을 호출하지않는다.,
+          2. 이미지파일이 하나라도 존재하는 글이라면 loadFile 을 할 때 기존에 올려진 이미지파일들을 보여준다.
+            2-1. 이미지파일을 제거한다면, 제거된 이미지파일의 이름을 db 에서 제거를 하고 server storage 에도 지운다.
+            2-2. 새롭게 이미지가 추가된다면, 기존에 업로드하듯이 업로드를 한다.
+          3. 수정 버튼을 눌렀을 시에 server 에 요청이 감
+          4. loading UX
+          5. 완료
 
+          */
+        });
+      },
+      editFile() {
+        // const inputDOM = document.querySelector('#edit-media-file');
+        // const filebox = document.querySelector('.edit-file-box');
+      },
     },
-    editFile() {
-      const inputDOM = document.querySelector('#edit-media-file');
-      const filebox = document.querySelector('.edit-file-box');
-    },
-  },
-}
+  }
 </script>
 <style scoped>
   .tweet-content {
@@ -218,5 +263,59 @@ export default {
     width: 100%;
     min-height: 200px;
   }
+
+  /* input media */
+  .media__container {
+    padding: 0;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1000;
+  }
+  .media__container:hover {
+    box-shadow: inset 0 0 1px #ccd6dd;
+    background-color: rgba(210, 202, 214, 0.1);
+  }
+
+  .edit-file-box {
+    background-color: #fff;
+    border: 1px solid #d7d7d7;
+    border-radius: 5px;
+    width: 100%;
+    height: 100px;
+    margin-bottom: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  label {
+    padding: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 5px;
+    color: #a9a6ac;
+  }
+  svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  input[type=file] {
+    position: absolute;
+    opacity: 0;
+    padding: 0;
+    overflow: hidden;
+    clip:rect(0,0,0,0);
+    border: 0;
+  }
+
+
 
 </style>

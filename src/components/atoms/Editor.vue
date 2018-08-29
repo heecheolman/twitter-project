@@ -14,6 +14,12 @@
             <slot name="body">
 
             </slot>
+            <slot name="edit-file-box">
+
+            </slot>
+            <slot name="edit-media">
+
+            </slot>
           </div>
           <div class="flex-container flex-center flex-row button-box">
             <slot name="cancel">
