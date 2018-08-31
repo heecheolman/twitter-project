@@ -88,7 +88,7 @@ export default {
       // 파일이 하나라도 존재할 시에
       if(inputDOM.files.length !== 0) {
         Eventbus.$emit('extendFileBox');
-        for(let i = inputDOM.files.length - 1; i > -1; i--) {
+        for(let i = 0; i < inputDOM.files.length; i++) {
           this.fileIdCounter++;
           const file = inputDOM.files[i];
           const fileId = this.fileIdCounter;

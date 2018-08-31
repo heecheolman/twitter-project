@@ -38,7 +38,7 @@
       <h3 slot="header" class="edit-header">
         게시글 수정
       </h3>
-      <textarea slot="body">{{ contentText }}</textarea>
+      <textarea slot="body" class="edit-textarea">{{ contentText }}</textarea>
       <div class="edit-file-box" slot="edit-file-box">
 
       </div>
@@ -109,8 +109,6 @@
         return store.user.id === this.contentUserId;
       }
     },
-    created() {
-    },
     data() {
       return {
         cssStyle: {
@@ -159,24 +157,29 @@
 		<path fill="currentColor" d="M18,20H4V6h9V4H4C2.9,4,2,4.9,2,6v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-9h-2V20z"/>
 		<polygon fill="currentColor" points="10.21,16.83 8.25,14.47 5.5,18 16.5,18 12.96,13.29 		"/>
 		<path fill="currentColor" d="M20,4V1h-2v3h-3c0.01,0.01,0,2,0,2h3v2.99c0.01,0.01,2,0,2,0V6h3V4H20z"/>
-</svg>`
+</svg>`,
+        originFileIdCounter: 0,
+        newFileIdCounter: 0,
+        originFileList: [],
+        newFileList: [],
       };
     },
     methods: {
+      // 게시글 수정 Modal
       edit() {
         this.showEditor = true;
-        this.loadFile();
+        this.newFileIdCounter = 0;
+        this.originFileIdCounter = 0;
+        this.originFileList = this.contentFilenameList;
+        console.log(this.originFileList);
+        if(this.contentFilenameList.length !== 0) {
+          this.loadFile();
+        }
       },
       loadFile() {
-        // 수정 버튼을 눌렀을 시 파일이 존재한다면 loadFile 을 실행해야함
-        // created 는 Editor.vue 에서 되므로
-        // Eventbus 로 등록
         this.$nextTick(function() {
           const editFileBox = document.querySelector('.edit-file-box');
-          console.log(editFileBox);
-          console.log(this.contentFilenameList);
-          console.log(this.contentFilenameList[0].filename);
-          console.log(this.contentFilenameList[1].filename);
+          this.extendBox();
           /*
           목표 : 최대한 서버에 부담이 가지않게 클라이언트에서 처리를 한다.
           [어떻게]
@@ -187,14 +190,150 @@
           3. 수정 버튼을 눌렀을 시에 server 에 요청이 감
           4. loading UX
           5. 완료
-
           */
+
+          for(let i = 0; i < this.contentFilenameList.length; i++) {
+            const image = this.createOriginImage(this.contentFilenameList[i].filename);
+            const wrap = this.createImageWrap();
+            const fileId = this.originFileIdCounter++;
+            this.contentFilenameList[i].id = fileId;
+            const x = this.createXButton(fileId, true);
+            wrap.appendChild(x);
+            wrap.appendChild(image);
+            editFileBox.appendChild(wrap);
+          }
         });
       },
-      editFile() {
-        // const inputDOM = document.querySelector('#edit-media-file');
-        // const filebox = document.querySelector('.edit-file-box');
+      createOriginImage(filename) {
+        const defaultPath = './../../static/';
+        const image = new Image();
+        image.title = filename;
+        image.style.width = 'auto';
+        image.style.height = 'auto';
+        image.style.overflow = 'hidden';
+        image.style.cursor = 'pointer';
+        image.src = defaultPath + filename;
+        return image;
       },
+      createImageWrap() {
+        const div = document.createElement('div');
+        div.style.width = '113px';
+        div.style.height = '113px';
+        div.style.display = 'inline-block';
+        div.style.overflow = 'hidden';
+        div.style.borderRadius = '5px';
+        div.style.border = '1px solid #d7d7d7';
+        div.style.marginRight = '5px';
+        return div;
+      },
+      createXButton(fileId, isOrigin) {
+        const xButton = document.createElement('div');
+        xButton.style.width = '20px';
+        xButton.style.height = '20px';
+        xButton.style.borderRadius = '50%';
+        xButton.style.backgroundColor = 'black';
+        xButton.style.color = 'white';
+        xButton.style.fontSize = '14px';
+        xButton.style.lineHeight = '16px';
+        xButton.style.textAlign = 'center';
+        xButton.style.fontWeight = 'lighter';
+        xButton.style.position = 'absolute';
+        xButton.style.marginLeft = '80px';
+        xButton.style.marginTop = '5px';
+        xButton.style.cursor = 'pointer';
+        xButton.userSelect = 'none';
+        xButton.fileId = fileId;
+        const x = document.createTextNode('x');
+        xButton.appendChild(x);
+        xButton.addEventListener('click', () => {
+          const frame = xButton.parentElement;
+
+          if(isOrigin) {
+            // origin
+            console.log('before originFileList');
+            console.log(this.originFileList);
+            this.originFileList = this.originFileList.filter((ele) => {
+              return ele.id !== xButton.fileId;
+            });
+            console.log('after originFileList');
+            console.log(this.originFileList);
+          } else {
+            // new
+            console.log('before newFileList');
+            console.log(this.newFileList);
+            this.newFileList = this.newFileList.filter((ele) => {
+              return ele.id !== xButton.fileId;
+            });
+            console.log('after newFileList');
+            console.log(this.newFileList);
+          }
+
+          if(this.originFileList.length === 0 && this.newFileList.length === 0) {
+            this.reduceBox();
+          }
+          frame.remove();
+        });
+        return xButton;
+      },
+      createNewImage(file) {
+        const fileReader = new FileReader();
+        const image = new Image();
+        fileReader.addEventListener('load', () => {
+          image.title = file.name;
+          image.style.width = 'auto';
+          image.style.height = 'auto';
+          image.style.overflow = 'hidden';
+          image.style.cursor = 'pointer';
+          image.src = fileReader.result;
+        }, false);
+        fileReader.readAsDataURL(file);
+        return image;
+      },
+
+      editFile() {
+        const inputDOM = document.querySelector('#edit-media-file');
+        const editFileBox = document.querySelector('.edit-file-box');
+        this.extendBox();
+        if(inputDOM.files.length !== 0) {
+          for(let i = 0; i < inputDOM.files.length; i++) {
+            const file = inputDOM.files[i];
+            const fileId = this.newFileIdCounter++;
+            const image = this.createNewImage(file);
+            const imageWrap = this.createImageWrap();
+            const xButton = this.createXButton(fileId, false);
+            this.addNewFileList(fileId, file);
+            imageWrap.appendChild(xButton);
+            imageWrap.appendChild(image);
+            editFileBox.appendChild(imageWrap);
+          }
+        } else {
+          this.reduceBox();
+        }
+      },
+      addNewFileList(fileId, file) {
+        this.newFileList.unshift({
+          id: fileId,
+          file: file,
+        });
+      },
+      extendBox() {
+        const editFileBox = document.querySelector('.edit-file-box');
+        const textarea = document.querySelector('.edit-textarea');
+        editFileBox.style.display = 'block';
+        editFileBox.style.visibility = 'visible';
+        textarea.style.borderBottomWidth = '1px';
+        textarea.style.borderBottomStyle = 'solid';
+        textarea.style.borderBottomColor = 'transparent';
+      },
+      reduceBox() {
+        const editFileBox = document.querySelector('.edit-file-box');
+        const textarea = document.querySelector('.edit-textarea');
+        editFileBox.style.display = 'none';
+        editFileBox.style.visibility = 'hidden';
+        textarea.style.borderBottomWidth = '1px';
+        textarea.style.borderBottomStyle = 'solid';
+        textarea.style.borderBottomColor = '#d7d7d7';
+      }
     },
   }
 </script>
@@ -256,12 +395,13 @@
     color: #1da1f2;
   }
 
-  textarea {
+  .edit-textarea {
     resize: none;
     outline: none;
     border: none;
     width: 100%;
     min-height: 200px;
+    border-bottom: 1px solid #d7d7d7;
   }
 
   /* input media */
@@ -280,11 +420,13 @@
   }
 
   .edit-file-box {
+    display: none;
+    visibility: hidden;
     background-color: #fff;
     border: 1px solid #d7d7d7;
     border-radius: 5px;
     width: 100%;
-    height: 100px;
+    height: auto;
     margin-bottom: 5px;
     padding: 10px;
     box-sizing: border-box;
@@ -315,7 +457,4 @@
     clip:rect(0,0,0,0);
     border: 0;
   }
-
-
-
 </style>
