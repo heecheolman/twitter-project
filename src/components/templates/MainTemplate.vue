@@ -73,7 +73,7 @@ export default {
       })
         .then((result) => {
           console.log(result);
-          this.contentList = result.data.reverse();
+          this.contentList = result.data;
         })
         .catch((err) => {
           console.error(err);

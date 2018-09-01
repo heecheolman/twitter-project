@@ -25,7 +25,7 @@
             <slot name="cancel">
 
             </slot>
-            <slot name="confirm">
+            <slot name="edit">
 
             </slot>
             <slot name="remove">
