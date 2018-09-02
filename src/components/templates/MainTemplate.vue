@@ -72,7 +72,6 @@ export default {
         },
       })
         .then((result) => {
-          console.log(result);
           this.contentList = result.data;
         })
         .catch((err) => {

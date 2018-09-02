@@ -18,7 +18,7 @@
     </div>
     <div class="tweet-content__body">
       <image-content
-        v-for="(img, index) in reverseList"
+        v-for="(img, index) in this.contentFilenameList"
         :key="index"
         :filename="img.filename" />
       <p-text
@@ -54,7 +54,7 @@
           @change="updateFile" />
       </div>
       <button slot="cancel" @click="showEditor = false" class="button button--cancel">취소</button>
-      <button slot="edit" @click="edit" class="button button--edit">수정</button>
+      <button slot="edit" @click.stop="edit" class="button button--edit">수정</button>
       <button slot="remove" @click="showEditor = false" class="button button--remove">삭제</button>
     </editor>
   </div>
@@ -69,6 +69,7 @@
   import Editor from './../atoms/Editor';
 
   import store from './../../lib/Storage';
+  import Eventbus from './../../lib/Eventbus';
   import axios from 'axios';
 
   export default {
@@ -102,9 +103,9 @@
       },
     },
     computed: {
-      reverseList() {
-        return this.contentFilenameList.reverse();
-      },
+      // reverseList() {
+      //   return this.contentFilenameList.reverse();
+      // },
       isMe() {
         return store.user.id === this.contentUserId;
       }
@@ -176,10 +177,9 @@
         this.editTextContent = this.contentText;
         // 파일 init
         if(this.contentFilenameList.length !== 0) {
-          this.originFileList = this.contentFilenameList;
+          this.originFileList = this.contentFilenameList.slice();
           this.loadFile();
         }
-        // 아니면 그냥 글만 불러옴
       },
       loadFile() {
         this.$nextTick(function() {
@@ -255,26 +255,14 @@
         xButton.addEventListener('click', () => {
           const frame = xButton.parentElement;
           if(isOrigin) {
-            // origin
-            console.log('before originFileList');
-            console.log(this.originFileList);
             this.originFileList = this.originFileList.filter((ele) => {
               return ele.id !== xButton.fileId;
             });
-            console.log('after originFileList');
-            console.log(this.originFileList);
           } else {
-            // new
-            console.log('before newFileList');
-            console.log(this.newFileList);
             this.newFileList = this.newFileList.filter((ele) => {
               return ele.id !== xButton.fileId;
             });
-            // this.removeNewFileList(fileId);
-            console.log('after newFileList');
-            console.log(this.newFileList);
           }
-
           if(this.originFileList.length === 0 && this.newFileList.length === 0) {
             this.reduceBox();
           }
@@ -308,7 +296,6 @@
             const image = this.createNewImage(file);
             const imageWrap = this.createImageWrap();
             const xButton = this.createXButton(fileId, false);
-            // newFileList 에 push
             this.addNewFileList(fileId, file);
             imageWrap.appendChild(xButton);
             imageWrap.appendChild(image);
@@ -319,18 +306,11 @@
         }
       },
       addNewFileList(fileId, file) {
-        this.newFileList.unshift({
+        this.newFileList.push({
           id: fileId,
           file: file,
         });
       },
-      // removeNewFileList(fileId) {
-      //   for(let it = 0; it < this.newFileList.length; it++) {
-      //     if(this.newFileList[it].id === fileId) {
-      //       this.newFileList.splice(it, 1);
-      //     }
-      //   }
-      // },
       extendBox() {
         const editFileBox = document.querySelector('.edit-file-box');
         const textarea = document.querySelector('.edit-textarea');
@@ -349,33 +329,17 @@
         textarea.style.borderBottomStyle = 'solid';
         textarea.style.borderBottomColor = '#d7d7d7';
       },
-      edit() {
-        /* 수정버튼 클릭 함
+      async edit() {
+        let filenameList = [];
+        const inputDOM              = document.querySelector('#edit-media-file');
+        const isTextModified        = this.contentText !== this.editTextContent;
+        const isOriginImageModified = this.originFileList.length !== this.contentFilenameList.length;
+        const isImageAdded          = this.newFileList.length !== 0;
+        let isImageListUpdated      = false;
 
-        [나눈것과 나눈 이유]
-
-        1. 글만 수정
-          글만 수정했다는것을 어떻게 판별을 하는가?
-            * this.contentText !== textarea 의 Text 를 비교.
-            * 일단 newList 의 길이가 0
-            * originFileList 의 요소들이 contentFileList 와 같은지 체크
-
-        2. 글과 사진 둘다 수정하는 경우.
-            * this.contentText !== textarea 다르고
-            * originList !== this.contentList 다르고
-            * newList.length !== 0
-
-          사진에 수정이 없는데 굳이 서버비용을 낭비하기 싫어서.
-        */
-
-        const inputDOM = document.querySelector('#edit-media-file');
-
-        if(this.contentText !== this.editTextContent &&
-           this.newFileList.length === 0 &&
-           this.contentFilenameList.length === this.originFileList.length) {
-          // 글만 변경
-          console.log('text only change');
-          axios.put(`/api/posts/${this.contentSerial}/contents`, {
+        if(isTextModified) {
+          // 글 post
+          await axios.put(`/api/posts/${this.contentSerial}/contents`, {
             params: {
               id: this.contentSerial,
             },
@@ -383,28 +347,50 @@
               contents: this.editTextContent,
             },
           });
-        } else if(this.contentText !== this.editTextContent ||
-                  this.originFileList.length !== this.contentFilenameList.length ||
-                  this.newFileList.length !== 0) {
-          // 하나라도 변경
-          console.log('something change');
-          if(this.newFileList.length !== 0) {
-            let formData = new FormData();
-            for(let i = 0; i < this.newFileList.length; i++) {
-              formData.append(inputDOM.name, this.newFileList[i].file);
-            }
-            // data 는 올라감
-            try {
-              axios.post('/api/upload',
-                formData, {
-                  timeout: 1000,
-                });
-            } catch (err) {
-              console.error(err);
-            }
-          }
         }
+        //기존 이미지 리스트가 변경되었을 시
+        if(isOriginImageModified) {
+          console.log('origin modified');
+          isImageListUpdated = true;
+        }
+        // 기존것을 옮겨준다
+        this.originFileList.forEach((ele) => {
+          filenameList.push({ filename: ele.filename });
+        });
 
+        if(isImageAdded) {
+          console.log('addImage');
+          let formData = new FormData();
+          this.newFileList.forEach((ele) => {
+            filenameList.push({ filename: ele.file.name });
+            formData.append(inputDOM.name, ele.file);
+          });
+          // 이미지 업로드
+          try {
+            await axios.post('/api/upload',
+              formData, {
+                timeout: 1000,
+              });
+          } catch (err) {
+            console.error(err);
+          }
+          isImageListUpdated = true;
+        }
+        if(isImageListUpdated) {
+          console.log('image update');
+          console.log(filenameList);
+          await axios.put(`/api/posts/${this.contentSerial}/images`, {
+            params: {
+              id: this.contentSerial,
+            },
+            data: {
+              images: filenameList,
+            }
+          });
+        }
+        await Eventbus.$emit('getTimelines');
+        this.showEditor = false;
+        this.newFileList = [];
       },
 
     },
