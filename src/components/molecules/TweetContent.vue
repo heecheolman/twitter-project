@@ -54,7 +54,8 @@
           @change="updateFile" />
       </div>
       <button slot="cancel" @click="showEditor = false" class="button button--cancel">취소</button>
-      <button slot="edit" @click.stop="edit" class="button button--edit">수정</button>
+      <button slot="edit" v-if="!editLoading" @click.stop="edit" class="button button--edit">수정</button>
+      <clip-loader slot="loader" v-else/>
       <button slot="remove" @click="showEditor = false" class="button button--remove">삭제</button>
     </editor>
   </div>
@@ -66,7 +67,8 @@
   import PText from './../atoms/PText';
   import SvgButton from './../atoms/SvgButton';
   import ImageContent from './../atoms/ImageContent';
-  import Editor from './../atoms/Editor';
+  import Editor from '../modal/Editor';
+  import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
   import store from './../../lib/Storage';
   import Eventbus from './../../lib/Eventbus';
@@ -81,6 +83,7 @@
       SvgButton,
       ImageContent,
       Editor,
+      ClipLoader,
     },
     props: {
       id: {
@@ -103,9 +106,6 @@
       },
     },
     computed: {
-      // reverseList() {
-      //   return this.contentFilenameList.reverse();
-      // },
       isMe() {
         return store.user.id === this.contentUserId;
       }
@@ -164,6 +164,7 @@
         originFileList: [],
         newFileList: [],
         editTextContent: '',
+        editLoading: false,
       };
     },
     methods: {
@@ -184,20 +185,8 @@
       loadFile() {
         this.$nextTick(function() {
           const editFileBox = document.querySelector('.edit-file-box');
-          // 상자를 늘려주고
+          // 상자를 늘려줌
           this.extendBox();
-          /*
-          목표 : 최대한 서버에 부담이 가지않게 클라이언트에서 처리를 한다.
-          [어떻게]
-          1. 이미지파일이 존재하지않는 게시글이라면 애초에 loadFile 을 호출하지않는다.,
-          2. 이미지파일이 하나라도 존재하는 글이라면 loadFile 을 할 때 기존에 올려진 이미지파일들을 보여준다.
-            2-1. 이미지파일을 제거한다면, 제거된 이미지파일의 이름을 db 에서 제거를 하고 server storage 에도 지운다.
-            2-2. 새롭게 이미지가 추가된다면, 기존에 업로드하듯이 업로드를 한다.
-          3. 수정 버튼을 눌렀을 시에 server 에 요청이 감
-          4. loading UX
-          5. 완료
-          */
-
           // 기존의 이미지들을 전부 파일박스에 붙여줌.
           for(let i = 0; i < this.contentFilenameList.length; i++) {
             const image = this.createOriginImage(this.contentFilenameList[i].filename);
@@ -330,69 +319,69 @@
         textarea.style.borderBottomColor = '#d7d7d7';
       },
       async edit() {
-        let filenameList = [];
+        this.editLoading = true;
+        let   filenameList = [];
         const inputDOM              = document.querySelector('#edit-media-file');
         const isTextModified        = this.contentText !== this.editTextContent;
         const isOriginImageModified = this.originFileList.length !== this.contentFilenameList.length;
         const isImageAdded          = this.newFileList.length !== 0;
-        let isImageListUpdated      = false;
+        let   isImageListUpdated    = false;
 
-        if(isTextModified) {
-          // 글 post
-          await axios.put(`/api/posts/${this.contentSerial}/contents`, {
-            params: {
-              id: this.contentSerial,
-            },
-            data: {
-              contents: this.editTextContent,
-            },
-          });
-        }
-        //기존 이미지 리스트가 변경되었을 시
-        if(isOriginImageModified) {
-          console.log('origin modified');
-          isImageListUpdated = true;
-        }
-        // 기존것을 옮겨준다
-        this.originFileList.forEach((ele) => {
-          filenameList.push({ filename: ele.filename });
-        });
-
-        if(isImageAdded) {
-          console.log('addImage');
-          let formData = new FormData();
-          this.newFileList.forEach((ele) => {
-            filenameList.push({ filename: ele.file.name });
-            formData.append(inputDOM.name, ele.file);
-          });
-          // 이미지 업로드
-          try {
-            await axios.post('/api/upload',
-              formData, {
-                timeout: 1000,
-              });
-          } catch (err) {
-            console.error(err);
+        let loadingTimeoutId = setTimeout(async () => {
+          if(isTextModified) {
+            // 글 post
+            await axios.put(`/api/posts/${this.contentSerial}/contents`, {
+              params: {
+                id: this.contentSerial,
+              },
+              data: {
+                contents: this.editTextContent,
+              },
+            });
           }
-          isImageListUpdated = true;
-        }
-        if(isImageListUpdated) {
-          console.log('image update');
-          console.log(filenameList);
-          await axios.put(`/api/posts/${this.contentSerial}/images`, {
-            params: {
-              id: this.contentSerial,
-            },
-            data: {
-              images: filenameList,
-            }
+          //기존 이미지 리스트가 변경되었을 시
+          if(isOriginImageModified) {
+            isImageListUpdated = true;
+          }
+          // 기존것을 옮겨준다
+          this.originFileList.forEach((ele) => {
+            filenameList.push({ filename: ele.filename });
           });
-        }
-        await Eventbus.$emit('getTimelines');
-        this.showEditor = false;
-        this.newFileList = [];
+          // 새로 추가된 이미지일경우
+          if(isImageAdded) {
+            let formData = new FormData();
+            this.newFileList.forEach((ele) => {
+              filenameList.push({ filename: ele.file.name });
+              formData.append(inputDOM.name, ele.file);
+            });
+            // 이미지 업로드
+            try {
+              await axios.post('/api/upload',
+                formData, {
+                  timeout: 1000,
+                });
+            } catch (err) {
+              console.error(err);
+            }
+            isImageListUpdated = true;
+          }
+          if(isImageListUpdated) {
+            await axios.put(`/api/posts/${this.contentSerial}/images`, {
+              params: {
+                id: this.contentSerial,
+              },
+              data: {
+                images: filenameList,
+              }
+            });
+          }
+          await Eventbus.$emit('getTimelines');
+          this.editLoading = false;
+          this.showEditor = false;
+          this.newFileList = [];
+        }, 500);
+        loadingTimeoutId = null;
       },
-
     },
   }
 </script>

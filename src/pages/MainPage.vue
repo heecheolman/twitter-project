@@ -6,9 +6,9 @@
 </template>
 
 <script>
+import axios from 'axios';
 import store from './../lib/Storage';
 import MainTemplate from './../components/templates/MainTemplate';
-import axios from 'axios';
 
 export default {
   name: 'MainPage',

@@ -25,7 +25,7 @@
       <join-button />
     </div>
     <!-- 회원가입성공 Modal -->
-    <modal v-if="showLoginModal" @close="showLoginModal = false">
+    <alert-modal v-if="showLoginModal" @close="showLoginModal = false">
       <h3 slot="header" class="modal-header--base modal-header--ok">
         축하드립니다! 🎉
       </h3>
@@ -36,9 +36,9 @@
       <button slot="button" @click="goLogin" class="modal-button--base">
         확인
       </button>
-    </modal>
+    </alert-modal>
     <!-- 회원가입실패 Modal -->
-    <modal v-if="showErrorModal" @close="showErrorModal = false">
+    <alert-modal v-if="showErrorModal" @close="showErrorModal = false">
       <h3 slot="header" class="modal-header--base modal-header--err">
         양식을 확인해보세요!
       </h3>
@@ -49,7 +49,7 @@
       <button slot="button" @click="returnForm" class="modal-button--base">
         돌아가기
       </button>
-    </modal>
+    </alert-modal>
   </div>
 </template>
 <script>
@@ -57,12 +57,12 @@ import Logo from './../molecules/Logo';
 import LoginInput from './../molecules/LoginInput';
 import LoginFormButton from './../molecules/LoginFormButton';
 import JoinButton from './../molecules/JoinButton';
-
-import Modal from './../molecules/Modal';
+import AlertModal from '../modal/AlertModal';
 
 import Eventbus from './../../lib/Eventbus';
 import axios from 'axios';
 import _ from 'lodash';
+import crypto from 'crypto';
 
 export default {
   name: 'JoinBox',
@@ -71,7 +71,7 @@ export default {
     LoginInput,
     LoginFormButton,
     JoinButton,
-    Modal,
+    AlertModal,
   },
   created() {
     Eventbus.$on('join', this.join);

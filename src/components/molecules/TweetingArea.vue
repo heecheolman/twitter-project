@@ -15,7 +15,6 @@
           :svg="button.svg" />
       </div>
       <div class="tweet-toolbar--right">
-        <add-tweet-button />
         <tweet-button />
       </div>
     </div>
@@ -26,9 +25,7 @@
 import TweetTextArea from './../atoms/TweetTextArea';
 import InputMedia from './../atoms/InputMedia';
 import TweetButton from './TweetButton';
-import AddTweetButton from './../atoms/AddTweetButton';
 import Eventbus from '../../lib/Eventbus';
-
 
 export default {
   name: 'TweetingArea',
@@ -36,7 +33,6 @@ export default {
     TweetTextArea,
     InputMedia,
     TweetButton,
-    AddTweetButton,
   },
   created() {
     Eventbus.$on('extendFileBox', this.extendFileBox);
@@ -62,10 +58,6 @@ export default {
 		<path fill="currentColor" d="M18,20H4V6h9V4H4C2.9,4,2,4.9,2,6v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-9h-2V20z"/>
 		<polygon fill="currentColor" points="10.21,16.83 8.25,14.47 5.5,18 16.5,18 12.96,13.29 		"/>
 		<path fill="currentColor" d="M20,4V1h-2v3h-3c0.01,0.01,0,2,0,2h3v2.99c0.01,0.01,2,0,2,0V6h3V4H20z"/>
-</svg>`, },
-        { svg: `<svg x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
-	<path fill="none" d="M0,0h24v24H0V0z"/>
-	<path fill="currentColor" d="M15,8v8H5V8H15 M16,6H4C3.45,6,3,6.45,3,7v10c0,0.55,0.45,1,1,1h12c0.55,0,1-0.45,1-1v-3.5l4,4v-11l-4,4V7 C17,6.45,16.55,6,16,6L16,6z"/>
 </svg>`, },
       ],
     };
@@ -116,7 +108,7 @@ export default {
     margin-left: auto;
     display: inline-flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-end;
     width: 128px;
     height: 100%;
   }

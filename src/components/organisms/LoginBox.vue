@@ -18,7 +18,7 @@
       <login-button />
       <join-form-button />
     </div>
-    <modal v-if="showErrorModal" @close="showErrorModal = false">
+    <alert-modal v-if="showErrorModal" @close="showErrorModal = false">
       <h3 slot="header" class="modal-header--base modal-header--err">
         로그인 실패!
       </h3>
@@ -28,7 +28,7 @@
       <button slot="button" @click="showErrorModal = false" class="modal-button--base">
         확인
       </button>
-    </modal>
+    </alert-modal>
   </div>
 </template>
 <script>
@@ -37,10 +37,10 @@ import LoginInput from './../molecules/LoginInput';
 import SupportLink from './../molecules/SupportLink';
 import LoginButton from './../molecules/LoginButton';
 import JoinFormButton from './../molecules/JoinFormButton';
-import Modal from './../molecules/Modal';
+import AlertModal from '../modal/AlertModal';
 
 import Eventbus from './../../lib/Eventbus';
-import Auth from './../../api';
+import Auth from '../../api/auth';
 
 import _ from 'lodash';
 
@@ -52,7 +52,7 @@ export default {
     SupportLink,
     LoginButton,
     JoinFormButton,
-    Modal,
+    AlertModal,
   },
   created() {
     Eventbus.$on('login', this.login);
@@ -120,15 +120,8 @@ export default {
         if(Auth.login.hasId) {
           await Auth.login.checkPw(userId, userPw);
           if(Auth.login.isLogin) {
-
-            // login true then routing
-            console.log('login true');
-            // 여기에서 유저에대한 db 정보를 넘겨줘야함, 일단 라우팅은 성공됐으니
-            // navigation guard 가 필요함 ok
-
             // userData 를 가져오는 api
             this.$router.replace({ name: 'MainPage', params: { phoneNumber: userId}},);
-
           } else { this.showErrorModal = true; }
         } else { this.showErrorModal = true; }
       } else { this.showErrorModal = true; }

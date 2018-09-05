@@ -28,6 +28,9 @@
             <slot name="edit">
 
             </slot>
+            <slot name="loader">
+
+            </slot>
             <slot name="remove">
 
             </slot>
@@ -102,6 +105,12 @@ export default {
     width: 100%;
     /*height: 50px;*/
     background-color: red;
+  }
+
+  .loader-wrap {
+    display: inline-block;
+    width: 80px;
+    height: 40px;
   }
 
 </style>

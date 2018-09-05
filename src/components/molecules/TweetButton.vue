@@ -7,11 +7,11 @@
   </div>
 </template>
 <script>
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
+
 import axios from 'axios';
 import Eventbus from '../../lib/Eventbus';
-import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 import store from '../../lib/Storage';
-
 
 export default {
   name: 'TweetButton',
@@ -36,17 +36,15 @@ export default {
   },
   methods: {
     addFormImageList(fileId, file) {
-      this.previewList.unshift({
+      this.previewList.push({
         id: fileId,
         file: file,
       });
     },
     removeFormImageList(fileId) {
-      for(let it = 0; it < this.previewList.length; it++) {
-        if(this.previewList[it].id === fileId) {
-          this.previewList.splice(it, 1);
-        }
-      }
+      this.previewList = this.previewList.filter((ele) => {
+        return ele.id !== fileId;
+      });
       if(this.previewList.length === 0) {
         Eventbus.$emit('initFileBox');
         Eventbus.$emit('initPreviewList');
@@ -75,7 +73,7 @@ export default {
           axios.post('/api/upload',
             formData, {
             timeout: 1000,
-            });
+            },);
         } catch (err) {
           console.error(err);
         }

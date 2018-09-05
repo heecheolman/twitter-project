@@ -29,8 +29,7 @@
 </template>
 <script>
 export default {
-  name: 'Modal',
-
+  name: 'AlertModal',
 };
 </script>
 <style scoped>
