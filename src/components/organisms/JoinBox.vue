@@ -86,6 +86,9 @@ export default {
     checkPassword() {
       const isPassword = /^.*(?=.{6,20})(?=.*[0-9])(?=.*[a-zA-Z]).*$/;
       if(isPassword.test(this.inputComponents[3].data)) {
+        // const hashword1 = this.hashing(this.inputComponents[3].data);
+        // const hashword2 = this.hashing(this.inputComponents[4].data);
+        // return hashword1 === hashword2;
         return this.inputComponents[3].data === this.inputComponents[4].data;
       }
     },
@@ -97,6 +100,8 @@ export default {
     },
     messageType() {
       if(this.checkPassword) {
+        // userData.password = hash값을 넣어야
+        // this.userData.password = this.hashing(this.inputComponents[3].data);
         this.userData.password = this.inputComponents[3].data;
         return '비밀번호가 유효합니다!';
       } else {
@@ -157,6 +162,9 @@ export default {
     }
   },
   methods: {
+    hashing(data) {
+      return crypto.createHash('sha512').update(data).digest('base64');
+    },
     // 한글이름 2~4글자 확인 후 유효하면 userData.name 등록
     checkName() {
       const isName = /^[가-힣]{2,4}$/;
@@ -239,13 +247,21 @@ export default {
           params: { phoneNumber },
         })
           .then((result) => {
-            if(isValid && result.data.length === 0) {
+            console.log(result);
+            if(result.data) {
               this.phoneNumberValid = true;
               vm.inputComponents[2].placeholder = '사용 가능합니다!';
-            } else if(isValid && result.data.length !== 0) {
+            } else {
               this.phoneNumberValid = false;
               vm.inputComponents[2].placeholder = '이미 있어요!';
             }
+            // if(isValid && result.data.length === 0) {
+            //   this.phoneNumberValid = true;
+            //   vm.inputComponents[2].placeholder = '사용 가능합니다!';
+            // } else if(isValid && result.data.length !== 0) {
+            //   this.phoneNumberValid = false;
+            //   vm.inputComponents[2].placeholder = '이미 있어요!';
+            // }
           })
           .catch((err) => {
             console.error(err);
@@ -265,7 +281,7 @@ export default {
       const isName = this.checkName();
       const isNickname = this.checkNickname();
       const isPhoneNumber = this.checkPhoneNumber();
-      if(isName && isNickname && isPhoneNumber && this.checkPassword) {
+      if(isName && isNickname && this.phoneNumberValid && isPhoneNumber && this.checkPassword) {
         this.showLoginModal = true;
         try {
           await axios.post('/api/join', {
@@ -273,12 +289,8 @@ export default {
             user_password: this.userData.password,
             real_name: this.userData.name,
             nickname: this.userData.nickname,
-            /* userData: {
-                nickname:
-                phoneNumber:
-                name:
-                password:
-             } */
+            following: [],
+            follower: [],
           });
         } catch(err) {
           console.error(err);

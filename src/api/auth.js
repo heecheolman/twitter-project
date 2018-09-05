@@ -28,8 +28,8 @@ const Auth = {
           userPassword: pw,
         },
       })
-        .then((dbPassword) => {
-          this.isLogin = pw === dbPassword.data[0].user_password;
+        .then((result) => {
+          this.isLogin = result.data;
         })
         .catch(() => {
           this.isLogin = false;
