@@ -4,7 +4,12 @@
       <span class="nickname-text">{{ user.nickname }}</span>
     </div>
     <div class="follow-button-wrap">
-      <button class="follow-button" @click="follow" ref="followButton">팔로우</button>
+      <button
+        v-if="!me"
+        class="follow-button"
+        @click="follow"
+        ref="followButton"
+        >팔로우</button>
     </div>
   </li>
 </template>
@@ -21,6 +26,7 @@ export default {
   },
   data() {
     return {
+      me: false,
       ableClick: true,
       listId: '',
     }
@@ -36,12 +42,11 @@ export default {
     } else {
       store.user.following = [];
     }
+
   },
   methods: {
     linkToProfile() {
       // 프로필화면 으로
-      // console.log(store.user);
-
     },
     async follow() {
       if(this.ableClick) {
@@ -69,8 +74,6 @@ export default {
         .then(() => {
           this.ableClick = false;
           this.$refs.followButton.classList.add('disabled');
-          console.log(store.user.following);
-          console.log(typeof store.user.following);
           store.user.following.push(this.listId);
         })
         .catch((err) => {

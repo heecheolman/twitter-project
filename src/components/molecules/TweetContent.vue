@@ -2,98 +2,141 @@
   <div class="tweet-content">
     <div class="tweet-content__header">
       <span-text
-        :class="idStyle"
+        :class="cssStyle.nicknameStyle"
         :text="id" />
       <text-a
         :label="hash"
-        :a-style="hashStyle" />
+        :a-style="cssStyle.hashStyle" />
       <span-text
-        :class="dateStyle"
+        :class="cssStyle.dateStyle"
         :text="contentDate" />
+      <span v-if="isMe" @click="initEditModal">
+        <span-text
+          :class="cssStyle.editStyle"
+          :text="editText"/>
+      </span>
     </div>
     <div class="tweet-content__body">
       <image-content
-        v-for="(img, index) in reverseList"
+        v-for="(img, index) in this.contentFilenameList"
         :key="index"
         :filename="img.filename" />
       <p-text
-        :class="pStyle"
+        :class="cssStyle.pStyle"
         :content-text="contentText" />
     </div>
     <div class="tweet-content__action">
       <div class="tweet-content__action__list">
         <svg-button
           v-for="(button, index) in svgList"
-          :class="svgButtonStyle"
+          :class="cssStyle.svgButtonStyle"
           :key="index"
           :svg="button.svg" />
       </div>
     </div>
+    <editor v-if="showEditor" @close="showEditor = false">
+      <h3 slot="header" class="edit-header">
+        게시글 수정
+      </h3>
+      <textarea slot="body" class="edit-textarea" v-model="editTextContent">{{ editTextContent }}</textarea>
+      <div class="edit-file-box" slot="edit-file-box">
+
+      </div>
+      <div class="media__container" slot="edit-media">
+        <label for="edit-media-file">
+          <svg v-html="svg"></svg>
+        </label>
+        <input
+          type="file"
+          id="edit-media-file"
+          name="userfile"
+          multiple
+          @change="updateFile" />
+      </div>
+      <button slot="cancel" @click="showEditor = false" class="button button--cancel">취소</button>
+      <button slot="edit" v-if="!editLoading" @click.stop="edit" class="button button--edit">수정</button>
+      <clip-loader slot="loader" v-else/>
+      <button slot="remove" @click="showEditor = false" class="button button--remove">삭제</button>
+    </editor>
   </div>
 </template>
 
 <script>
-import SpanText from './../atoms/SpanText';
-import TextA from './../atoms/TextA';
-import PText from './../atoms/PText';
-import SvgButton from './../atoms/SvgButton';
-import ImageContent from './../atoms/ImageContent';
+  import SpanText from './../atoms/SpanText';
+  import TextA from './../atoms/TextA';
+  import PText from './../atoms/PText';
+  import SvgButton from './../atoms/SvgButton';
+  import ImageContent from './../atoms/ImageContent';
+  import Editor from '../modal/Editor';
+  import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
-export default {
-  name: 'TweetContent',
-  components: {
-    SpanText,
-    TextA,
-    PText,
-    SvgButton,
-    ImageContent,
-  },
-  props: {
-    id: {
+  import store from './../../lib/Storage';
+  import Eventbus from './../../lib/Eventbus';
+  import axios from 'axios';
+
+  export default {
+    name: 'TweetContent',
+    components: {
+      SpanText,
+      TextA,
+      PText,
+      SvgButton,
+      ImageContent,
+      Editor,
+      ClipLoader,
     },
-    contentText: {
-      type: String,
+    props: {
+      id: {
+        type: String,
+      },
+      contentSerial: {
+        type: Number,
+      },
+      contentUserId: {
+        type: Number,
+      },
+      contentText: {
+        type: String,
+      },
+      contentDate: {
+        type: String,
+      },
+      contentFilenameList: {
+        type: Array,
+      },
     },
-    contentDate: {
-      type: String,
+    computed: {
+      isMe() {
+        return store.user.id === this.contentUserId;
+      }
     },
-    contentFilenameList: {
-      type: Array,
-    },
-  },
-  computed: {
-    reverseList() {
-      return this.contentFilenameList.reverse();
-    }
-  },
-  data() {
-    return {
-      idStyle: 'text--id',
-      hash: '@fMUmSjMbVbjhqBO',
-      hashStyle: 'text--hash',
-      pStyle: 'text--tweet',
-      dateStyle: 'text--date',
-      svgButtonStyle: 'svg--reply',
-      // updateTimelineId: null,
-      svgList: [
-        {
-          svg: `<svg x="0px" y="0px" viewBox="0 0 30.333 30.333">
+    data() {
+      return {
+        cssStyle: {
+          nicknameStyle: 'text--nickname',
+          hashStyle: 'text--hash',
+          dateStyle: 'text--date',
+          editStyle: 'text--edit',
+          svgButtonStyle: 'svg--reply',
+          pStyle: 'text--tweet',
+        },
+        showEditor: false,
+        hash: '@fMUmSjMbVbjhqBO',
+        editText: '수정',
+        svgList: [
+          { svg: `<svg x="0px" y="0px" viewBox="0 0 30.333 30.333">
                     <path d="M0,26.75V11.908c0-4.59,3.735-8.325,8.325-8.325h13.681c4.591,0,8.327,3.735,8.327,8.325v2.56
                       c0,4.59-3.735,8.325-8.325,8.325H8.518L0,26.75z M8.325,5.439c-3.567,0-6.469,2.902-6.469,6.469v11.933l6.253-2.905h13.899
                       c3.567,0,6.469-2.902,6.469-6.469v-2.56c0-3.567-2.903-6.469-6.471-6.469H8.325V5.439z M8.937,11.767
                       c0.975,0,1.765,0.79,1.765,1.765s-0.79,1.765-1.765,1.765s-1.765-0.79-1.765-1.765S7.962,11.767,8.937,11.767z M21.395,11.767
                       c0.975,0,1.765,0.79,1.765,1.765s-0.79,1.765-1.765,1.765s-1.765-0.79-1.765-1.765S20.42,11.767,21.395,11.767z M15.165,11.767
                       c0.975,0,1.765,0.79,1.765,1.765s-0.79,1.765-1.765,1.765s-1.765-0.79-1.765-1.765S14.19,11.767,15.165,11.767z"/>
-                </svg>`,
-        },
-        {
-          svg: `<svg width="18px" height="18px" viewBox="0 0 64 64">
+                </svg>`, },
+          { svg: `<svg width="18px" height="18px" viewBox="0 0 64 64">
                     <path d="m15.486,25.515c0.398,0.454 0.952,0.687 1.507,0.687 0.478,0 0.958-0.172 1.345-0.518 0.832-0.75 0.906-2.043 0.165-2.887l-7.488-8.528c-0.014-0.015-0.032-0.021-0.046-0.034-0.029-0.031-0.057-0.06-0.088-0.088-0.016-0.015-0.02-0.033-0.035-0.047-0.073-0.066-0.163-0.09-0.241-0.144-0.093-0.062-0.177-0.142-0.275-0.187-0.037-0.018-0.075-0.027-0.112-0.041-0.108-0.041-0.219-0.052-0.331-0.074-0.108-0.021-0.211-0.057-0.323-0.06-0.021-0.001-0.038-0.012-0.058-0.012s-0.037,0.011-0.058,0.012c-0.112,0.003-0.217,0.038-0.327,0.06-0.112,0.022-0.221,0.033-0.327,0.074-0.037,0.014-0.074,0.023-0.11,0.041-0.101,0.045-0.184,0.124-0.278,0.187-0.08,0.054-0.171,0.078-0.244,0.144-0.016,0.015-0.02,0.034-0.035,0.049-0.03,0.027-0.058,0.056-0.085,0.086-0.014,0.014-0.031,0.02-0.046,0.034l-7.486,8.528c-0.741,0.844-0.666,2.137 0.168,2.887 0.385,0.346 0.863,0.518 1.34,0.518 0.557,0 1.11-0.232 1.509-0.687l3.96-4.511v23.445c0,3.383 2.717,6.134 6.058,6.134h29.14c1.115,0 2.019-0.915 2.019-2.044 0-1.13-0.903-2.045-2.019-2.045h-29.14c-1.115,0-2.02-0.918-2.02-2.045v-23.445l3.961,4.511z"/>
                     <path d="m60.473,38.652l-3.959,4.51v-23.445c0-3.383-2.718-6.134-6.058-6.134h-28.415c-1.117,0-2.02,0.915-2.02,2.044 0,1.13 0.902,2.045 2.02,2.045h28.415c1.115,0 2.02,0.918 2.02,2.045v23.445l-3.962-4.51c-0.742-0.844-2.016-0.92-2.852-0.168-0.832,0.75-0.906,2.043-0.166,2.886l7.489,8.527c0.012,0.015 0.032,0.019 0.044,0.032 0.029,0.032 0.059,0.062 0.09,0.092 0.014,0.013 0.02,0.031 0.035,0.045 0.095,0.084 0.206,0.125 0.309,0.189 0.033,0.021 0.062,0.048 0.1,0.066 0.047,0.025 0.085,0.07 0.134,0.092 0.018,0.008 0.037,0.01 0.055,0.018 0.241,0.096 0.49,0.151 0.744,0.151 0.251,0 0.504-0.055 0.743-0.151 0.018-0.008 0.037-0.01 0.056-0.018 0.049-0.021 0.086-0.065 0.131-0.09 0.033-0.019 0.059-0.044 0.091-0.062 0.109-0.064 0.226-0.109 0.321-0.195 0.016-0.015 0.02-0.034 0.035-0.049 0.03-0.028 0.058-0.058 0.087-0.088 0.012-0.014 0.031-0.018 0.043-0.032l7.488-8.527c0.74-0.843 0.665-2.136-0.169-2.886-0.835-0.752-2.11-0.675-2.849,0.168z"/>
-                </svg>`
-        },
-        {
-          svg: `<svg x="0px" y="0px" width="18px" height="18px" viewBox="0 0 979.494 979.494">
+                </svg>` },
+          { svg: `<svg x="0px" y="0px" width="18px" height="18px" viewBox="0 0 979.494 979.494">
                     <path d="M964.616,227.519c-15.63-44.595-43.082-84.824-79.389-116.338c-36.341-31.543-80.051-53.048-126.404-62.188
                       c-17.464-3.444-35.421-5.19-53.371-5.19c-52.371,0-103.306,14.809-147.296,42.827c-26.482,16.867-49.745,38.022-68.908,62.484
                       c-19.158-24.415-42.405-45.53-68.859-62.364C376.42,58.773,325.52,43.985,273.189,43.985c-0.003,0,0.001,0-0.001,0
@@ -108,12 +151,239 @@ export default {
                       c13.544,0,27.074,1.314,40.216,3.905c34.739,6.85,67.585,23.042,94.986,46.826c27.39,23.774,48.064,54.023,59.79,87.476
                       c8.547,24.385,12.164,50.811,10.75,78.542c-2.772,54.379-24.017,114.42-64.944,183.553
                       C773.338,635.262,656.457,747.659,489.322,855.248z"/>
-                </svg>`,
-        },
-      ],
-    };
-  },
-}
+                </svg>`, },
+        ],
+        svg: `<svg x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
+	<path fill="none" d="M0,0h24v24H0V0z"/>
+		<path fill="currentColor" d="M18,20H4V6h9V4H4C2.9,4,2,4.9,2,6v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-9h-2V20z"/>
+		<polygon fill="currentColor" points="10.21,16.83 8.25,14.47 5.5,18 16.5,18 12.96,13.29 		"/>
+		<path fill="currentColor" d="M20,4V1h-2v3h-3c0.01,0.01,0,2,0,2h3v2.99c0.01,0.01,2,0,2,0V6h3V4H20z"/>
+</svg>`,
+        originFileIdCounter: 0,
+        newFileIdCounter: 0,
+        originFileList: [],
+        newFileList: [],
+        editTextContent: '',
+        editLoading: false,
+      };
+    },
+    methods: {
+      // 게시글 수정 Modal
+      initEditModal() {
+        this.showEditor = true;
+        // id init
+        this.newFileIdCounter = 0;
+        this.originFileIdCounter = 0;
+        // 게시글 init
+        this.editTextContent = this.contentText;
+        // 파일 init
+        if(this.contentFilenameList.length !== 0) {
+          this.originFileList = this.contentFilenameList.slice();
+          this.loadFile();
+        }
+      },
+      loadFile() {
+        this.$nextTick(function() {
+          const editFileBox = document.querySelector('.edit-file-box');
+          // 상자를 늘려줌
+          this.extendBox();
+          // 기존의 이미지들을 전부 파일박스에 붙여줌.
+          for(let i = 0; i < this.contentFilenameList.length; i++) {
+            const image = this.createOriginImage(this.contentFilenameList[i].filename);
+            const wrap = this.createImageWrap();
+            const fileId = this.originFileIdCounter++;
+            this.contentFilenameList[i].id = fileId;
+            const x = this.createXButton(fileId, true);
+            wrap.appendChild(x);
+            wrap.appendChild(image);
+            editFileBox.appendChild(wrap);
+          }
+        });
+      },
+      createOriginImage(filename) {
+        const defaultPath = './../../static/';
+        const image = new Image();
+        image.title = filename;
+        image.style.width = 'auto';
+        image.style.height = 'auto';
+        image.style.overflow = 'hidden';
+        image.style.cursor = 'pointer';
+        image.src = defaultPath + filename;
+        return image;
+      },
+      createImageWrap() {
+        const div = document.createElement('div');
+        div.style.width = '113px';
+        div.style.height = '113px';
+        div.style.display = 'inline-block';
+        div.style.overflow = 'hidden';
+        div.style.borderRadius = '5px';
+        div.style.border = '1px solid #d7d7d7';
+        div.style.marginRight = '5px';
+        return div;
+      },
+      createXButton(fileId, isOrigin) {
+        const xButton = document.createElement('div');
+        xButton.style.width = '20px';
+        xButton.style.height = '20px';
+        xButton.style.borderRadius = '50%';
+        xButton.style.backgroundColor = 'black';
+        xButton.style.color = 'white';
+        xButton.style.fontSize = '14px';
+        xButton.style.lineHeight = '16px';
+        xButton.style.textAlign = 'center';
+        xButton.style.fontWeight = 'lighter';
+        xButton.style.position = 'absolute';
+        xButton.style.marginLeft = '80px';
+        xButton.style.marginTop = '5px';
+        xButton.style.cursor = 'pointer';
+        xButton.userSelect = 'none';
+        xButton.fileId = fileId;
+        const x = document.createTextNode('x');
+        xButton.appendChild(x);
+        xButton.addEventListener('click', () => {
+          const frame = xButton.parentElement;
+          if(isOrigin) {
+            this.originFileList = this.originFileList.filter((ele) => {
+              return ele.id !== xButton.fileId;
+            });
+          } else {
+            this.newFileList = this.newFileList.filter((ele) => {
+              return ele.id !== xButton.fileId;
+            });
+          }
+          if(this.originFileList.length === 0 && this.newFileList.length === 0) {
+            this.reduceBox();
+          }
+          frame.remove();
+        });
+        return xButton;
+      },
+      createNewImage(file) {
+        const fileReader = new FileReader();
+        const image = new Image();
+        fileReader.addEventListener('load', () => {
+          image.title = file.name;
+          image.style.width = 'auto';
+          image.style.height = 'auto';
+          image.style.overflow = 'hidden';
+          image.style.cursor = 'pointer';
+          image.src = fileReader.result;
+        }, false);
+        fileReader.readAsDataURL(file);
+        return image;
+      },
+      // 추가하려는 파일이 존재하면 붙여준다.
+      updateFile() {
+        const inputDOM = document.querySelector('#edit-media-file');
+        const editFileBox = document.querySelector('.edit-file-box');
+        this.extendBox();
+        if(inputDOM.files.length !== 0) {
+          for(let i = 0; i < inputDOM.files.length; i++) {
+            const file = inputDOM.files[i];
+            const fileId = this.newFileIdCounter++;
+            const image = this.createNewImage(file);
+            const imageWrap = this.createImageWrap();
+            const xButton = this.createXButton(fileId, false);
+            this.addNewFileList(fileId, file);
+            imageWrap.appendChild(xButton);
+            imageWrap.appendChild(image);
+            editFileBox.appendChild(imageWrap);
+          }
+        } else {
+          this.reduceBox();
+        }
+      },
+      addNewFileList(fileId, file) {
+        this.newFileList.push({
+          id: fileId,
+          file: file,
+        });
+      },
+      extendBox() {
+        const editFileBox = document.querySelector('.edit-file-box');
+        const textarea = document.querySelector('.edit-textarea');
+        editFileBox.style.display = 'block';
+        editFileBox.style.visibility = 'visible';
+        textarea.style.borderBottomWidth = '1px';
+        textarea.style.borderBottomStyle = 'solid';
+        textarea.style.borderBottomColor = 'transparent';
+      },
+      reduceBox() {
+        const editFileBox = document.querySelector('.edit-file-box');
+        const textarea = document.querySelector('.edit-textarea');
+        editFileBox.style.display = 'none';
+        editFileBox.style.visibility = 'hidden';
+        textarea.style.borderBottomWidth = '1px';
+        textarea.style.borderBottomStyle = 'solid';
+        textarea.style.borderBottomColor = '#d7d7d7';
+      },
+      async edit() {
+        this.editLoading = true;
+        let   filenameList = [];
+        const inputDOM              = document.querySelector('#edit-media-file');
+        const isTextModified        = this.contentText !== this.editTextContent;
+        const isOriginImageModified = this.originFileList.length !== this.contentFilenameList.length;
+        const isImageAdded          = this.newFileList.length !== 0;
+        let   isImageListUpdated    = false;
+
+        let loadingTimeoutId = setTimeout(async () => {
+          if(isTextModified) {
+            // 글 post
+            await axios.put(`/api/posts/${this.contentSerial}/contents`, {
+              params: {
+                id: this.contentSerial,
+              },
+              data: {
+                contents: this.editTextContent,
+              },
+            });
+          }
+          //기존 이미지 리스트가 변경되었을 시
+          if(isOriginImageModified) {
+            isImageListUpdated = true;
+          }
+          // 기존것을 옮겨준다
+          this.originFileList.forEach((ele) => {
+            filenameList.push({ filename: ele.filename });
+          });
+          // 새로 추가된 이미지일경우
+          if(isImageAdded) {
+            let formData = new FormData();
+            this.newFileList.forEach((ele) => {
+              filenameList.push({ filename: ele.file.name });
+              formData.append(inputDOM.name, ele.file);
+            });
+            // 이미지 업로드
+            try {
+              await axios.post('/api/upload',
+                formData, {
+                  timeout: 1000,
+                });
+            } catch (err) {
+              console.error(err);
+            }
+            isImageListUpdated = true;
+          }
+          if(isImageListUpdated) {
+            await axios.put(`/api/posts/${this.contentSerial}/images`, {
+              params: {
+                id: this.contentSerial,
+              },
+              data: {
+                images: filenameList,
+              }
+            });
+          }
+          await Eventbus.$emit('getTimelines');
+          this.editLoading = false;
+          this.showEditor = false;
+          this.newFileList = [];
+        }, 500);
+        loadingTimeoutId = null;
+      },
+    },
+  }
 </script>
 <style scoped>
   .tweet-content {
@@ -139,5 +409,100 @@ export default {
     line-height: 1;
     margin-bottom: 2px;
     margin-top: 10px;
+  }
+
+  .edit-header {
+    /*color: #1da1f2;*/
+    color: #666666;
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+  }
+
+  .button {
+    outline: none;
+    width: 80px;
+    height: 40px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: .2s;
+    margin: 5px;
+    border: 1px solid #d7d7d7;
+    color: #666666;
+    background-color: #fff;
+  }
+
+  .button:hover {
+    transform: translateY(-3px);
+  }
+  .button--cancel:hover, .button--remove:hover {
+    color: #ff3c38;
+  }
+
+  .button--edit:hover {
+    color: #1da1f2;
+  }
+
+  .edit-textarea {
+    resize: none;
+    outline: none;
+    border: none;
+    width: 100%;
+    min-height: 200px;
+    border-bottom: 1px solid #d7d7d7;
+  }
+
+  /* input media */
+  .media__container {
+    padding: 0;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1000;
+  }
+  .media__container:hover {
+    box-shadow: inset 0 0 1px #ccd6dd;
+    background-color: rgba(210, 202, 214, 0.1);
+  }
+
+  .edit-file-box {
+    display: none;
+    visibility: hidden;
+    background-color: #fff;
+    border: 1px solid #d7d7d7;
+    border-radius: 5px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  label {
+    padding: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    border-radius: 5px;
+    color: #a9a6ac;
+  }
+  svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  input[type=file] {
+    position: absolute;
+    opacity: 0;
+    padding: 0;
+    overflow: hidden;
+    clip:rect(0,0,0,0);
+    border: 0;
   }
 </style>

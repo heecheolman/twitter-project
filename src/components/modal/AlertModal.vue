@@ -29,8 +29,7 @@
 </template>
 <script>
 export default {
-  name: 'Modal',
-
+  name: 'AlertModal',
 };
 </script>
 <style scoped>
@@ -41,7 +40,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .3);
+    background-color: rgba(0, 0, 0, .6);
     display: table;
     transition: opacity .3s ease;
   }

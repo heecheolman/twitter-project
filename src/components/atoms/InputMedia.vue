@@ -21,9 +21,6 @@ export default {
     svg: {
       type: String,
     },
-    mediaType: {
-      type: String,
-    },
   },
   created() {
     this.fileIdCounter = 0;
@@ -91,7 +88,7 @@ export default {
       // 파일이 하나라도 존재할 시에
       if(inputDOM.files.length !== 0) {
         Eventbus.$emit('extendFileBox');
-        for(let i = inputDOM.files.length - 1; i > -1; i--) {
+        for(let i = 0; i < inputDOM.files.length; i++) {
           this.fileIdCounter++;
           const file = inputDOM.files[i];
           const fileId = this.fileIdCounter;
@@ -126,7 +123,6 @@ export default {
     /*border: 1px solid rgba(74, 179, 244, 0.1);*/
     /*box-shadow: inset 0 0 1px rgba(22, 53, 72, 0.1);*/
     box-shadow: inset 0 0 1px #ccd6dd;
-
     background-color: rgba(74, 179, 244, 0.1);
   }
 

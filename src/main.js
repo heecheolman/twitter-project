@@ -3,7 +3,7 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
-import Auth from './api';
+import Auth from './api/auth';
 
 Vue.config.productionTip = false;
 

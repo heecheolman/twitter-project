@@ -14,6 +14,8 @@
             v-for="(content, index) in contentList"
             :key="index"
             :id="content.nickname"
+            :content-serial="content.id"
+            :content-user-id="content.user_id"
             :content-text="content.contents"
             :content-date="content.created_at"
             :content-filename-list="content.images" />
@@ -70,8 +72,7 @@ export default {
         },
       })
         .then((result) => {
-          console.log(result);
-          this.contentList = result.data.reverse();
+          this.contentList = result.data;
         })
         .catch((err) => {
           console.error(err);

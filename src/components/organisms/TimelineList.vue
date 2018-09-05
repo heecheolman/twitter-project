@@ -5,6 +5,8 @@
       :avatar-size="avatarSize" />
     <tweet-content
       :id="id"
+      :content-serial="contentSerial"
+      :content-user-id="contentUserId"
       :content-text="contentText"
       :content-date="stringifyDate"
       :content-filename-list="contentFilenameList" />
@@ -17,12 +19,16 @@ import ProfileImage from './../../assets/default_profile.png';
 import TweetContent from './../molecules/TweetContent';
 
 import DateCalculator from './../../lib/DateCalculator';
+import Eventbus from './../../lib/Eventbus';
 
 export default {
   name: 'TimelineList',
   components: {
     ProfileButton,
     TweetContent,
+  },
+  created() {
+    Eventbus.$on('edit', this.edit);
   },
   mounted() {
     this.updateTimelineId = this.updateTimelineDate();
@@ -33,6 +39,12 @@ export default {
   props: {
     id: {
       type: String,
+    },
+    contentSerial: {
+      type: Number,
+    },
+    contentUserId: {
+      type: Number,
     },
     contentText: {
       type: String,
