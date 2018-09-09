@@ -27,6 +27,16 @@ export default {
 }
 </script>
 <style scoped>
+  @media screen and (max-width: 425px) {
+    .logo-container {
+      display: none;
+      visibility: hidden;
+    }
+    .logo-container h1 {
+      display: none;
+      visibility: hidden;
+    }
+  }
   .logo-container {
     position: relative;
     display: inline-block;

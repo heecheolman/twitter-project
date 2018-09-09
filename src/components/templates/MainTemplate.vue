@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="main-wrap">
     <header-section/>
     <!-- ------ Main Content ------ -->
-    <div class="content wrapper">
+    <div class="content">
       <div class="content__section">
         <dash-board-profile
           :nickname="userData.nickname" />
@@ -83,7 +83,42 @@ export default {
 </script>
 
 <style scoped>
-  @media screen and (min-width: 1236px) {
+  /* Mobile Device */
+  @media screen and (max-width: 425px) {
+    .main-wrap .content .content__section,
+    .main-wrap .content .content__section .dashboard__profile {
+      display: none;
+      visibility: hidden;
+    }
+    .main-wrap .content {
+      width: 100%;
+      margin: 0;
+    }
+    .main-wrap .content .content__timeline {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+
+  /* Tablet Device */
+  @media screen and (min-width: 426px) and (max-width: 1024px) {
+    .main-wrap .content .content__section,
+    .main-wrap .content .content__section .dashboard__profile {
+      display: none;
+      visibility: hidden;
+    }
+    .main-wrap .content {
+      width: 100%;
+      margin: 0;
+    }
+    .main-wrap .content .content__timeline {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+
+  /* Desktop Device */
+  @media screen and (min-width: 1025px) {
     .main-wrap .content {
       width: 1190px;
       padding: 56px 20px 15px;
@@ -94,9 +129,14 @@ export default {
     }
   }
 
+  .main-wrap {
+    width: 100vw;
+  }
+
   .content {
     position: relative;
-    padding: 56px 0 0 15px;
+    /*padding: 56px 0 0 15px;*/
+    padding: 50px 0;
     height: 100%;
     width: 900px;
     margin: 0 auto;

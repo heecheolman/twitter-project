@@ -81,6 +81,26 @@ export default {
 </script>
 
 <style scoped>
+  @media screen and (max-width: 425px) {
+    .main-wrap .content .content__timeline .timeline-list__list {
+      /*width: 320px;*/
+      width: 100%;
+      height: auto;
+    }
+    .main-wrap .content .content__timeline .timeline-list__list .profile-button {
+      display: none;
+      visibility: hidden;
+    }
+  }
+  /* Desktop Device */
+  @media screen and (min-width: 426px) and (max-width: 1024px) {
+    .main-wrap .content .content__timeline .timeline-list__list {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+
   .timeline-list__list {
     width: 100%;
     position: relative;

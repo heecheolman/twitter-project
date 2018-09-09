@@ -10,18 +10,25 @@
             :a-style="tooltipStyle" />
         </ul>
       </div>
+      <div class="left-tooltip-container--mobile">
+        <div class="hamburger-menu-box">
+          <div class="hamburger--base hamburger--item1"></div>
+          <div class="hamburger--base hamburger--item2"></div>
+          <div class="hamburger--base hamburger--item3"></div>
+        </div>
+      </div>
       <logo
         :logo-style="logoStyle"/>
       <div class="right-tooltip-container">
         <div class="search-bar-container">
           <search-bar />
         </div>
-        <div class="right-tooltip-container__right">
-          <profile-button
-            :image-path="imagePath"
-            :avatar-size="avatarSize" />
-          <tweet-button />
-        </div>
+        <!--<div class="right-tooltip-container__right">-->
+          <!--<profile-button-->
+            <!--:image-path="imagePath"-->
+            <!--:avatar-size="avatarSize" />-->
+          <!--<tweet-button />-->
+        <!--</div>-->
       </div>
     </div>
   </div>
@@ -31,10 +38,10 @@
 import MenuTooltip from './../molecules/MenuTooltip';
 import Logo from './../molecules/Logo';
 import SearchBar from './../molecules/SearchBar';
-import ProfileButton from './../molecules/ProfileButton';
-import TweetButton from '../molecules/TweetButton';
+// import ProfileButton from './../molecules/ProfileButton';
+// import TweetButton from '../molecules/TweetButton';
 
-import ProfileImage from './../../assets/default_profile.png';
+// import ProfileImage from './../../assets/default_profile.png';
 
 export default {
   name: 'HeaderSection',
@@ -42,8 +49,8 @@ export default {
     Logo,
     MenuTooltip,
     SearchBar,
-    ProfileButton,
-    TweetButton,
+    // ProfileButton,
+    // TweetButton,
   },
   data() {
     return {
@@ -53,8 +60,8 @@ export default {
         { label: '쪽지'}
         ],
       tooltipStyle: 'a--tooltip',
-      avatarSize: 'avatar--size32',
-      imagePath: ProfileImage,
+      // avatarSize: 'avatar--size32',
+      // imagePath: ProfileImage,
       logoStyle: 'logo',
     };
   },
@@ -62,11 +69,65 @@ export default {
 </script>
 
 <style scoped>
-  @media screen and (min-width: 1236px) {
+
+  @media screen and (max-width: 425px) {
+    .main-wrap .header {
+      /*width: 320px;*/
+      /*min-width: 320px;*/
+      width: 100%;
+      min-width: 100%;
+    }
+    .main-wrap .header .header__container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 0;
+    }
+    .main-wrap .header .header__container .left-tooltip-container {
+      display: none;
+      visibility: hidden;
+    }
+    .main-wrap .header .header__container .left-tooltip-container--mobile {
+      display: flex;
+      visibility: visible;
+    }
+    .main-wrap .header .header__container .left-tooltip-container--mobile .hamburger-menu-box {
+      display: flex;
+      visibility: visible;
+    }
+  }
+
+  /* Tablet Device */
+  @media screen and (min-width: 426px) and (max-width: 1024px) {
+    .header .header__container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%;
+      padding: 0;
+    }
+    .header .header__container .left-tooltip-container {
+      display: none;
+      visibility: hidden;
+    }
+    .header .header__container .left-tooltip-container--mobile {
+      display: flex;
+      visibility: visible;
+    }
+    .header .header__container .left-tooltip-container--mobile .hamburger-menu-box {
+      display: flex;
+      visibility: visible;
+    }
+  }
+
+  /* Desktop Device */
+  @media screen and (min-width: 1025px) {
     .header .header__container {
       max-width: 1190px;
     }
   }
+
   .header {
     position: fixed;
     z-index: 1000;
@@ -74,13 +135,12 @@ export default {
     width: 100%;
     height: 45px;
     border-bottom: 1px solid rgba(0,0,0,0.25);
-    /* PC 로만 일단 */
-    min-width: 800px;
   }
   .header__container {
     position: relative;
     max-width: 900px;
     margin: 0 auto;
+    padding: 0 20px;
     text-align: center;
     height: 100%;
   }
@@ -91,6 +151,34 @@ export default {
     width: 200px;
     height: 100%;
   }
+
+  .left-tooltip-container--mobile {
+    display: none;
+    visibility: hidden;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+  }
+
+  .left-tooltip-container--mobile .hamburger-menu-box {
+    display: none;
+    visibility: hidden;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 25px;
+    height: 23px;
+  }
+  .left-tooltip-container--mobile .hamburger-menu-box .hamburger--base {
+    width: 90%;
+    height: 3px;
+    /*border-radius: 5px;*/
+    background: #1da1f2;
+  }
+  /*.left-tooltip-container--mobile .hamburger-menu-box .hamburger--item2 {*/
+    /*width: 50%;*/
+  /*}*/
 
   .right-tooltip-container {
     float: right;
@@ -121,12 +209,6 @@ export default {
     height: 100%;
   }
 
-
-
-
-
-  .dropdown {
-  }
   .arrow-box {
     /*width: 18px;*/
     /*height: 10px;*/

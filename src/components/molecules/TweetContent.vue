@@ -4,9 +4,9 @@
       <span-text
         :class="cssStyle.nicknameStyle"
         :text="id" />
-      <text-a
-        :label="hash"
-        :a-style="cssStyle.hashStyle" />
+      <!--<text-a-->
+        <!--:label="hash"-->
+        <!--:a-style="cssStyle.hashStyle" />-->
       <span-text
         :class="cssStyle.dateStyle"
         :text="contentDate" />
@@ -211,10 +211,40 @@
         image.src = defaultPath + filename;
         return image;
       },
+      whichDevice() {
+        const viewSize = document.querySelector('body').clientWidth;
+        let device = '';
+        if(viewSize < 426) {
+          device = 'mobile';
+        } else if(viewSize < 1025) {
+          device = 'tablet';
+        } else {
+          device = 'desktop';
+        }
+        return device;
+      },
       createImageWrap() {
         const div = document.createElement('div');
-        div.style.width = '113px';
-        div.style.height = '113px';
+        let imageWrapStyle = {
+          width: '',
+          height: '',
+        };
+        switch(this.whichDevice()) {
+          case 'mobile':
+            imageWrapStyle.width = '50px';
+            imageWrapStyle.height = '50px';
+            break;
+          case 'tablet':
+            imageWrapStyle.width = '80px';
+            imageWrapStyle.height = '80px';
+            break;
+          case 'desktop':
+            imageWrapStyle.width = '113px';
+            imageWrapStyle.height = '113px';
+            break;
+        }
+        div.style.width = imageWrapStyle.width;
+        div.style.height = imageWrapStyle.height;
         div.style.display = 'inline-block';
         div.style.overflow = 'hidden';
         div.style.borderRadius = '5px';
@@ -224,8 +254,28 @@
       },
       createXButton(fileId, isOrigin) {
         const xButton = document.createElement('div');
-        xButton.style.width = '20px';
-        xButton.style.height = '20px';
+        let xButtonStyle = {
+          width: '20px',
+          height: '20px',
+          marginLeft: '',
+          marginTop: '5px',
+        };
+        switch(this.whichDevice()) {
+          case 'mobile':
+            xButtonStyle.marginLeft = '20px';
+            break;
+          case 'tablet':
+            xButtonStyle.marginLeft = '50px';
+            break;
+          case 'desktop':
+            xButtonStyle.marginLeft = '80px';
+            break;
+        }
+        xButton.style.width = xButtonStyle.width;
+        xButton.style.height = xButtonStyle.height;
+        xButton.style.marginLeft = xButtonStyle.marginLeft;
+        xButton.style.marginTop = xButtonStyle.marginTop;
+
         xButton.style.borderRadius = '50%';
         xButton.style.backgroundColor = 'black';
         xButton.style.color = 'white';
@@ -234,8 +284,6 @@
         xButton.style.textAlign = 'center';
         xButton.style.fontWeight = 'lighter';
         xButton.style.position = 'absolute';
-        xButton.style.marginLeft = '80px';
-        xButton.style.marginTop = '5px';
         xButton.style.cursor = 'pointer';
         xButton.userSelect = 'none';
         xButton.fileId = fileId;
@@ -386,6 +434,29 @@
   }
 </script>
 <style scoped>
+  @media screen and (max-width: 425px) {
+    .main-wrap .content .content__timeline .timeline-list__list .tweet-content {
+      width: 100%;
+      margin: 0;
+    }
+    .main-wrap .content .content__timeline .timeline-list__list .tweet-content .tweet-content__header {
+      width: 100%;
+    }
+    .main-wrap .content .content__timeline .timeline-list__list .tweet-content .tweet-content__action .tweet-content__action__list {
+      padding: 0;
+    }
+  }
+  @media screen and (min-width: 426px) and (max-width: 1024px) {
+    .main-wrap .content .content__timeline .timeline-list__list .tweet-content {
+      width: 90%;
+    }
+    .main-wrap .content .content__timeline .timeline-list__list .tweet-content .tweet-content__header {
+      width: 100%;
+    }
+    .main-wrap .content .content__timeline .timeline-list__list .tweet-content .tweet-content__action .tweet-content__action__list {
+      padding: 0;
+    }
+  }
   .tweet-content {
     width: 506px;
     height: auto;

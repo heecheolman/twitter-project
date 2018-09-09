@@ -24,6 +24,9 @@ export default {
 };
 </script>
 <style scoped>
+  @media screen and (max-width: 425px) {
+
+  }
   .profile-button {
     margin-top: 2px;
     float: left;

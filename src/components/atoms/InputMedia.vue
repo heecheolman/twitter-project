@@ -47,8 +47,11 @@ export default {
     },
     createXButton(fileId) {
       const xButton = document.createElement('div');
+
       xButton.style.width = '20px';
       xButton.style.height = '20px';
+      xButton.style.marginLeft = '80px';
+      xButton.style.marginTop = '5px';
       xButton.style.borderRadius = '50%';
       xButton.style.backgroundColor = 'black';
       xButton.style.color = 'white';
@@ -57,8 +60,7 @@ export default {
       xButton.style.textAlign = 'center';
       xButton.style.fontWeight = 'lighter';
       xButton.style.position = 'absolute';
-      xButton.style.marginLeft = '80px';
-      xButton.style.marginTop = '5px';
+
       xButton.style.cursor = 'pointer';
       xButton.fileId = fileId;
       xButton.userSelect = 'none';
