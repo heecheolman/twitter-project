@@ -21,8 +21,8 @@ export default {
         phone_number: to.params.phoneNumber,
       },
     })
-      .then((result) => {
-        store.user = result.data[0];
+      .then((user) => {
+        store.user = user.data;
         next();
       })
       .catch((err) => {

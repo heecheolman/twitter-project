@@ -46,6 +46,34 @@ export default {
 };
 </script>
 <style scoped>
+  /* Moblie Device */
+  @media screen and (max-width: 425px) {
+    .content__timeline .timeline-list__list .tweet-content .editor-mask {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .content__timeline .timeline-list__list .tweet-content .editor-mask .editor-wrapper .editor-container {
+      width: 90%;
+    }
+  }
+  /*@media screen and (max-width: 767px) {*/
+    /*.content__timeline .timeline-list__list .tweet-content .editor-mask {*/
+      /*display: flex;*/
+      /*justify-content: center;*/
+      /*align-items: center;*/
+    /*}*/
+  /*}*/
+
+  /* Tablet Device */
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+
+  }
+
+  /* Desktop Device */
+  @media screen and (min-width: 1025px) {
+  }
+
   .editor-mask {
     position: fixed;
     z-index: 9998;

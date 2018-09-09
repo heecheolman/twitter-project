@@ -70,6 +70,21 @@ export default {
 };
 </script>
 <style scoped>
+  /* Moblie Device */
+  @media screen and (max-width: 425px) {
+    /*.form--search {*/
+      /*width: 100%;*/
+    /*}*/
+  }
+  /* Tablet Device */
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+
+  }
+
+  /* Desktop Device */
+  @media screen and (min-width: 1025px) {
+  }
+
   .form--search {
     display: block;
     position: relative;
@@ -97,7 +112,8 @@ export default {
     overflow: hidden;
   }
   .searched-box {
-    width: 316px;
+    /*width: 316px;*/
+    width: 100%;
     border-radius: 4px;
     background-color: #fff;
     background-clip: padding-box;

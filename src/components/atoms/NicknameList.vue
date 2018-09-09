@@ -85,6 +85,18 @@ export default {
 };
 </script>
 <style scoped>
+  /* Moblie Device */
+  @media screen and (max-width: 767px) {
+  }
+
+  /* Tablet Device */
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+  }
+
+  /* Desktop Device */
+  @media screen and (min-width: 1025px) {
+  }
+
   .list-wrap {
     display: block;
     box-sizing: border-box;
@@ -113,20 +125,20 @@ export default {
 
   .nickname-wrap {
     display: inline-block;
-    width: 200px;
+    width: 70%;
     height: 100%;
   }
 
   .follow-button-wrap {
     display: inline-block;
-    width: auto;
+    width: 50px;
     height: 100%;
   }
   .follow-button {
     outline: none;
     border: none;
     border-radius: 10px;
-    width: 60px;
+    width: 100%;
     height: 28px;
     text-align: center;
     line-height: 28px;
