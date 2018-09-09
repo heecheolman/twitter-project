@@ -1,7 +1,7 @@
 <template>
   <div class="login-body">
     <div class="login-body__logo">
-      <logo :logo-style="logoStyle"/>
+      <h1 class="logo--login">Twitter</h1>
     </div>
     <div class="flex-container flex-center flex-column">
       <login-input
@@ -32,7 +32,6 @@
   </div>
 </template>
 <script>
-import Logo from './../molecules/Logo';
 import LoginInput from './../molecules/LoginInput';
 import SupportLink from './../molecules/SupportLink';
 import LoginButton from './../molecules/LoginButton';
@@ -47,7 +46,6 @@ import _ from 'lodash';
 export default {
   name: 'LoginBox',
   components: {
-    Logo,
     LoginInput,
     SupportLink,
     LoginButton,
@@ -87,7 +85,6 @@ export default {
   },
   data() {
     return {
-      logoStyle: 'logo--login',
       inputComponents: [
         {
           placeholder: '휴대폰 번호',
@@ -130,6 +127,24 @@ export default {
 };
 </script>
 <style scoped>
+  /* Mobile Device */
+  @media screen and (max-width: 425px) {
+    .login-wrap .login-body {
+      width: 300px;
+      height: 500px;
+    }
+  }
+
+  /* Tablet Device */
+  @media screen and (min-width: 426px) and (max-width: 1024px) {
+
+  }
+
+  /* Desktop Device */
+  @media screen and (min-width: 1025px) {
+
+  }
+
   .login-body {
     width: 370px;
     height: 500px;
@@ -142,6 +157,15 @@ export default {
     text-align: center;
     padding-top: 30px;
   }
+
+  .logo--login {
+    user-select: none;
+    cursor: default;
+    font-size: 2rem;
+    color: #4AB3F4;
+    margin: 0;
+  }
+
   .login-body__support-body {
     width: 100%;
     height: 50px;
