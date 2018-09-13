@@ -12,7 +12,7 @@ const Auth = {
         },
       })
         .then((result) => {
-          if(result.data.length !== 0) {
+          if(result.data) {
             this.hasId = true;
           }
         })

@@ -54,6 +54,7 @@ export default {
     },
   },
   created() {
+    console.log(store);
     this.contentList = [];
     Eventbus.$on('getTimelines', this.getTimelines);
     this.getTimelines();
@@ -78,8 +79,6 @@ export default {
           console.error(err);
         });
     },
-    showHamburgerMenu() {
-    }
   }
 }
 </script>

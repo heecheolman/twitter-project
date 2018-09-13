@@ -7,7 +7,8 @@
             v-for="(tooltip, index) in tooltipList"
             :key="index"
             :label="tooltip.label"
-            :a-style="tooltipStyle" />
+            :a-style="tooltipStyle"
+            :foo="tooltip.clickEvent"/>
         </ul>
       </div>
       <div class="left-tooltip-container--mobile">
@@ -35,6 +36,10 @@ import MenuTooltip from './../molecules/MenuTooltip';
 import HamburgerMenu from './../molecules/HamburgerMenu';
 import Logo from './../molecules/Logo';
 import SearchBar from './../molecules/SearchBar';
+
+import Eventbus from './../../lib/Eventbus';
+import auth from './../../api/auth';
+
 // import ProfileButton from './../molecules/ProfileButton';
 // import TweetButton from '../molecules/TweetButton';
 
@@ -50,12 +55,38 @@ export default {
     // ProfileButton,
     // TweetButton,
   },
+  created() {
+    Eventbus.$on('goHome', this.tooltipList[0].clickEvent);
+    Eventbus.$on('goProfile', this.tooltipList[1].clickEvent);
+    Eventbus.$on('logout', this.tooltipList[2].clickEvent);
+  },
   data() {
     return {
       tooltipList: [
-        { label: '홈', },
-        { label: '프로필', },
-        { label: '로그아웃', }
+        {
+          label: '홈',
+          clickEvent: async () => {
+            console.log('home');
+            this.$router.replace({ name: 'MainPage', params: { phoneNumber: '123'}},);
+            await Eventbus.$emit('getTimelines');
+          },
+        },
+        {
+          label: '프로필',
+          clickEvent: async () => {
+            console.log('profile');
+            this.$router.replace('/profile');
+          },
+        },
+        {
+          label: '로그아웃',
+          clickEvent: async () => {
+            console.log('logout');
+            auth.login.isLogin = false;
+            auth.login.hasId = false;
+            this.$router.replace({ name: 'LoginPage' });
+          },
+        }
         ],
       tooltipStyle: 'a--tooltip',
       // avatarSize: 'avatar--size32',

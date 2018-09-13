@@ -60,7 +60,7 @@ export default {
   },
   destroyed() {
     for(let i = 0; i < this.inputComponents.length; i++) {
-      this.inputComponents[i] = null;
+      this.inputComponents[i].data = '';
     }
   },
   computed: {
@@ -103,7 +103,6 @@ export default {
       ],
       support: { text: '비밀번호를 잊으셨나요?' },
       isPhoneNumber: false,
-      // isLogin: false,
       showErrorModal: false,
     };
   },
@@ -112,7 +111,6 @@ export default {
       if(this.isPhoneNumber && this.inputComponents[0].data.length !== 0 && this.inputComponents[1].data.length !== 0) {
         const userId = this.inputComponents[0].data;
         const userPw = this.inputComponents[1].data;
-
         await Auth.login.checkId(userId);
         if(Auth.login.hasId) {
           await Auth.login.checkPw(userId, userPw);

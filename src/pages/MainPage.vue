@@ -23,11 +23,12 @@ export default {
     })
       .then((user) => {
         store.user = user.data;
+        console.log(store.user);
         next();
       })
       .catch((err) => {
         console.error(err);
-      })
+      });
   },
   created() {
     this.userData = store.user;
