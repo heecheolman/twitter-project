@@ -78,6 +78,8 @@ export default {
           console.error(err);
         });
     },
+    showHamburgerMenu() {
+    }
   }
 }
 </script>

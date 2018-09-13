@@ -21,6 +21,9 @@ export default {
       type: String,
     },
   },
+  created() {
+
+  },
 };
 </script>
 <style scoped>

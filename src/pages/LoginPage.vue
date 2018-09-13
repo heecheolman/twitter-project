@@ -41,6 +41,22 @@ export default {
 </script>
 <style scoped>
   @import './../assets/common.css';
+
+  /*!* Mobile Device *!*/
+  /*@media screen and (max-width: 425px) {*/
+
+  /*}*/
+
+  /*!* Tablet Device *!*/
+  /*@media screen and (min-width: 426px) and (max-width: 1024px) {*/
+
+  /*}*/
+
+  /*!* Desktop Device *!*/
+  /*@media screen and (min-width: 1025px) {*/
+
+  /*}*/
+
   .login-wrap {
     width: 100vw;
     height: 100vh;

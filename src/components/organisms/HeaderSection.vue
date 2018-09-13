@@ -11,11 +11,7 @@
         </ul>
       </div>
       <div class="left-tooltip-container--mobile">
-        <div class="hamburger-menu-box">
-          <div class="hamburger--base hamburger--item1"></div>
-          <div class="hamburger--base hamburger--item2"></div>
-          <div class="hamburger--base hamburger--item3"></div>
-        </div>
+        <hamburger-menu />
       </div>
       <logo
         :logo-style="logoStyle"/>
@@ -36,6 +32,7 @@
 
 <script>
 import MenuTooltip from './../molecules/MenuTooltip';
+import HamburgerMenu from './../molecules/HamburgerMenu';
 import Logo from './../molecules/Logo';
 import SearchBar from './../molecules/SearchBar';
 // import ProfileButton from './../molecules/ProfileButton';
@@ -49,15 +46,16 @@ export default {
     Logo,
     MenuTooltip,
     SearchBar,
+    HamburgerMenu,
     // ProfileButton,
     // TweetButton,
   },
   data() {
     return {
       tooltipList: [
-        { label: '홈' },
-        { label: '알림' },
-        { label: '쪽지'}
+        { label: '홈', },
+        { label: '프로필', },
+        { label: '로그아웃', }
         ],
       tooltipStyle: 'a--tooltip',
       // avatarSize: 'avatar--size32',
@@ -92,10 +90,6 @@ export default {
       display: flex;
       visibility: visible;
     }
-    .main-wrap .header .header__container .left-tooltip-container--mobile .hamburger-menu-box {
-      display: flex;
-      visibility: visible;
-    }
   }
 
   /* Tablet Device */
@@ -112,10 +106,6 @@ export default {
       visibility: hidden;
     }
     .header .header__container .left-tooltip-container--mobile {
-      display: flex;
-      visibility: visible;
-    }
-    .header .header__container .left-tooltip-container--mobile .hamburger-menu-box {
       display: flex;
       visibility: visible;
     }
@@ -160,25 +150,6 @@ export default {
     width: 44px;
     height: 44px;
   }
-
-  .left-tooltip-container--mobile .hamburger-menu-box {
-    display: none;
-    visibility: hidden;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    width: 25px;
-    height: 23px;
-  }
-  .left-tooltip-container--mobile .hamburger-menu-box .hamburger--base {
-    width: 90%;
-    height: 3px;
-    /*border-radius: 5px;*/
-    background: #1da1f2;
-  }
-  /*.left-tooltip-container--mobile .hamburger-menu-box .hamburger--item2 {*/
-    /*width: 50%;*/
-  /*}*/
 
   .right-tooltip-container {
     float: right;

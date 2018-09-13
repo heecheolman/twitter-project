@@ -1,7 +1,7 @@
 <template>
   <div class="join-body">
     <div class="join-body__logo">
-      <logo :logo-style="logoStyle"/>
+      <h1 class="logo--login">Twitter</h1>
     </div>
     <div class="flex-container flex-center flex-column">
       <login-input
@@ -20,7 +20,7 @@
         </span>
       </transition>
     </div>
-    <div class="flex-container flex-center flex-column">
+    <div class="button-wrap flex-container flex-center flex-column">
       <login-form-button />
       <join-button />
     </div>
@@ -53,7 +53,6 @@
   </div>
 </template>
 <script>
-import Logo from './../molecules/Logo';
 import LoginInput from './../molecules/LoginInput';
 import LoginFormButton from './../molecules/LoginFormButton';
 import JoinButton from './../molecules/JoinButton';
@@ -67,7 +66,6 @@ import crypto from 'crypto';
 export default {
   name: 'JoinBox',
   components: {
-    Logo,
     LoginInput,
     LoginFormButton,
     JoinButton,
@@ -128,7 +126,6 @@ export default {
     return {
       showLoginModal: false,
       showErrorModal: false,
-      logoStyle: 'logo--login',
       inputComponents: [
         {
           placeholder: '이름',
@@ -312,6 +309,34 @@ export default {
 };
 </script>
 <style scoped>
+  /* Mobile Device */
+  @media screen and (max-width: 425px) {
+    .login-wrap .join-body {
+      width: 300px;
+      height: auto;
+    }
+    .login-wrap .join-body .join-body__logo {
+      height: 50px;
+      padding-top: 10px;
+    }
+    .login-wrap .join-body .join-body__logo .logo--login {
+      font-size: 1.6rem;
+    }
+    .login-wrap .join-body .button-wrap {
+      height: 120px;
+    }
+  }
+
+  /* Tablet Device */
+  @media screen and (min-width: 426px) and (max-width: 1024px) {
+
+  }
+
+  /* Desktop Device */
+  @media screen and (min-width: 1025px) {
+
+  }
+
   .join-body {
     width: 370px;
     height: 650px;
@@ -324,6 +349,15 @@ export default {
     text-align: center;
     padding-top: 30px;
   }
+
+  .logo--login {
+    user-select: none;
+    cursor: default;
+    font-size: 2rem;
+    color: #4AB3F4;
+    margin: 0;
+  }
+
   .password-check-wrap {
     width: 100%;
     text-align: center;
