@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import MainPage from './../pages/MainPage'
 import LoginPage from './../pages/LoginPage';
+import ProfilePage from './../pages/ProfilePage';
 
 Vue.use(Router);
 
@@ -20,7 +21,14 @@ export default new Router({
         requiresAuth: true,
       },
     },
-    // 404 not found
+    {
+      path: '/profile',
+      name: 'ProfilePage',
+      component: ProfilePage,
+      meta: {
+        requiresAuth: true,
+      }
+    },
     {
       path: '*',
       component: {

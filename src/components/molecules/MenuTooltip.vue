@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li @click="foo">
     <text-a
       :label="label"
       :a-style="aStyle" />
@@ -20,9 +20,9 @@ export default {
     aStyle: {
       type: String,
     },
-  },
-  created() {
-
+    foo: {
+      type: Function,
+    },
   },
 };
 </script>

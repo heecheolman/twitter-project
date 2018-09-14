@@ -2,24 +2,29 @@
   <div class="input-wrap">
     <label
       :class="isTypedLabel"
-      class="label--base">{{component.placeholder}}</label>
+      class="label--base">{{ placeholder }}</label>
     <input
       class="input--info"
-      :type="component.type"
+      :type="type"
       required
-      :value="data" @input="$emit('update:data', $event.target.value)">
+      :value="data" @input="event"/>
   </div>
 </template>
-
 <script>
 export default {
-  name: 'LoginInput',
+  name: 'InputField',
   props: {
-    component: {
-      type: Object,
+    placeholder: {
+      type: String,
+    },
+    type: {
+      type: String,
     },
     data: {
       type: String,
+    },
+    event: {
+      type: Function,
     },
   },
   computed: {
@@ -27,20 +32,16 @@ export default {
       return {
         'typed-label': this.data.length !== 0,
 
-        'valid': this.component.placeholder === '사용 가능합니다!'||
-                 this.component.placeholder === '유효한 형식입니다!' ||
-                 this.component.placeholder === '유효한 형식입니다!',
+        'valid': this.placeholder === '사용 가능합니다!'||
+          this.placeholder === '유효한 형식입니다!' ||
+          this.placeholder === '유효한 형식입니다!',
 
-        'not-valid': this.component.placeholder === '이미 있어요!' ||
-                     this.component.placeholder === '형식이 틀립니다!' ||
-                     this.component.placeholder === '제대로 입력해주세요!',
+        'not-valid': this.placeholder === '이미 있어요!' ||
+          this.placeholder === '형식이 틀립니다!' ||
+          this.placeholder === '제대로 입력해주세요!' ||
+          this.placeholder === '형식이 틀립니다!',
       };
     },
-  },
-  data() {
-    return {
-      fieldStyle: 'input--info',
-    };
   },
 };
 </script>
@@ -83,6 +84,7 @@ export default {
     border: 1px solid #00aced;
     box-shadow: 0 2px 4px rgba(0, 172, 237, 0.35), 0 3px 6px rgba(0, 172, 237, 0.08);
   }
+
   .typed-label {
     transform: scale(.7333) translateX(-20%) translateY(-17px);
   }

@@ -19,3 +19,9 @@
 .flex-column {
   flex-direction: column;
 }
+
+.wrap--common {
+  width: 100vw;
+  height: 100vh;
+  background-color: #1DA1F2 !important;
+}

@@ -7,8 +7,6 @@
     <div class="hamburger--base hamburger--item1"></div>
     <div class="hamburger--base hamburger--item2"></div>
     <div class="hamburger--base hamburger--item3"></div>
-    <!--<div class="arrow"></div>-->
-    <!--<div class="arrow-back"></div>-->
     <div class="mobile-menu" v-show="clicked">
       <ul>
         <li class="mobile-menu__list" @click="goHome">홈</li>
@@ -33,13 +31,13 @@ export default {
       this.clicked = !this.clicked;
     },
     goHome() {
-      alert('home');
+      Eventbus.$emit('goHome')
     },
     goProfile() {
-      alert('profile');
+      Eventbus.$emit('goProfile')
     },
     logout() {
-      alert('logout');
+      Eventbus.$emit('logout')
     },
   }
 };
@@ -79,6 +77,7 @@ export default {
     width: 25px;
     height: 23px;
   }
+
   .hamburger-menu-box .hamburger--base {
     width: 90%;
     height: 3px;
