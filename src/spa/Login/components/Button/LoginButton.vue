@@ -10,10 +10,18 @@
 export default {
   name: 'LoginButton',
   methods: {
-    login() {
-
+    async login() {
+      console.log('clicked');
+      await this.$store.dispatch('login/checkId');
+      await this.$store.dispatch('login/checkPassword');
+      await this.$store.dispatch('login/login');
+      if(this.$store.getters['login/getLogin']) {
+        alert('login success');
+      } else {
+        this.$store.commit('login/setError');
+      }
     }
-  }
+}
 }
 </script>
 <style scoped>

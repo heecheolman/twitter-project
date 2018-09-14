@@ -10,7 +10,7 @@ export default {
   name: 'JoinButton',
   methods: {
     join() {
-      alert('join');
+      this.$store.dispatch('join/join');
     },
   }
 };

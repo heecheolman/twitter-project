@@ -38,7 +38,8 @@ export default {
 
         'not-valid': this.placeholder === '이미 있어요!' ||
           this.placeholder === '형식이 틀립니다!' ||
-          this.placeholder === '제대로 입력해주세요!',
+          this.placeholder === '제대로 입력해주세요!' ||
+          this.placeholder === '형식이 틀립니다!',
       };
     },
   },

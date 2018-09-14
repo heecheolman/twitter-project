@@ -2,6 +2,7 @@
   <div class="password-check-wrap">
     <transition name="fade">
         <span
+          v-if="guideMessage"
           :class="messageColor"
           class="check-text">{{ message }}</span>
     </transition>
@@ -12,27 +13,22 @@ export default {
   name: 'PasswordCheck',
   computed: {
     message() {
-      if(this.$store.state.join.password.length === 0 ) {
-        return '';
-      } else if(this.$store.getters.getPasswordTest) {
-        if(this.$store.getters.getIsPasswordSame) {
-          this.$store.commit('setValidPassword', true);
-          return '비밀번호가 유효합니다!';
-        } else {
-          this.$store.commit('setValidPassword', false);
-          return '비밀번호가 일치하지 않습니다';
-        }
-      } else {
-        this.$store.commit('setValidPassword', false);
-        return '비밀번호는 영문, 숫자를 조합 8자 이상';
+      switch(this.$store.getters['join/passwordCheck']) {
+        case 1: return '';
+        case 2: return '비밀번호가 유효합니다';
+        case 3: return '비밀번호가 일치하지않습니다';
+        case 4: return '비밀번호는 영문, 숫자를 조합 8자 이상';
       }
     },
     messageColor() {
       return {
-        'correct': this.$store.getters.getPasswordTest && this.$store.getters.getIsPasswordSame,
-        'in-correct': !this.$store.getters.getPasswordTest || !this.$store.getters.getIsPasswordSame,
+        'correct': this.$store.getters['join/getValidPassword'],
+        'in-correct': !this.$store.getters['join/getValidPassword'],
       }
     },
+    guideMessage() {
+      return this.$store.getters['join/getGuideMessage'];
+    }
   },
 };
 </script>

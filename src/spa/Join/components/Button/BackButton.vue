@@ -10,6 +10,7 @@
     name: 'BackButton',
     methods: {
       goBack() {
+        this.$store.commit('join/clearUserData');
         this.$router.replace('/login');
       },
     }

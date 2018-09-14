@@ -252,13 +252,6 @@ export default {
               this.phoneNumberValid = false;
               vm.inputComponents[2].placeholder = '이미 있어요!';
             }
-            // if(isValid && result.data.length === 0) {
-            //   this.phoneNumberValid = true;
-            //   vm.inputComponents[2].placeholder = '사용 가능합니다!';
-            // } else if(isValid && result.data.length !== 0) {
-            //   this.phoneNumberValid = false;
-            //   vm.inputComponents[2].placeholder = '이미 있어요!';
-            // }
           })
           .catch((err) => {
             console.error(err);
