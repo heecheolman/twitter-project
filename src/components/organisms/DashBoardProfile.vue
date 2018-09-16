@@ -14,7 +14,7 @@
 <script>
 import ProfileButton from './../molecules/ProfileButton';
 import ProfileNickname from './../molecules/ProfileNickname';
-import ProfileImage from './../../assets/default_profile.png';
+import ProfileImage from '../../assets/img/default_profile.png';
 
 export default {
   name: 'DashBoardProfile',

@@ -11,12 +11,12 @@ export default {
   name: 'LoginButton',
   methods: {
     async login() {
-      console.log('clicked');
       await this.$store.dispatch('login/checkId');
       await this.$store.dispatch('login/checkPassword');
       await this.$store.dispatch('login/login');
       if(this.$store.getters['login/getLogin']) {
         alert('login success');
+        this.$router.replace({ name: 'MainPage', params: { phone: this.$store.getters['login/getPhone'] }});
       } else {
         this.$store.commit('login/setError');
       }
