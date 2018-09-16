@@ -1,5 +1,3 @@
-import _ from 'lodash';
-import api from './../api';
 import axios from 'axios';
 
 const state = {

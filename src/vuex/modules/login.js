@@ -28,7 +28,6 @@ const mutations = {
     state.errorModal = false;
   },
   setError() {
-    console.log('2');
     state.errorModal = true;
   },
 };
@@ -49,6 +48,9 @@ const getters = {
       type = 0;
     }
     return type;
+  },
+  getPhone(state) {
+    return state.phone;
   },
   getLogin(state) {
     return state.login;
@@ -113,39 +115,3 @@ export default {
   getters,
   actions,
 }
-
-
-// login: {
-//   isLogin: false,
-//     hasId: false,
-//     async checkId(id) {
-//     await axios.get(`/api/phone-numbers/${id}`, {
-//       params: {
-//         phoneNumber: id,
-//       },
-//     })
-//       .then((result) => {
-//         if(result.data) {
-//           this.hasId = true;
-//         }
-//       })
-//       .catch(() => {
-//         this.hasId = false;
-//         this.isLogin = false;
-//       });
-//   },
-//   async checkPw(id,pw) {
-//     await axios.get(`api/password/${id}/${pw}`, {
-//       params: {
-//         phoneNumber: id,
-//         userPassword: pw,
-//       },
-//     })
-//       .then((result) => {
-//         this.isLogin = result.data;
-//       })
-//       .catch(() => {
-//         this.isLogin = false;
-//       });
-//   },
-// },

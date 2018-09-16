@@ -28,6 +28,7 @@ Vue.config.productionTip = false;
 //     next();
 //   }
 // });
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
