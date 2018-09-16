@@ -2,97 +2,60 @@
   <li class="searched-list-wrap" @click="linkToProfile">
     <div class="searched-list-wrap__nickname-wrap">
       <span class="searched-list-wrap__nickname-wrap__nickname-text">
-        {{ user.nickname }}
+        {{ nickname }}
       </span>
     </div>
     <div class="searched-list-wrap__follow-button-wrap">
       <button
-        v-if="!me"
-        ref="followButton"
+        :class="disabled"
         class="searched-list-wrap__follow-button-wrap__follow-button"
         @click="follow">팔로우</button>
     </div>
   </li>
 </template>
 <script>
-import axios from 'axios';
-
 export default {
   name: 'NicknameList',
   props: {
-    user: {
-      type: Object,
-    }
+    id: {
+      type: Number,
+    },
+    nickname: {
+      type: String,
+    },
+    disable: {
+      type: Boolean,
+    },
+  },
+  destroyed() {
+    this.modelDisable = false;
+  },
+  created() {
+    this.modelDisable = false;
   },
   computed: {
     disabled() {
       return {
-        'disabled': this.isFollow,
+        'disabled': this.disable || this.modelDisable,
       };
-    },
+    }
   },
   data() {
     return {
-      me: false,
-      isFollow: false,
-      ableClick: true,
-      listId: '',
-    }
-  },
-  mounted() {
-    const following = this.$store.getters['main/getFollowing'];
-    for(let i = 0; i < following.length; i++) {
-      if(following[i] === this.user.id) {
-        this.$refs.followButton.classList.add('disabled');
-        this.ableClick = false;
-      }
-    }
-    // const following = this.$store.getters['main/getFollowing'];
-    // following.forEach((id) => {
-    //   if(id === this.user.id) {
-    //     this.isFollow = true;
-    //   }
-    // });
+      modelDisable: false,
+    };
   },
   methods: {
     linkToProfile() {
-      // 프로필화면 으로
+
     },
     async follow() {
-      if(!this.isFollow) {
-        await axios.get(`/api/id/${this.user.nickname}`, {
-          params: {
-            nickname: this.user.nickname,
-          },
-        })
-          .then((result) => {
-            console.log('result.data[0].id is');
-            console.log(result.data[0].id);
-            this.listId = result.data[0].id;
-            return this.addFollow();
-          })
-          .catch((err) => {
-            console.error(err);
-          });
+      if(!this.disable && !this.modelDisable) {
+        this.$store.commit('main/setNicknameForFollow', this.nickname);
+        await this.$store.dispatch('main/follow');
+        this.modelDisable = true;
       }
-    },
-    async addFollow() {
-      const userId = this.$store.getters['main/getUserId'];
-      const followPromise = await axios.put(`/api/follow/${userId}/with/${this.listId}`, {
-        params: {
-          user_id: userId,
-          id: this.listId,
-        },
-      })
-        .then(() => {
-          this.isFollow = true;
-          this.$store.commit('main/pushFollowingUser', this.listId);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-      return followPromise;
-    },
+    }
   },
 };
 </script>

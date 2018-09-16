@@ -11,20 +11,15 @@
         </ul>
       </div>
       <div class="header__container__left-tooltip-container--mobile">
-        <!--<hamburger-menu />-->
+        <hamburger-menu />
       </div>
-      <!--<logo-->
-        <!--:logo-style="logoStyle"/>-->
+      <div class="header__container__logo-container">
+        <h1 class="header__container__logo-container__logo">Twitter</h1>
+      </div>
       <div class="header__container__right-tooltip-container">
         <div class="header__container__right-tooltip-container__search-bar-container">
           <search-bar/>
         </div>
-        <!--<div class="right-tooltip-container__right">-->
-        <!--<profile-button-->
-        <!--:image-path="imagePath"-->
-        <!--:avatar-size="avatarSize" />-->
-        <!--<tweet-button />-->
-        <!--</div>-->
       </div>
     </div>
   </div>
@@ -32,29 +27,14 @@
 <script>
 import MenuTooltip from './components/MenuTooltip';
 import SearchBar from './components/SearchBar/SearchBar';
-
-import axios from 'axios';
-import vuexUser from '../../vuex/modules/main';
+import HamburgerMenu from './components/Hamburger/HamburgerMenu';
 
 export default {
   name: 'Header',
   components: {
     MenuTooltip,
     SearchBar,
-  },
-  beforeRouteEnter(to, from, next) {
-    axios.get(`/api/phone-numbers/${to.params.phone}/user-data`, {
-      params: {
-        phone_number: to.params.phone,
-      },
-    })
-      .then((user) => {
-        vuexUser.state.user = user.data;
-        next();
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    HamburgerMenu,
   },
   data() {
     return {
@@ -83,6 +63,62 @@ export default {
 };
 </script>
 <style scoped>
+  @media screen and (max-width: 425px) {
+    .main-wrap .header {
+      width: 100%;
+      min-width: 100%;
+    }
+    .main-wrap .header .header__container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 0;
+    }
+    .main-wrap .header .header__container .header__container__left-tooltip-container {
+      display: none;
+      visibility: hidden;
+    }
+    .main-wrap .header .header__container .header__container__left-tooltip-container--mobile {
+      display: flex;
+      visibility: visible;
+    }
+    .header .header__container .header__container__logo-container {
+      display: none;
+      visibility: hidden;
+    }
+    .header .header__container .header__container__logo-container .header__container__logo-container__logo {
+      display: none;
+      visibility: hidden;
+    }
+  }
+
+  /* Tablet Device */
+  @media screen and (min-width: 426px) and (max-width: 1024px) {
+    .header .header__container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%;
+      padding: 0;
+    }
+    .header .header__container .header__container__left-tooltip-container {
+      display: none;
+      visibility: hidden;
+    }
+    .header .header__container .header__container__left-tooltip-container--mobile {
+      display: flex;
+      visibility: visible;
+    }
+  }
+
+  /* Desktop Device */
+  @media screen and (min-width: 1025px) {
+    .header .header__container {
+      max-width: 1190px;
+    }
+  }
+
   ul {
     margin: 0;
     padding: 0;
@@ -110,6 +146,28 @@ export default {
     display: inline-block;
     width: 200px;
     height: 100%;
+  }
+  .header__container__logo-container {
+    position: relative;
+    display: inline-block;
+    width: auto;
+    height: 100%;
+    line-height: 44px;
+  }
+  .header__container__left-tooltip-container--mobile {
+    display: none;
+    visibility: hidden;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+  }
+  .header__container__logo-container__logo {
+    user-select: none;
+    cursor: default;
+    font-size: 1.2rem;
+    color: #4AB3F4;
+    margin: 0;
   }
   .header__container__right-tooltip-container {
     float: right;

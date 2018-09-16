@@ -8,14 +8,18 @@
         </svg>
       </button>
     </div>
-    <div v-show="doSearching" class="search-form__drop-down">
-      <div class="search-form__drop-down__arrow-box">
+    <div v-if="doSearching" class="search-form__drop-down">
+      <div class="arrow-box" v-if="getNicknameList.length !== 0">
+        <div class="outer"></div>
+        <div class="inner"></div>
       </div>
       <div class="search-form__drop-down__searched-box">
         <ul>
           <nickname-list
-            v-for="(user, index) in nicknameList"
-            :user="user"
+            v-for="(user, index) in getNicknameList"
+            :id="user.id"
+            :nickname="user.nickname"
+            :disable="user.disable"
             :key="index" />
         </ul>
       </div>
@@ -23,8 +27,6 @@
   </form>
 </template>
 <script>
-import _ from 'lodash';
-import axios from 'axios';
 import NicknameList from './components/NicknameList';
 import { mapGetters } from 'vuex';
 
@@ -35,21 +37,14 @@ export default {
   },
   watch: {
     searchToken: function() {
-      // this.$store.commit('main/setSearchToken', this.searchToken);
-      // await this.$store.dispatch('main/searchNicknameList');
-      this.searchUserData();
+      this.$store.commit('main/setSearchToken', this.searchToken);
+      this.$store.dispatch('main/searchNicknameList');
     },
   },
   computed: {
-    // ...mapGetters({
-    //   getNicknameList: 'main/getNicknameList',
-    // }),
-    // getNicknameList() {
-    //   // console.log('nicknamelist is');
-    //   // console.log(this.$store.getters['main/getNicknameList']);
-    //   this.nicknameList = this.$store.getters['main/getNicknameList'];
-    //   return this.nicknameList;
-    // },
+    ...mapGetters({
+      getNicknameList: 'main/getNicknameList',
+    }),
     doSearching() {
       return this.searchToken.length !== 0;
     },
@@ -59,27 +54,6 @@ export default {
       searchToken: '',
       nicknameList: [],
     };
-  },
-  methods: {
-    searchUserData: _.debounce(function() {
-      console.log('1');
-      if(this.searchToken.length !== 0) {
-        const userId = this.$store.getters['main/getUserId'];
-        axios.get(`/api/${userId}/nickname-list/${this.searchToken}`, {
-          params: {
-            id: userId,
-            input: this.searchToken,
-          },
-        })
-          .then((result) => {
-            this.nicknameList = result.data;
-            // Eventbus.$emit('updateNicknameList', result.data);
-          })
-          .catch((err) => {
-            console.error(err);
-          })
-      }
-    }, 500)
   },
 };
 </script>
@@ -154,6 +128,7 @@ export default {
   }
   .search-form__drop-down__searched-box {
     /*width: 316px;*/
+    margin-top: 17px;
     width: 100%;
     border-radius: 4px;
     background-color: #fff;
@@ -166,5 +141,36 @@ export default {
     margin: 0;
     padding: 0;
     list-style: none;
+  }
+
+  .arrow-box {
+    position: absolute;
+    display: block;
+    z-index: 999;
+    top: 39px;
+    left: 18px;
+    width: 18px;
+    height: 10px;
+    float: left;
+  }
+  .outer {
+    border-bottom: 10px solid #657786;
+    border-bottom-color: rgba(0,0,0,0.1);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: auto;
+    left: 0;
+    top: 0;
+    width: auto;
+  }
+  .inner {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    width: auto;
+    height: auto;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 9px solid #fff;
   }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <li class="timeline-list__list">
-    <profile-button
-      :image-path="imagePath"
-      :avatar-size="avatarSize" />
+    <div class="timeline-list__list__profile-button">
+      <img :src="imagePath" class="timeline-list__list__profile-button__profile-img">
+    </div>
     <tweet-content
       :id="id"
       :content-serial="contentSerial"
@@ -14,27 +14,14 @@
 </template>
 
 <script>
-import ProfileButton from './../molecules/ProfileButton';
-import ProfileImage from '../../assets/img/default_profile.png';
-import TweetContent from './../molecules/TweetContent';
-
-import DateCalculator from './../../lib/DateCalculator';
-import Eventbus from './../../lib/Eventbus';
+import ProfileImage from '../../../../../../assets/img/default_profile.png';
+import DateCalculator from '../../../../../../lib/DateCalculator';
+import TweetContent from './TweetContent/TweetContent';
 
 export default {
   name: 'TimelineList',
   components: {
-    ProfileButton,
     TweetContent,
-  },
-  created() {
-    Eventbus.$on('edit', this.edit);
-  },
-  mounted() {
-    this.updateTimelineId = this.updateTimelineDate();
-  },
-  destroyed() {
-    clearInterval(this.updateTimelineId);
   },
   props: {
     id: {
@@ -56,6 +43,12 @@ export default {
       type: Array,
     },
   },
+  mounted() {
+    this.updateTimelineId = this.updateTimelineDate();
+  },
+  destroyed() {
+    clearInterval(this.updateTimelineId);
+  },
   computed: {
     stringifyDate() {
       this.date = '• ' + DateCalculator(this.contentDate);
@@ -65,7 +58,6 @@ export default {
   data() {
     return {
       imagePath: ProfileImage,
-      avatarSize: 'avatar--size48',
       date: '',
     };
   },
@@ -77,7 +69,6 @@ export default {
     },
   }
 };
-
 </script>
 
 <style scoped>
@@ -87,10 +78,15 @@ export default {
       width: 100%;
       height: auto;
     }
-    .main-wrap .content .content__timeline .timeline-list__list .profile-button {
+    .main-wrap .content .content__timeline .timeline-list__list .timeline-list__list__profile-button {
       display: none;
       visibility: hidden;
     }
+    .main-wrap .content .content__timeline .timeline-list__list .timeline-list__list__profile-button .timeline-list__list__profile-button__profile-img {
+      display: none;
+      visibility: hidden;
+    }
+
   }
   /* Desktop Device */
   @media screen and (min-width: 426px) and (max-width: 1024px) {
@@ -99,8 +95,6 @@ export default {
       height: auto;
     }
   }
-
-
   .timeline-list__list {
     width: 100%;
     position: relative;
@@ -113,5 +107,18 @@ export default {
 
   .timeline-list__list:hover {
     background-color: #f5f8fa;
+  }
+
+  .timeline-list__list__profile-button {
+    margin-top: 2px;
+    float: left;
+  }
+  .timeline-list__list__profile-button__profile-img {
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+    display: block;
+    border-radius: 50%;
+    cursor: pointer;
   }
 </style>

@@ -2,9 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import LoginPage from './../spa/Login/Login';
 import JoinPage from './../spa/Join/Join';
-import Header from './../shared-components/Header/Header';
+import MainPage from './../spa/Main/Main';
+import Contents from '../spa/Main/components/Contents';
 
 Vue.use(Router);
+
 export default new Router({
   routes: [
     {
@@ -19,12 +21,12 @@ export default new Router({
     },
     {
       path: '/main',
-      name: 'MainPage',
-      component: Header,
+      component: MainPage,
       children: [
         {
+          name: 'MainPage',
           path: 'contents',
-          // component: '',
+          component: Contents,
         },
         {
           path: 'profile',

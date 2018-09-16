@@ -12,7 +12,7 @@
 
 <script>
 import ProfileButton from './../molecules/ProfileButton';
-import ProfileImage from './../../assets/default_profile.png';
+import ProfileImage from '../../assets/img/default_profile.png';
 import TweetingArea from './../molecules/TweetingArea';
 
 export default {
