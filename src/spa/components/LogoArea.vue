@@ -10,6 +10,12 @@ export default {
 };
 </script>
 <style scoped>
+  @media screen and (max-width: 425px) {
+    .wrap--common .join-body .logo-area--common {
+      line-height: 50px;
+      height: 50px;
+    }
+  }
   .logo-area--common {
     width: 100%;
     height: 100px;

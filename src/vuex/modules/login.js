@@ -49,15 +49,9 @@ const getters = {
     }
     return type;
   },
-  getPhone(state) {
-    return state.phone;
-  },
-  getLogin(state) {
-    return state.login;
-  },
-  getErrorModal(state) {
-    return state.errorModal;
-  }
+  getPhone: state => state.phone,
+  getLogin: state => state.login,
+  getErrorModal: state => state.errorModal,
 };
 
 const actions = {

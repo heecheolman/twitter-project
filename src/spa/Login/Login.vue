@@ -53,6 +53,23 @@ export default {
 };
 </script>
 <style scoped>
+  /* Mobile Device */
+  @media screen and (max-width: 425px) {
+    .wrap--common .login-body {
+      width: 300px;
+      height: 500px;
+    }
+  }
+
+  /* Tablet Device */
+  @media screen and (min-width: 426px) and (max-width: 1024px) {
+
+  }
+
+  /* Desktop Device */
+  @media screen and (min-width: 1025px) {
+
+  }
   .login-body {
     width: 370px;
     height: 500px;

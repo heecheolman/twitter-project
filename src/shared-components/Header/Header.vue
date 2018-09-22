@@ -11,7 +11,8 @@
         </ul>
       </div>
       <div class="header__container__left-tooltip-container--mobile">
-        <hamburger-menu />
+        <hamburger-menu
+          :route="tooltipList"/>
       </div>
       <div class="header__container__logo-container">
         <h1 class="header__container__logo-container__logo">Twitter</h1>
@@ -42,19 +43,20 @@ export default {
         {
           label: '홈',
           clickEvent: async () => {
-            console.log('home');
+            this.$router.replace({ name: 'MainPage' });
+            await this.$store.dispatch('tweet/getTimelines');
           },
         },
         {
           label: '프로필',
           clickEvent: async () => {
-            console.log('profile');
+            this.$router.replace({ name: 'ProfilePage' });
           },
         },
         {
           label: '로그아웃',
           clickEvent: async () => {
-            console.log('logout');
+            this.$router.replace({ name: 'LoginPage' });
           },
         }
       ],
