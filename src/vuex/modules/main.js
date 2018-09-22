@@ -9,23 +9,18 @@ const state = {
     following: [],
     follower: [],
   },
+  me: true,
   searchToken: '',
   nicknameList: [],
   followingNicknameList: [],
   followerNicknameList: [],
   nicknameData: '',
+  toId: null,
   idData: null,
   dropdown: false,
 };
 
 const mutations = {
-  saveUserData(state, payload) {
-    state.user.id = payload.id;
-    state.user.realname = payload.realname;
-    state.user.nickname = payload.nickname;
-    state.user.following = payload.following;
-    state.user.follower = payload.follower;
-  },
   setSearchToken(state, payload) {
     state.searchToken = payload;
   },
@@ -41,13 +36,12 @@ const mutations = {
   clearList(state) {
     state.followingNicknameList = [];
     state.followerNicknameList = [];
-  }
+  },
 };
 
 const getters = {
   getSearchToken: state => state.searchToken,
   getUserId: state => state.user.id,
-  getUser: state => state.user,
   getFollowing: state => state.user.following,
   getFollower: state => state.user.follower,
   getNicknameList: state => state.nicknameList,
@@ -68,7 +62,6 @@ const actions = {
           .then(async (result) => {
             state.nicknameList = [];
             const tempList = await _.cloneDeep(result.data);
-            // state.nicknameList = _.cloneDeep(result.data);
             if (state.user.following.length !== 0) {
               for (let i = 0; i < tempList.length; i++) {
                 for (let j = 0; j < state.user.following.length; j++) {
@@ -109,7 +102,7 @@ const actions = {
   async unfollow() {
     await api.searchNickname()
       .then(api.removeFollowingUser)
-      .then(api.removeFollowerUser)
+      .then(api.removeFollowerUser);
   },
 };
 
@@ -151,6 +144,7 @@ const api = {
     })
       .then(async (result) => {
         state.followingNicknameList = await _.cloneDeep(result.data);
+        console.log(state.followingNicknameList);
       })
       .catch((err) => {
         console.error(err);

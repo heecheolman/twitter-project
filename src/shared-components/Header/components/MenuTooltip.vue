@@ -1,6 +1,6 @@
 <template>
   <li @click="clickEvent">
-    <a href="#" class="menu-tooltip__tooltip">{{ label }}</a>
+    <span class="menu-tooltip__tooltip">{{ label }}</span>
   </li>
 </template>
 <script>
@@ -27,9 +27,9 @@ export default {
     text-align: center;
     float: left;
   }
-  a {
-    text-decoration: none;
-  }
+  /*a {*/
+    /*text-decoration: none;*/
+  /*}*/
   .menu-tooltip__tooltip {
     font-size: 13px;
     font-weight: bold;
