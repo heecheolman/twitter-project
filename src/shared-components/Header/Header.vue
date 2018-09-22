@@ -50,7 +50,24 @@ export default {
         {
           label: '프로필',
           clickEvent: async () => {
-            this.$router.replace({ name: 'ProfilePage', params:{ id: this.$store.getters['main/getUserId'] } },);
+            this.$store.state.main.bridge.id = this.$store.state.main.user.id;
+            this.$store.state.main.bridge.nickname = this.$store.state.main.user.nickname;
+            this.$store.state.main.bridge.following = this.$store.state.main.user.following;
+            this.$store.state.main.bridge.follower = this.$store.state.main.user.follower;
+            await this.$store.dispatch('main/fetchFollowingNicknameList');
+            await this.$store.dispatch('main/fetchFollowerNicknameList');
+            // this.following = this.$store.getters['main/getBridgeFilteredFollowing'];
+            // this.follower = this.$store.getters['main/getBridgeFilteredFollower'];
+            this.$router.replace(
+              { name: 'ProfilePage',
+                params: {
+                  id: this.$store.getters['main/getUserId'],
+                  nickname: this.$store.getters['main/getUserNickname'],
+                  following: this.$store.getters['main/getBridgeFilteredFollowing'],
+                  follower: this.$store.getters['main/getBridgeFilteredFollower'],
+                  me: true,
+                },
+              },);
           },
         },
         {

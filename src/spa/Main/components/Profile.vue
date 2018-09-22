@@ -6,8 +6,7 @@
         <div class="profile-wrap__top-section__profile-card--top">
           <div class="profile-wrap__top-section__profile-card--top__header">
             <span class="profile-wrap__top-section__profile-card--top__header--nickname">
-              {{ $route.params.id }}
-              {{ $route.params.id === $store.getters['main/getUserId'] }}
+              {{ getBridgeNickname }}
             </span>
           </div>
           <div class="profile-wrap__top-section__profile-card--top__contents">
@@ -20,9 +19,11 @@
             <div class="profile-wrap__top-section__profile-card--bottom__follow-wrap__list">
               <ul>
                 <nickname-list
-                  v-for="(user, index) in getFollowingNicknameList"
+                  v-for="(user, index) in getBridgeFilteredFollowing"
                   :key="index"
                   :nickname="user.nickname"
+                  :following="user.following"
+                  :follower="user.follower"
                   :id="user.id"
                   :active="user.active"
                   :seen-button="true"/>
@@ -33,9 +34,11 @@
             <div class="profile-wrap__top-section__profile-card--bottom__follow-wrap__header">Follower</div>
             <ul>
               <nickname-list
-                v-for="(user, index) in getFollowerNicknameList"
+                v-for="(user, index) in getBridgeFilteredFollower"
                 :key="index"
                 :nickname="user.nickname"
+                :following="user.following"
+                :follower="user.follower"
                 :id="user.id"
                 :active="user.active"
                 :seen-button="false"/>
@@ -57,30 +60,18 @@ export default {
   components: {
     NicknameList,
   },
-  watch: {
-    async '$route' (to, from) {
-      // 경로 변경에 반응하여...
-      console.log(to.params.id);
-    }
-  },
-  destroyed() {
-    this.$store.commit('main/clearList');
-  },
-  async created() {
-    await this.$store.dispatch('main/fetchFollowingNicknameList');
-    await this.$store.dispatch('main/fetchFollowerNicknameList');
-  },
   computed: {
     ...mapGetters({
-      getFollowingNicknameList: 'main/getFollowingNicknameList',
-      getFollowerNicknameList: 'main/getFollowerNicknameList',
+      getBridgeFilteredFollowing: 'main/getBridgeFilteredFollowing',
+      getBridgeFilteredFollower: 'main/getBridgeFilteredFollower',
+      getBridgeNickname: 'main/getBridgeNickname',
     }),
   },
   data() {
     return {
       imgPath: ProfileImg,
-    }
-  }
+    };
+  },
 };
 </script>
 <style scoped>
