@@ -4,6 +4,7 @@ import LoginPage from './../spa/Login/Login';
 import JoinPage from './../spa/Join/Join';
 import MainPage from './../spa/Main/Main';
 import Contents from '../spa/Main/components/Contents';
+import Profile from '../spa/Main/components/Profile';
 
 Vue.use(Router);
 
@@ -29,8 +30,9 @@ export default new Router({
           component: Contents,
         },
         {
+          name: 'ProfilePage',
           path: 'profile',
-          // component: '',
+          component: Profile,
         },
       ],
     },

@@ -19,6 +19,11 @@
 <script>
 export default {
   name: 'HamburgerMenu',
+  props: {
+    route: {
+      type: Array,
+    }
+  },
   data() {
     return {
       clicked: false,
@@ -29,13 +34,13 @@ export default {
       this.clicked = !this.clicked;
     },
     goHome() {
-      console.log('go home');
+      this.route[0].clickEvent();
     },
     goProfile() {
-      console.log('go profile');
+      this.route[1].clickEvent();
     },
     logout() {
-      console.log('logout');
+      this.route[2].clickEvent();
     },
   }
 };

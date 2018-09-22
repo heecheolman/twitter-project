@@ -13,14 +13,15 @@
         <div class="outer"></div>
         <div class="inner"></div>
       </div>
-      <div class="search-form__drop-down__searched-box">
+      <div class="search-form__drop-down__searched-box" v-if="getNicknameList.length !== 0">
         <ul>
           <nickname-list
             v-for="(user, index) in getNicknameList"
+            :key="index"
             :id="user.id"
             :nickname="user.nickname"
-            :disable="user.disable"
-            :key="index" />
+            :active="user.active"
+            :seen-button="true"/>
         </ul>
       </div>
     </div>
@@ -52,22 +53,11 @@ export default {
   data() {
     return {
       searchToken: '',
-      nicknameList: [],
     };
   },
 };
 </script>
 <style scoped>
-  /* Moblie Device */
-  @media screen and (max-width: 425px) {
-  }
-  /* Tablet Device */
-  @media screen and (min-width: 768px) and (max-width: 1024px) {
-  }
-  /* Desktop Device */
-  @media screen and (min-width: 1025px) {
-  }
-
   svg {
     width: inherit;
     height: inherit;
