@@ -6,8 +6,7 @@
         <div class="profile-wrap__top-section__profile-card--top">
           <div class="profile-wrap__top-section__profile-card--top__header">
             <span class="profile-wrap__top-section__profile-card--top__header--nickname">
-              {{ $route.params.id }}
-              {{ $route.params.id === $store.getters['main/getUserId'] }}
+              other
             </span>
           </div>
           <div class="profile-wrap__top-section__profile-card--top__contents">
@@ -48,40 +47,35 @@
   </div>
 </template>
 <script>
-import ProfileImg from './../../../assets/img/default_profile.png';
-import NicknameList from './../../../shared-components/Header/components/SearchBar/components/NicknameList';
-import { mapGetters } from 'vuex';
+  import ProfileImg from './../../../assets/img/default_profile.png';
+  import NicknameList from './../../../shared-components/Header/components/SearchBar/components/NicknameList';
+  import { mapGetters } from 'vuex';
 
-export default {
-  name: 'Profile',
-  components: {
-    NicknameList,
-  },
-  watch: {
-    async '$route' (to, from) {
-      // 경로 변경에 반응하여...
-      console.log(to.params.id);
+  export default {
+    name: 'Profile',
+    components: {
+      NicknameList,
+    },
+    destroyed() {
+      this.$store.commit('main/clearList');
+    },
+    async created() {
+      console.log('created');
+      await this.$store.dispatch('main/fetchFollowingNicknameList');
+      await this.$store.dispatch('main/fetchFollowerNicknameList');
+    },
+    computed: {
+      ...mapGetters({
+        getFollowingNicknameList: 'main/getFollowingNicknameList',
+        getFollowerNicknameList: 'main/getFollowerNicknameList',
+      }),
+    },
+    data() {
+      return {
+        imgPath: ProfileImg,
+      }
     }
-  },
-  destroyed() {
-    this.$store.commit('main/clearList');
-  },
-  async created() {
-    await this.$store.dispatch('main/fetchFollowingNicknameList');
-    await this.$store.dispatch('main/fetchFollowerNicknameList');
-  },
-  computed: {
-    ...mapGetters({
-      getFollowingNicknameList: 'main/getFollowingNicknameList',
-      getFollowerNicknameList: 'main/getFollowerNicknameList',
-    }),
-  },
-  data() {
-    return {
-      imgPath: ProfileImg,
-    }
-  }
-};
+  };
 </script>
 <style scoped>
   ul {

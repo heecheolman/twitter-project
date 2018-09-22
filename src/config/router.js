@@ -5,6 +5,7 @@ import JoinPage from './../spa/Join/Join';
 import MainPage from './../spa/Main/Main';
 import Contents from '../spa/Main/components/Contents';
 import Profile from '../spa/Main/components/Profile';
+import Other from '../spa/Main/components/OtherProfile';
 
 Vue.use(Router);
 
@@ -31,9 +32,14 @@ export default new Router({
         },
         {
           name: 'ProfilePage',
-          path: 'profile',
+          path: 'profile/:id',
           component: Profile,
         },
+        // {
+        //   name: 'OtherProfilePage',
+        //   path: '',
+        //   component: Other,
+        // },
       ],
     },
   ],

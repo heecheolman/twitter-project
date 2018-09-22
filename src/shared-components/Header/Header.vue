@@ -50,7 +50,7 @@ export default {
         {
           label: '프로필',
           clickEvent: async () => {
-            this.$router.replace({ name: 'ProfilePage' });
+            this.$router.replace({ name: 'ProfilePage', params:{ id: this.$store.getters['main/getUserId'] } },);
           },
         },
         {

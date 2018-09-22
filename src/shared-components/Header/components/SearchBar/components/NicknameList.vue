@@ -1,15 +1,15 @@
 <template>
-  <li class="searched-list-wrap" @click="linkToProfile">
+  <li class="searched-list-wrap" @click.stop="linkToProfile">
     <div class="searched-list-wrap__nickname-wrap">
       <span class="searched-list-wrap__nickname-wrap__nickname-text">
         {{ nickname }}
       </span>
     </div>
     <div class="searched-list-wrap__follow-button-wrap" v-if="seenButton">
-      <button v-if="activeCheck" class="searched-list-wrap__follow-button-wrap__button--base follow-button" @click="follow">
+      <button v-if="activeCheck" class="searched-list-wrap__follow-button-wrap__button--base follow-button" @click.stop="follow">
         팔로우
         </button>
-      <button v-else class="searched-list-wrap__follow-button-wrap__button--base unfollow-button" @click="unfollow">
+      <button v-else class="searched-list-wrap__follow-button-wrap__button--base unfollow-button" @click.stop="unfollow">
         팔로잉
       </button>
     </div>
@@ -48,18 +48,19 @@ export default {
   },
   methods: {
     linkToProfile() {
-
+      this.$router.replace({ name: 'ProfilePage', params: { id: this.id }},);
     },
     async follow() {
+      this.$store.commit('main/setNicknameData', this.nickname);
       if(this.ableFollow) {
-        this.$store.commit('main/setNicknameData', this.nickname);
         await this.$store.dispatch('main/follow');
         this.ableFollow = false;
       }
+
     },
     async unfollow() {
+      this.$store.commit('main/setNicknameData', this.nickname);
       if(!this.ableFollow) {
-        this.$store.commit('main/setNicknameData', this.nickname);
         await this.$store.dispatch('main/unfollow');
         this.ableFollow = true;
       }
