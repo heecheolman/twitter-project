@@ -4,14 +4,30 @@ import _ from 'lodash';
 const state = {
   user: {
     id: '',
-    realname: '',
     nickname: '',
     following: [],
     follower: [],
+    filteredFollowing: [],
+    filteredFollower: [],
   },
-  me: true,
+  bridge: {
+    id: '',
+    nickname: '',
+    following: [],
+    follower: [],
+    filteredFollowing: [],
+    filteredFollower: [],
+  },
+  otherUser: {
+    id: '',
+    nickname: '',
+    following: [],
+    follower: [],
+    filteredFollowing: [],
+    filteredFollower: [],
+  },
   searchToken: '',
-  nicknameList: [],
+  searchedNicknameList: [],
   followingNicknameList: [],
   followerNicknameList: [],
   nicknameData: '',
@@ -28,7 +44,7 @@ const mutations = {
     state.user.following.push(payload);
   },
   clearNicknameList(state) {
-    state.nicknameList = [];
+    state.searchedNicknameList = [];
   },
   setNicknameData(state, payload) {
     state.nicknameData = payload;
@@ -37,60 +53,41 @@ const mutations = {
     state.followingNicknameList = [];
     state.followerNicknameList = [];
   },
+
 };
 
 const getters = {
   getSearchToken: state => state.searchToken,
   getUserId: state => state.user.id,
-  getFollowing: state => state.user.following,
-  getFollower: state => state.user.follower,
-  getNicknameList: state => state.nicknameList,
+  getUserNickname: state => state.user.nickname,
+  getUserFollowing: state => state.user.following,
+  getUserFollower: state => state.user.follower,
+  getSearchedNicknameList: state => state.searchedNicknameList,
   getFollowingNicknameList: state => state.followingNicknameList,
   getFollowerNicknameList: state => state.followerNicknameList,
+  getBridgeId: state => state.bridge.id,
+  getBridgeNickname: state => state.bridge.nickname,
+  getBridgeFilteredFollowing: state => state.bridge.filteredFollowing,
+  getBridgeFilteredFollower: state => state.bridge.filteredFollower,
 };
 
 const actions = {
-  searchNicknameList:
-    _.debounce(function() {
-      if (state.searchToken.length !== 0) {
-        axios.get(`/api/${state.user.id}/nickname-list/${state.searchToken}`, {
-          params: {
-            id: state.user.id,
-            input: state.searchToken,
-          },
-        })
-          .then(async (result) => {
-            state.nicknameList = [];
-            const tempList = await _.cloneDeep(result.data);
-            if (state.user.following.length !== 0) {
-              for (let i = 0; i < tempList.length; i++) {
-                for (let j = 0; j < state.user.following.length; j++) {
-                  if (tempList[i].id === state.user.following[j]) {
-                    tempList[i].active = false;
-                  }
-                }
-              }
-            }
-            for (let i = 0; i < tempList.length; i++) {
-              if (!tempList[i].hasOwnProperty('active')) {
-                tempList[i].active = true;
-              }
-            }
-            state.nicknameList = tempList;
-          })
-          .catch((err) => {
-            console.error(err);
-          })
-      }
-    }, 500),
+  searchNicknameList: _.debounce(function() {
+    if (state.searchToken.length !== 0) {
+      api.searchAllUser();
+  }}, 500),
   fetchFollowingNicknameList() {
-    if(state.user.following.length !== 0) {
+    if(state.bridge.following.length !== 0) {
       api.fetchFollowingNicknameList();
+    } else {
+      state.bridge.filteredFollowing = [];
     }
   },
   fetchFollowerNicknameList() {
-    if(state.user.follower.length !== 0) {
+    if(state.bridge.follower.length !== 0) {
       api.fetchFollowerNicknameList();
+    } else {
+      state.bridge.filteredFollower = [];
     }
   },
 
@@ -107,6 +104,36 @@ const actions = {
 };
 
 const api = {
+  searchAllUser: async () => {
+    axios.get(`/api/${state.user.id}/nickname-list/${state.searchToken}`, {
+      params: {
+        id: state.user.id,
+        input: state.searchToken,
+      },
+    })
+      .then(async (result) => {
+        state.searchedNicknameList = [];
+        const tempList = await _.cloneDeep(result.data);
+        if (state.user.following.length !== 0) {
+          for (let i = 0; i < tempList.length; i++) {
+              for (let j = 0; j < state.user.following.length; j++) {
+                if (tempList[i].id === state.user.following[j]) {
+                  tempList[i].active = false;
+                }
+              }
+          }
+        }
+        for (let i = 0; i < tempList.length; i++) {
+          if (!tempList[i].hasOwnProperty('active')) {
+            tempList[i].active = true;
+          }
+        }
+        state.searchedNicknameList = tempList;
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+  },
   searchNickname: async () => {
     await axios.get(`/api/id/${state.nicknameData}`, {
       params: {
@@ -136,33 +163,61 @@ const api = {
       });
   },
   fetchFollowingNicknameList: async () => {
-    await axios.get(`api/${state.user.id}/${state.user.following}/nickname-list`, {
+    // 얘는 브릿지만 받으면됨
+    // 그리고 브릿지에 필터링된 팔로우리스트를 주면
+    await axios.get(`api/${state.bridge.id}/${state.bridge.following}/nickname-list`, {
       params: {
-        id: state.user.id,
-        following: state.user.following,
+        id: state.bridge.id,
+        following: state.bridge.following,
       },
     })
       .then(async (result) => {
-        state.followingNicknameList = await _.cloneDeep(result.data);
-        console.log(state.followingNicknameList);
+        state.bridge.filteredFollowing = await _.cloneDeep(result.data);
+        console.log(state.bridge.filteredFollowing);
       })
       .catch((err) => {
         console.error(err);
       });
+    // await axios.get(`api/${state.user.id}/${state.user.following}/nickname-list`, {
+    //   params: {
+    //     id: state.user.id,
+    //     following: state.user.following,
+    //   },
+    // })
+    //   .then(async (result) => {
+    //     state.followingNicknameList = await _.cloneDeep(result.data);
+    //     console.log(state.followingNicknameList);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   },
   fetchFollowerNicknameList: async () => {
-    await axios.get(`api/${state.user.id}/${state.user.follower}/nickname-list`, {
+    await axios.get(`api/${state.bridge.id}/${state.bridge.follower}/nickname-list`, {
       params: {
-        id: state.user.id,
-        follower: state.user.follower,
+        id: state.bridge.id,
+        follower: state.bridge.follower,
       },
     })
       .then(async (result) => {
-        state.followerNicknameList = await _.cloneDeep(result.data);
+        state.bridge.filteredFollower = await _.cloneDeep(result.data);
+        console.log(state.bridge.filteredFollower);
       })
       .catch((err) => {
         console.error(err);
       });
+    // await axios.get(`api/${state.user.id}/${state.user.follower}/nickname-list`, {
+    //   params: {
+    //     id: state.user.id,
+    //     follower: state.user.follower,
+    //   },
+    // })
+    //   .then(async (result) => {
+    //     state.followerNicknameList = await _.cloneDeep(result.data);
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
   },
   addFollowerUser: async () => {
     await axios.put(`/api/follower/${state.idData}/to/${state.user.id}`, {

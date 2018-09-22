@@ -19,6 +19,8 @@
             v-for="(user, index) in getNicknameList"
             :key="index"
             :id="user.id"
+            :following="user.following"
+            :follower="user.follower"
             :nickname="user.nickname"
             :active="user.active"
             :seen-button="true"/>
@@ -44,7 +46,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getNicknameList: 'main/getNicknameList',
+      getNicknameList: 'main/getSearchedNicknameList',
     }),
     doSearching() {
       return this.searchToken.length !== 0;

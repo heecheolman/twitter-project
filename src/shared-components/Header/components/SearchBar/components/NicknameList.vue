@@ -29,6 +29,12 @@ export default {
     active: {
       type: Boolean,
     },
+    following: {
+      type: Array,
+    },
+    follower: {
+      type: Array,
+    },
     seenButton: {
       type: Boolean,
     },
@@ -47,8 +53,24 @@ export default {
     };
   },
   methods: {
-    linkToProfile() {
-      this.$router.replace({ name: 'ProfilePage', params: { id: this.id }},);
+    async linkToProfile() {
+      this.$store.state.main.bridge.id = this.id;
+      this.$store.state.main.bridge.nickname = this.nickname;
+      this.$store.state.main.bridge.following = this.following;
+      this.$store.state.main.bridge.follower = this.follower;
+      await this.$store.dispatch('main/fetchFollowingNicknameList');
+      await this.$store.dispatch('main/fetchFollowerNicknameList');
+      console.log('1');
+      this.$router.replace(
+        { name: 'ProfilePage',
+          params: {
+            id: this.$store.getters['main/getBridgeId'],
+            nickname: this.$store.getters['main/getBridgeNickname'],
+            following: this.$store.getters['main/getBridgeFilteredFollowing'],
+            follower: this.$store.getters['main/getBridgeFilteredFollower'],
+            me: false,
+          },
+        });
     },
     async follow() {
       this.$store.commit('main/setNicknameData', this.nickname);
