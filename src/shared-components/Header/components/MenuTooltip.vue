@@ -26,10 +26,8 @@ export default {
     line-height: 42px;
     text-align: center;
     float: left;
+    cursor: pointer;
   }
-  /*a {*/
-    /*text-decoration: none;*/
-  /*}*/
   .menu-tooltip__tooltip {
     font-size: 13px;
     font-weight: bold;

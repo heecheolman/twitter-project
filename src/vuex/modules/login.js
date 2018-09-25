@@ -49,6 +49,7 @@ const getters = {
     }
     return type;
   },
+  getLoginStatus: state => state.login,
   getPhone: state => state.phone,
   getLogin: state => state.login,
   getErrorModal: state => state.errorModal,
@@ -63,9 +64,7 @@ const actions = {
         },
       })
         .then((result) => {
-          if(result.data) {
-            state.validPhone = true;
-          }
+          state.validPhone = result.data !== 0;
         })
         .catch(() => {
           state.validPhone = false;

@@ -22,6 +22,7 @@
             :following="user.following"
             :follower="user.follower"
             :nickname="user.nickname"
+            :descript="user.descript"
             :active="user.active"
             :seen-button="true"/>
         </ul>

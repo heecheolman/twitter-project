@@ -22,9 +22,9 @@
   </div>
 </template>
 <script>
-import DashBoardProfile from './shared-components/DashBoardProfile';
-import TweetBox from './contents/TweetBox';
-import TimelineList from './contents/components/TimelineList/TimelineList';
+import DashBoardProfile from './Contents/DashBoardProfile';
+import TweetBox from './Contents/TweetBox';
+import TimelineList from './Contents/components/TimelineList/TimelineList';
 
 import { mapActions, mapGetters } from 'vuex';
 
@@ -101,7 +101,6 @@ export default {
   }
   .content {
     position: relative;
-    /*padding: 56px 0 0 15px;*/
     padding: 50px 0;
     height: 100%;
     width: 900px;

@@ -1,14 +1,15 @@
 <template>
   <div class="main-wrap">
     <header-section />
-    <router-view />
+    <transition name="fade" mode="out-in">
+      <router-view />
+    </transition>
   </div>
 </template>
 <script>
 import HeaderSection from './../../shared-components/Header/Header';
 import axios from 'axios';
 
-// userData 를 Root 로 하기
 import mainUser from '../../vuex/modules/main';
 import tweetUser from '../../vuex/modules/tweet';
 
@@ -18,10 +19,9 @@ export default {
     HeaderSection,
   },
   beforeRouteEnter(to, from, next) {
-    axios.get(`/api/phone-numbers/${to.params.phone}/user-data`, {
-      params: {
-        phone_number: to.params.phone,
-      },
+    const phone_number = to.params.phone.split('-').join('');
+    axios.get(`/api/phone-numbers/${phone_number}/user-data`, {
+      params: { phone_number },
     })
       .then((user) => {
         mainUser.state.user = user.data;

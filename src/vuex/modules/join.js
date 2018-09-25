@@ -64,6 +64,7 @@ const mutations = {
       nickname: state.nickname,
       following: [],
       follower: [],
+      descript: '',
     });
   },
 };
@@ -169,11 +170,11 @@ const actions = {
     const isPhoneNumber = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/;
     let type = 0;
     if(state.phone.length !== 0 && isPhoneNumber.test(state.phone)) {
-      await axios.get('/api/phone-numbers/' + state.phone, {
+      await axios.get(`/api/phone-numbers/${state.phone}`, {
         params: {phoneNumber: state.phone},
       })
         .then((result) => {
-          if (result.data) {
+          if (result.data === 0) {
             type = 1;
             state.validPhone = true;
           } else {

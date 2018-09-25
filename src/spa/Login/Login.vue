@@ -4,7 +4,6 @@
       <div class="login-body">
         <logo-area />
         <input-area />
-        <support-link />
         <button-area />
       </div>
     </transition>
@@ -24,7 +23,6 @@
 <script>
 import LogoArea from '../components/LogoArea';
 import InputArea from './components/LoginInputArea';
-import SupportLink from './components/SupportLink';
 import ButtonArea from './components/ButtonArea';
 import AlertModal from './../components/AlertModal';
 
@@ -33,7 +31,6 @@ export default {
   components: {
     LogoArea,
     InputArea,
-    SupportLink,
     ButtonArea,
     AlertModal,
   },

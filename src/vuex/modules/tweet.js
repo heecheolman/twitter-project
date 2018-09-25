@@ -3,7 +3,6 @@ import axios from 'axios';
 const state = {
   text: '',
   file: {
-    // hasFile: false,
     previewList: [],
     filenameList: [],
   },
@@ -13,7 +12,8 @@ const state = {
   },
   content: {
     contentList: [],
-  }
+  },
+  target: null,
 };
 
 const mutations = {
@@ -41,12 +41,16 @@ const mutations = {
     state.file.filenameList = [];
     state.text = '';
   },
+  setTarget(state, payload) {
+    state.target = payload.target;
+  }
 };
 
 const getters = {
   getHasFile: state => state.file.previewList.length !== 0,
   getTextContent: state => state.text,
   getContentList: state => state.content.contentList,
+  getContentListOnlyUser: state => state.content.contentList.filter(content => state.target === content.user_id),
   getUserId: state => state.user.id,
 };
 
