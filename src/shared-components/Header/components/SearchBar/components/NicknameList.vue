@@ -6,12 +6,8 @@
       </span>
     </div>
     <div class="searched-list-wrap__follow-button-wrap" v-if="seenButton">
-      <button v-if="activeCheck" class="searched-list-wrap__follow-button-wrap__button--base follow-button" @click.stop="follow">
-        팔로우
-        </button>
-      <button v-else class="searched-list-wrap__follow-button-wrap__button--base unfollow-button" @click.stop="unfollow">
-        팔로잉
-      </button>
+      <button v-if="activeCheck" class="searched-list-wrap__follow-button-wrap__button--base follow-button" @click.stop="follow">팔로우</button>
+      <button v-else class="searched-list-wrap__follow-button-wrap__button--base unfollow-button" @click.stop="unfollow">팔로잉</button>
     </div>
   </li>
 </template>
@@ -35,6 +31,9 @@ export default {
     follower: {
       type: Array,
     },
+    descript: {
+      type: String,
+    },
     seenButton: {
       type: Boolean,
     },
@@ -54,36 +53,51 @@ export default {
   },
   methods: {
     async linkToProfile() {
-      this.$store.state.main.bridge.id = this.id;
-      this.$store.state.main.bridge.nickname = this.nickname;
-      this.$store.state.main.bridge.following = this.following;
-      this.$store.state.main.bridge.follower = this.follower;
-      await this.$store.dispatch('main/fetchFollowingNicknameList');
-      await this.$store.dispatch('main/fetchFollowerNicknameList');
-      console.log('1');
-      this.$router.replace(
-        { name: 'ProfilePage',
-          params: {
-            id: this.$store.getters['main/getBridgeId'],
-            nickname: this.$store.getters['main/getBridgeNickname'],
-            following: this.$store.getters['main/getBridgeFilteredFollowing'],
-            follower: this.$store.getters['main/getBridgeFilteredFollower'],
-            me: false,
-          },
+      // 본인
+      if(this.$store.getters['main/getUserId'] === this.id) {
+        await this.$store.commit('main/bridgeDataUpdate', {
+          id: this.$store.getters['main/getUserId'],
+          nickname: this.$store.getters['main/getUserNickname'],
+          following: this.$store.getters['main/getUserFollowing'],
+          follower: this.$store.getters['main/getUserFollower'],
+          descript: this.$store.getters['main/getUserDescript'],
         });
+        // 타인
+      } else {
+        await this.$store.commit('main/bridgeDataUpdate', {
+          id: this.id,
+          nickname: this.nickname,
+          following: this.following,
+          follower: this.follower,
+          descript: this.descript,
+        });
+      }
+      await this.$store.dispatch('main/filteringFollowingLists');
+      await this.$store.dispatch('main/filteringFollowerLists');
+      this.$router.replace({
+        name: 'ProfilePage',
+        params: {
+          id: this.$store.getters['main/getBridgeId'],
+          nickname: this.$store.getters['main/getBridgeNickname'],
+          following: this.$store.getters['main/getBridgeFilteredFollowing'],
+          follower: this.$store.getters['main/getBridgeFilteredFollower'],
+          descript: this.$store.getters['main/getBridgeDescript'],
+        },
+      });
     },
     async follow() {
-      this.$store.commit('main/setNicknameData', this.nickname);
       if(this.ableFollow) {
+        this.$store.commit('main/setNicknameData', this.nickname);
         await this.$store.dispatch('main/follow');
+        await this.$store.dispatch('tweet/getTimelines');
         this.ableFollow = false;
       }
-
     },
     async unfollow() {
-      this.$store.commit('main/setNicknameData', this.nickname);
       if(!this.ableFollow) {
+        this.$store.commit('main/setNicknameData', this.nickname);
         await this.$store.dispatch('main/unfollow');
+        await this.$store.dispatch('tweet/getTimelines');
         this.ableFollow = true;
       }
     }
@@ -91,18 +105,6 @@ export default {
 };
 </script>
 <style scoped>
-  /* Moblie Device */
-  @media screen and (max-width: 767px) {
-  }
-
-  /* Tablet Device */
-  @media screen and (min-width: 768px) and (max-width: 1024px) {
-  }
-
-  /* Desktop Device */
-  @media screen and (min-width: 1025px) {
-  }
-
   .searched-list-wrap {
     display: block;
     box-sizing: border-box;
@@ -122,7 +124,6 @@ export default {
     color: #657786;
     font-weight: 400;
   }
-
   .searched-list-wrap:hover .searched-list-wrap__nickname-wrap__nickname-text {
     text-decoration: underline;
   }
@@ -163,11 +164,4 @@ export default {
   .unfollow-button:hover {
     background-color: rgba(101, 119, 134, 0.1);
   }
-
-  /*.abled {*/
-    /*color: #1DA1F2;*/
-  /*}*/
-  /*.disabled {*/
-    /*color: #657786;*/
-  /*}*/
 </style>

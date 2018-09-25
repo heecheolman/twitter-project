@@ -16,5 +16,16 @@ export const store = new Vuex.Store({
     main,
     tweet,
   },
+  state: {
+    login: false,
+  },
+  getters: {
+    getLoginStatus: state => state.login,
+  },
+  mutations: {
+    setLoginStatus(state, payload) {
+      state.login = payload;
+    },
+  },
 });
 

@@ -5,8 +5,8 @@
   </div>
 </template>
 <script>
-import JoinButton from './Button/JoinButton';
-import BackButton from './Button/BackButton';
+import JoinButton from './Buttons/JoinButton';
+import BackButton from './Buttons/BackButton';
 
 export default {
   name: 'ButtonArea',

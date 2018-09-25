@@ -5,12 +5,16 @@ import JoinPage from './../spa/Join/Join';
 import MainPage from './../spa/Main/Main';
 import Contents from '../spa/Main/components/Contents';
 import Profile from '../spa/Main/components/Profile';
-import Other from '../spa/Main/components/OtherProfile';
+import NotFound from '../spa/NotFound';
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
+    {
+      path: '/',
+      component: LoginPage,
+    },
     {
       path: '/login',
       name: 'LoginPage',
@@ -24,6 +28,9 @@ export default new Router({
     {
       path: '/main',
       component: MainPage,
+      meta: {
+        requiresAuth: true,
+      },
       children: [
         {
           name: 'MainPage',
@@ -35,12 +42,49 @@ export default new Router({
           path: 'profile/:id',
           component: Profile,
         },
-        // {
-        //   name: 'OtherProfilePage',
-        //   path: '',
-        //   component: Other,
-        // },
       ],
+    },
+    /* redirect */
+    {
+      path: '/main',
+      redirect: {
+        name: 'LoginPage'
+      },
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/main/contents',
+      redirect: {
+        name: 'LoginPage'
+      },
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/main/profile',
+      redirect: {
+        name: 'LoginPage'
+      },
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/main/profile/:id',
+      redirect: {
+        name: 'LoginPage'
+      },
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '*',
+      name: 'NotFound',
+      component: NotFound,
     },
   ],
 });

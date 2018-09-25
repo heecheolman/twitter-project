@@ -50,14 +50,17 @@ export default {
         {
           label: '프로필',
           clickEvent: async () => {
-            this.$store.state.main.bridge.id = this.$store.state.main.user.id;
-            this.$store.state.main.bridge.nickname = this.$store.state.main.user.nickname;
-            this.$store.state.main.bridge.following = this.$store.state.main.user.following;
-            this.$store.state.main.bridge.follower = this.$store.state.main.user.follower;
-            await this.$store.dispatch('main/fetchFollowingNicknameList');
-            await this.$store.dispatch('main/fetchFollowerNicknameList');
-            // this.following = this.$store.getters['main/getBridgeFilteredFollowing'];
-            // this.follower = this.$store.getters['main/getBridgeFilteredFollower'];
+            // bridge 에 유저 데이터를 넣음
+            this.$store.commit('main/bridgeDataUpdate', {
+              id: this.$store.getters['main/getUserId'],
+              nickname: this.$store.getters['main/getUserNickname'],
+              following: this.$store.getters['main/getUserFollowing'],
+              follower: this.$store.getters['main/getUserFollower'],
+              descript:  this.$store.getters['main/getUserDescript'],
+            });
+            await this.$store.dispatch('main/filteringFollowingLists');
+            await this.$store.dispatch('main/filteringFollowerLists');
+            // 라우트할 때 브릿지에 있는 데이터를 가져다 줌
             this.$router.replace(
               { name: 'ProfilePage',
                 params: {
@@ -65,7 +68,7 @@ export default {
                   nickname: this.$store.getters['main/getUserNickname'],
                   following: this.$store.getters['main/getBridgeFilteredFollowing'],
                   follower: this.$store.getters['main/getBridgeFilteredFollower'],
-                  me: true,
+                  descript:  this.$store.getters['main/getBridgeDescript'],
                 },
               },);
           },

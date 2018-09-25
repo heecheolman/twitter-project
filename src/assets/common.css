@@ -25,3 +25,11 @@
   height: 100vh;
   background-color: #1DA1F2 !important;
 }
+
+/* route animation */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+}
+.fade-enter, .fade-leave-to{
+  opacity: 0;
+}

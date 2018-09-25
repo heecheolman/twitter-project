@@ -7,6 +7,7 @@ const state = {
     nickname: '',
     following: [],
     follower: [],
+    descript: '',
     filteredFollowing: [],
     filteredFollower: [],
   },
@@ -15,23 +16,13 @@ const state = {
     nickname: '',
     following: [],
     follower: [],
-    filteredFollowing: [],
-    filteredFollower: [],
-  },
-  otherUser: {
-    id: '',
-    nickname: '',
-    following: [],
-    follower: [],
+    descript: '',
     filteredFollowing: [],
     filteredFollower: [],
   },
   searchToken: '',
   searchedNicknameList: [],
-  followingNicknameList: [],
-  followerNicknameList: [],
   nicknameData: '',
-  toId: null,
   idData: null,
   dropdown: false,
 };
@@ -49,11 +40,19 @@ const mutations = {
   setNicknameData(state, payload) {
     state.nicknameData = payload;
   },
-  clearList(state) {
-    state.followingNicknameList = [];
-    state.followerNicknameList = [];
+  setUserDescript(state, payload) {
+    state.user.descript = payload;
   },
-
+  setBridgeDescript(state, payload) {
+    state.bridge.descript = payload;
+  },
+  bridgeDataUpdate(state, payload) {
+    state.bridge.id = payload.id;
+    state.bridge.nickname = payload.nickname;
+    state.bridge.following = payload.following;
+    state.bridge.follower = payload.follower;
+    state.bridge.descript = payload.descript;
+  },
 };
 
 const getters = {
@@ -62,11 +61,11 @@ const getters = {
   getUserNickname: state => state.user.nickname,
   getUserFollowing: state => state.user.following,
   getUserFollower: state => state.user.follower,
+  getUserDescript: state => state.user.descript,
   getSearchedNicknameList: state => state.searchedNicknameList,
-  getFollowingNicknameList: state => state.followingNicknameList,
-  getFollowerNicknameList: state => state.followerNicknameList,
   getBridgeId: state => state.bridge.id,
   getBridgeNickname: state => state.bridge.nickname,
+  getBridgeDescript: state => state.bridge.descript,
   getBridgeFilteredFollowing: state => state.bridge.filteredFollowing,
   getBridgeFilteredFollower: state => state.bridge.filteredFollower,
 };
@@ -76,30 +75,29 @@ const actions = {
     if (state.searchToken.length !== 0) {
       api.searchAllUser();
   }}, 500),
-  fetchFollowingNicknameList() {
-    if(state.bridge.following.length !== 0) {
-      api.fetchFollowingNicknameList();
-    } else {
-      state.bridge.filteredFollowing = [];
-    }
+  filteringFollowingLists() {
+    state.bridge.following.length === 0
+      ? api.clearFollowingLists()
+      : api.filteringFollowingLists();
   },
-  fetchFollowerNicknameList() {
-    if(state.bridge.follower.length !== 0) {
-      api.fetchFollowerNicknameList();
-    } else {
-      state.bridge.filteredFollower = [];
-    }
+  filteringFollowerLists() {
+    state.bridge.follower.length === 0
+      ? api.clearFollowerLists()
+      : api.filteringFollowerLists();
   },
 
   async follow() {
-    await api.searchNickname()
+    await api.searchIdByNickname()
       .then(api.addFollowingUser)
       .then(api.addFollowerUser);
   },
   async unfollow() {
-    await api.searchNickname()
+    await api.searchIdByNickname()
       .then(api.removeFollowingUser)
       .then(api.removeFollowerUser);
+  },
+  async editDescript() {
+    await api.updateDescript();
   },
 };
 
@@ -115,6 +113,7 @@ const api = {
         state.searchedNicknameList = [];
         const tempList = await _.cloneDeep(result.data);
         if (state.user.following.length !== 0) {
+          // 리팩토링을 해보자
           for (let i = 0; i < tempList.length; i++) {
               for (let j = 0; j < state.user.following.length; j++) {
                 if (tempList[i].id === state.user.following[j]) {
@@ -134,14 +133,14 @@ const api = {
         console.error(err);
       })
   },
-  searchNickname: async () => {
+  // 닉네임으로 id 검색
+  searchIdByNickname: async () => {
     await axios.get(`/api/id/${state.nicknameData}`, {
       params: {
         nickname: state.nicknameData,
       },
     })
       .then((result) => {
-        // 팔로우하려는 사람의 id 저장함
         state.idData = result.data[0].id;
       })
       .catch((err) => {
@@ -162,9 +161,7 @@ const api = {
         console.error(err);
       });
   },
-  fetchFollowingNicknameList: async () => {
-    // 얘는 브릿지만 받으면됨
-    // 그리고 브릿지에 필터링된 팔로우리스트를 주면
+  filteringFollowingLists: async () => {
     await axios.get(`api/${state.bridge.id}/${state.bridge.following}/nickname-list`, {
       params: {
         id: state.bridge.id,
@@ -173,26 +170,12 @@ const api = {
     })
       .then(async (result) => {
         state.bridge.filteredFollowing = await _.cloneDeep(result.data);
-        console.log(state.bridge.filteredFollowing);
       })
       .catch((err) => {
         console.error(err);
       });
-    // await axios.get(`api/${state.user.id}/${state.user.following}/nickname-list`, {
-    //   params: {
-    //     id: state.user.id,
-    //     following: state.user.following,
-    //   },
-    // })
-    //   .then(async (result) => {
-    //     state.followingNicknameList = await _.cloneDeep(result.data);
-    //     console.log(state.followingNicknameList);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
   },
-  fetchFollowerNicknameList: async () => {
+  filteringFollowerLists: async () => {
     await axios.get(`api/${state.bridge.id}/${state.bridge.follower}/nickname-list`, {
       params: {
         id: state.bridge.id,
@@ -201,24 +184,13 @@ const api = {
     })
       .then(async (result) => {
         state.bridge.filteredFollower = await _.cloneDeep(result.data);
-        console.log(state.bridge.filteredFollower);
       })
       .catch((err) => {
         console.error(err);
       });
-    // await axios.get(`api/${state.user.id}/${state.user.follower}/nickname-list`, {
-    //   params: {
-    //     id: state.user.id,
-    //     follower: state.user.follower,
-    //   },
-    // })
-    //   .then(async (result) => {
-    //     state.followerNicknameList = await _.cloneDeep(result.data);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
   },
+  clearFollowingLists: () => { state.bridge.filteredFollowing = []; },
+  clearFollowerLists: () => { state.bridge.filteredFollower = []; },
   addFollowerUser: async () => {
     await axios.put(`/api/follower/${state.idData}/to/${state.user.id}`, {
       params: {
@@ -246,6 +218,15 @@ const api = {
       params: {
         user_id: state.user.id,
         id: state.idData,
+      },
+    });
+  },
+  updateDescript: async () => {
+    await axios.put(`/api/profile/${state.user.id}/descript`, {
+      params: {
+        id: state.user.id,
+      },data: {
+        descript: state.bridge.descript,
       },
     });
   },
