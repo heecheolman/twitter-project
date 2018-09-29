@@ -22,13 +22,11 @@ const mutations = {
       id: payload.fileId,
       file: payload.file,
     });
-    console.log(state.file.previewList);
   },
   removeFormImageList(state, payload) {
     state.file.previewList = state.file.previewList.filter((ele) => {
       return ele.id !== payload;
     });
-    // 아무것도없을 때
     if(state.file.previewList.length === 0) {
       state.file.previewList = [];
     }

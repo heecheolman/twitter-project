@@ -25,7 +25,6 @@ export default {
     width: 100%;
     height: 130px;
     line-height: 130px;
-    border-bottom: 1px solid #fff;
     font-size: 35px;
     font-weight: bold;
     color: #fff;
