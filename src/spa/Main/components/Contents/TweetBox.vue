@@ -28,8 +28,8 @@
 <script>
 import ProfileImage from './../../../../assets/img/default_profile.png';
 
-import InputMedia from './components/Buttons/InputMedia';
-import TweetButton from './components/Buttons/TweetButton';
+import InputMedia from './Buttons/InputMedia';
+import TweetButton from './Buttons/TweetButton';
 
 export default {
   name: 'TweetBox',
@@ -52,7 +52,6 @@ export default {
   data() {
     return {
       imagePath: ProfileImage,
-      // textContent: '',
     };
   },
   methods: {

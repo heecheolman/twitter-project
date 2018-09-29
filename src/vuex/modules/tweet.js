@@ -65,7 +65,7 @@ const actions = {
       try {
         axios.post('/api/upload',
           formData, {
-            timeout: 1000,
+            timeout: 5000,
           },);
       } catch (err) {
         console.error(err);
@@ -80,7 +80,7 @@ const actions = {
         text: state.text,
         filenameList: state.file.filenameList,
       }, {
-        timeout: 500,
+        timeout: 5000,
       });
     } catch (err) {
       console.error(err);
@@ -91,6 +91,7 @@ const actions = {
       params: {
         user_id: state.user.id,
       },
+      timeout: 5000,
     })
       .then((result) => {
         state.content.contentList = result.data;

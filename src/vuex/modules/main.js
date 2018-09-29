@@ -111,29 +111,12 @@ const api = {
     })
       .then(async (result) => {
         state.searchedNicknameList = [];
-        const tempList = await _.cloneDeep(result.data);
-        if (state.user.following.length !== 0) {
-          // 리팩토링을 해보자
-          for (let i = 0; i < tempList.length; i++) {
-              for (let j = 0; j < state.user.following.length; j++) {
-                if (tempList[i].id === state.user.following[j]) {
-                  tempList[i].active = false;
-                }
-              }
-          }
-        }
-        for (let i = 0; i < tempList.length; i++) {
-          if (!tempList[i].hasOwnProperty('active')) {
-            tempList[i].active = true;
-          }
-        }
-        state.searchedNicknameList = tempList;
+        state.searchedNicknameList = await _.cloneDeep(result.data);
       })
       .catch((err) => {
         console.error(err);
       })
   },
-  // 닉네임으로 id 검색
   searchIdByNickname: async () => {
     await axios.get(`/api/id/${state.nicknameData}`, {
       params: {

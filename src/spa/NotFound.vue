@@ -22,11 +22,11 @@ export default {
   }
   .notfound-wrap--text {
     text-align: center;
-    width: 30%;
-    height: 60px;
+    width: 100%;
+    height: 130px;
+    line-height: 130px;
     border-bottom: 1px solid #fff;
-    margin: 20px 0;
-    font-size: 2rem;
+    font-size: 35px;
     font-weight: bold;
     color: #fff;
     user-select: none;

@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     srcPathFinder() {
-      this.src = './../../../../../../../../../static/' + this.filename;
+      this.src = './../../../../../../../../../static/images/' + this.filename;
       return this.src;
     },
   },

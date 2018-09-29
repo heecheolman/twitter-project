@@ -84,8 +84,8 @@
 </template>
 <script>
 import ProfileImg from './../../../assets/img/default_profile.png';
-import NicknameList from './../../../shared-components/Header/components/SearchBar/components/NicknameList';
-import TimelineList from './Contents/components/TimelineList/TimelineList';
+import NicknameList from '../../../shared-components/Header/components/SearchBar/NicknameList/NicknameList';
+import TimelineList from './Contents/TimelineList/TimelineList';
 import Editor from './../../components/Editor';
 import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 import { mapGetters, mapActions } from 'vuex';
@@ -170,7 +170,6 @@ export default {
       height: 100%;
       flex-direction: column;
     }
-
     .main-wrap .profile-wrap .profile-wrap__bottom-section {
       width: 100%;
       height: auto;

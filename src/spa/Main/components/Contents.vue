@@ -24,7 +24,7 @@
 <script>
 import DashBoardProfile from './Contents/DashBoardProfile';
 import TweetBox from './Contents/TweetBox';
-import TimelineList from './Contents/components/TimelineList/TimelineList';
+import TimelineList from './Contents/TimelineList/TimelineList';
 
 import { mapActions, mapGetters } from 'vuex';
 

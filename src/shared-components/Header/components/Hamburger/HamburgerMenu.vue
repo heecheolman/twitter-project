@@ -46,12 +46,14 @@ export default {
 };
 </script>
 <style scoped>
+  /* Mobile Device */
   @media screen and (max-width: 425px) {
     .header__container__left-tooltip-container--mobile .hamburger-menu-box {
       display: flex;
       visibility: visible;
     }
   }
+  /* Tablet Device */
   @media screen and (min-width: 426px) and (max-width: 1024px) {
     .header__container__left-tooltip-container--mobile .hamburger-menu-box {
       display: flex;
@@ -67,10 +69,6 @@ export default {
       line-height: 50px;
     }
   }
-  @media screen and (min-width: 1025px) {
-
-  }
-
   .hamburger-menu-box {
     display: none;
     visibility: hidden;

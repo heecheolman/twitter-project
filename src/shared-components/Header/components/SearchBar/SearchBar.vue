@@ -22,16 +22,14 @@
             :following="user.following"
             :follower="user.follower"
             :nickname="user.nickname"
-            :descript="user.descript"
-            :active="user.active"
-            :seen-button="true"/>
+            :descript="user.descript" />
         </ul>
       </div>
     </div>
   </form>
 </template>
 <script>
-import NicknameList from './components/NicknameList';
+import NicknameList from './NicknameList/NicknameList';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -108,19 +106,7 @@ export default {
     background-color: #fff;
     border: 2px solid #4AB3F4;
   }
-  .search-form__drop-down__arrow-box {
-    /*width: 18px;*/
-    /*height: 10px;*/
-    /*position: absolute;*/
-    /*top: -10px;*/
-    /*left: 12px;*/
-    width: 18px;
-    height: 10px;
-    /*float: left;*/
-    overflow: hidden;
-  }
   .search-form__drop-down__searched-box {
-    /*width: 316px;*/
     margin-top: 17px;
     width: 100%;
     border-radius: 4px;

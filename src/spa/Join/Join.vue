@@ -76,15 +76,6 @@ export default {
       height: 120px;
     }
   }
-  /* Tablet Device */
-  @media screen and (min-width: 426px) and (max-width: 1024px) {
-
-  }
-
-  /* Desktop Device */
-  @media screen and (min-width: 1025px) {
-
-  }
   .join-body {
     width: 370px;
     height: auto;

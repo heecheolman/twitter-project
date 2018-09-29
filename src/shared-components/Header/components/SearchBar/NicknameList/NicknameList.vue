@@ -5,10 +5,6 @@
         {{ nickname }}
       </span>
     </div>
-    <div class="searched-list-wrap__follow-button-wrap" v-if="seenButton">
-      <button v-if="activeCheck" class="searched-list-wrap__follow-button-wrap__button--base follow-button" @click.stop="follow">팔로우</button>
-      <button v-else class="searched-list-wrap__follow-button-wrap__button--base unfollow-button" @click.stop="unfollow">팔로잉</button>
-    </div>
   </li>
 </template>
 
@@ -22,9 +18,6 @@ export default {
     nickname: {
       type: String,
     },
-    active: {
-      type: Boolean,
-    },
     following: {
       type: Array,
     },
@@ -34,26 +27,9 @@ export default {
     descript: {
       type: String,
     },
-    seenButton: {
-      type: Boolean,
-    },
-  },
-  created() {
-    this.ableFollow = this.active;
-  },
-  computed: {
-    activeCheck() {
-      return this.ableFollow;
-    },
-  },
-  data() {
-    return {
-      ableFollow: false,
-    };
   },
   methods: {
     async linkToProfile() {
-      // 본인
       if(this.$store.getters['main/getUserId'] === this.id) {
         await this.$store.commit('main/bridgeDataUpdate', {
           id: this.$store.getters['main/getUserId'],
@@ -62,7 +38,6 @@ export default {
           follower: this.$store.getters['main/getUserFollower'],
           descript: this.$store.getters['main/getUserDescript'],
         });
-        // 타인
       } else {
         await this.$store.commit('main/bridgeDataUpdate', {
           id: this.id,
@@ -85,22 +60,6 @@ export default {
         },
       });
     },
-    async follow() {
-      if(this.ableFollow) {
-        this.$store.commit('main/setNicknameData', this.nickname);
-        await this.$store.dispatch('main/follow');
-        await this.$store.dispatch('tweet/getTimelines');
-        this.ableFollow = false;
-      }
-    },
-    async unfollow() {
-      if(!this.ableFollow) {
-        this.$store.commit('main/setNicknameData', this.nickname);
-        await this.$store.dispatch('main/unfollow');
-        await this.$store.dispatch('tweet/getTimelines');
-        this.ableFollow = true;
-      }
-    }
   },
 };
 </script>
@@ -132,36 +91,5 @@ export default {
     display: inline-block;
     width: 50%;
     height: 100%;
-  }
-
-  .searched-list-wrap__follow-button-wrap {
-    display: inline-block;
-    width: 50px;
-    height: 100%;
-  }
-  .searched-list-wrap__follow-button-wrap__button--base {
-    outline: none;
-    border: none;
-    border-radius: 20px;
-    width: 100%;
-    height: 28px;
-    text-align: center;
-    line-height: 28px;
-    background-color: transparent;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  .follow-button {
-    color: #1DA1F2;
-  }
-  .follow-button:hover {
-    background-color: rgba(29, 161, 242, 0.1);
-  }
-  .unfollow-button {
-    color: #657786;
-  }
-  .unfollow-button:hover {
-    background-color: rgba(101, 119, 134, 0.1);
   }
 </style>
