@@ -19,19 +19,23 @@ export default {
     HeaderSection,
   },
   beforeRouteEnter(to, from, next) {
-    const phone_number = to.params.phone.split('-').join('');
-    axios.get(`/api/phone-numbers/${phone_number}/user-data`, {
-      params: { phone_number },
-    })
-      .then((user) => {
-        mainUser.state.user = user.data;
-        tweetUser.state.user.id = user.data.id;
-        tweetUser.state.user.nickname = user.data.nickname;
-        next();
+    if(!to.params.phone) {
+      next({ name: 'LoginPage' });
+    } else {
+      const phone_number = to.params.phone.split('-').join('');
+      axios.get(`/api/phone-numbers/${phone_number}/user-data`, {
+        params: { phone_number },
       })
-      .catch((err) => {
-        console.error(err);
-      });
+        .then((user) => {
+          mainUser.state.user = user.data;
+          tweetUser.state.user.id = user.data.id;
+          tweetUser.state.user.nickname = user.data.nickname;
+          next();
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   },
 
 };

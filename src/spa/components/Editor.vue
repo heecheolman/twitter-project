@@ -65,16 +65,6 @@ export default {
       width: 90%;
     }
   }
-
-  /* Tablet Device */
-  @media screen and (min-width: 768px) and (max-width: 1024px) {
-
-  }
-
-  /* Desktop Device */
-  @media screen and (min-width: 1025px) {
-  }
-
   .editor-mask {
     position: fixed;
     z-index: 9998;

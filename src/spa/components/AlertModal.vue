@@ -54,7 +54,6 @@ export default {
     width: 300px;
     margin: 0 auto;
     padding: 20px 30px;
-    /*background-color: #e6ecf0;*/
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .23);
@@ -78,8 +77,6 @@ export default {
   .modal-leave-active {
     opacity: 0;
   }
-
-
   .modal-enter .modal-container,
   .modal-leave-active .modal-container {
     -webkit-transform: scale(1.1);

@@ -50,7 +50,6 @@ export default {
         {
           label: '프로필',
           clickEvent: async () => {
-            // bridge 에 유저 데이터를 넣음
             this.$store.commit('main/bridgeDataUpdate', {
               id: this.$store.getters['main/getUserId'],
               nickname: this.$store.getters['main/getUserNickname'],
@@ -60,7 +59,6 @@ export default {
             });
             await this.$store.dispatch('main/filteringFollowingLists');
             await this.$store.dispatch('main/filteringFollowerLists');
-            // 라우트할 때 브릿지에 있는 데이터를 가져다 줌
             this.$router.replace(
               { name: 'ProfilePage',
                 params: {
@@ -85,6 +83,7 @@ export default {
 };
 </script>
 <style scoped>
+  /* Mobile Device */
   @media screen and (max-width: 425px) {
     .main-wrap .header {
       width: 100%;

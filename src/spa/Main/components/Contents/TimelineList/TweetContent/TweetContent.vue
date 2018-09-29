@@ -2,9 +2,6 @@
   <div class="tweet-content">
     <div class="tweet-content__header">
       <span class="tweet-content__header--nickname">{{ id }}</span>
-      <!--<text-a-->
-      <!--:label="hash"-->
-      <!--:a-style="cssStyle.hashStyle" />-->
       <span class="tweet-content__header--date">{{ contentDate }}</span>
       <span v-if="isMe" @click="initEditModal">
         <span class="tweet-content__header--edit">수정</span>
@@ -69,7 +66,7 @@
 <script>
 import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 import ImageContent from './ImageContent/ImageContent';
-import Editor from '../../../../../../components/Editor';
+import Editor from '../../../../../components/Editor';
 
 import axios from 'axios';
 
@@ -108,7 +105,6 @@ export default {
   data() {
     return {
       showEditor: false,
-      // hash: '@fMUmSjMbVbjhqBO',
       inputSvg: `<svg x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24" enable-background="new 0 0 24 24">
 <path fill="none" d="M0,0h24v24H0V0z"/>
   <path fill="currentColor" d="M18,20H4V6h9V4H4C2.9,4,2,4.9,2,6v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-9h-2V20z"/>
@@ -125,15 +121,11 @@ export default {
     };
   },
   methods: {
-    // 게시글 수정 Modal
     initEditModal() {
       this.showEditor = true;
-      // id init
       this.newFileIdCounter = 0;
       this.originFileIdCounter = 0;
-      // 게시글 init
       this.editTextContent = this.contentText;
-      // 파일 init
       if(this.contentFilenameList.length !== 0) {
         this.originFileList = this.contentFilenameList.slice();
         this.loadFile();
@@ -142,9 +134,7 @@ export default {
     loadFile() {
       this.$nextTick(function() {
         const editFileBox = document.querySelector('.edit-file-box');
-        // 상자를 늘려줌
         this.extendBox();
-        // 기존의 이미지들을 전부 파일박스에 붙여줌.
         for(let i = 0; i < this.contentFilenameList.length; i++) {
           const image = this.createOriginImage(this.contentFilenameList[i].filename);
           const wrap = this.createImageWrap();
@@ -158,7 +148,7 @@ export default {
       });
     },
     createOriginImage(filename) {
-      const defaultPath = './../../../../../../../../static/';
+      const defaultPath = './../../../../../../../../static/images/';
       const image = new Image();
       image.title = filename;
       image.style.width = 'auto';
@@ -334,7 +324,6 @@ export default {
 
       let loadingTimeoutId = setTimeout(async () => {
         if(isTextModified) {
-          // 글 post
           await axios.put(`/api/posts/${this.contentSerial}/contents`, {
             params: {
               id: this.contentSerial,
@@ -344,26 +333,22 @@ export default {
             },
           });
         }
-        //기존 이미지 리스트가 변경되었을 시
         if(isOriginImageModified) {
           isImageListUpdated = true;
         }
-        // 기존것을 옮겨준다
         this.originFileList.forEach((ele) => {
           filenameList.push({ filename: ele.filename });
         });
-        // 새로 추가된 이미지일경우
         if(isImageAdded) {
           let formData = new FormData();
           this.newFileList.forEach((ele) => {
             filenameList.push({ filename: ele.file.name });
             formData.append(inputDOM.name, ele.file);
           });
-          // 이미지 업로드
           try {
             await axios.post('/api/upload',
               formData, {
-                timeout: 1000,
+                timeout: 5000,
               });
           } catch (err) {
             console.error(err);
@@ -380,7 +365,6 @@ export default {
             }
           });
         }
-        console.log(filenameList);
         await this.$store.dispatch('tweet/getTimelines');
         this.editLoading = false;
         this.showEditor = false;
@@ -406,6 +390,7 @@ export default {
 }
 </script>
 <style scoped>
+  /* Mobile Device */
   @media screen and (max-width: 425px) {
     .main-wrap .content .content__timeline .timeline-list__list .tweet-content,
     .main-wrap .profile-wrap .profile-wrap__bottom-section .profile-wrap__bottom-section__timeline .timeline-list__list .tweet-content {
@@ -421,6 +406,7 @@ export default {
       padding: 0;
     }
   }
+  /* Table Device */
   @media screen and (min-width: 426px) and (max-width: 1024px) {
     .main-wrap .content .content__timeline .timeline-list__list .tweet-content {
       width: 90%;

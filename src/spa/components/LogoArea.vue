@@ -10,6 +10,7 @@ export default {
 };
 </script>
 <style scoped>
+  /* Mobile Device */
   @media screen and (max-width: 425px) {
     .wrap--common .join-body .logo-area--common {
       line-height: 50px;

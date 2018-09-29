@@ -1,12 +1,10 @@
 <template>
   <div class="wrap--common flex-container flex-center">
-    <transition name="fade">
-      <div class="login-body">
-        <logo-area />
-        <input-area />
-        <button-area />
-      </div>
-    </transition>
+    <div class="login-body">
+      <logo-area />
+      <input-area />
+      <button-area />
+    </div>
     <alert-modal v-if="isError" @close="closeModal">
       <h3 slot="header" class="modal-header--base modal-header--err">
         로그인 실패!
@@ -57,30 +55,12 @@ export default {
       height: 500px;
     }
   }
-
-  /* Tablet Device */
-  @media screen and (min-width: 426px) and (max-width: 1024px) {
-
-  }
-
-  /* Desktop Device */
-  @media screen and (min-width: 1025px) {
-
-  }
   .login-body {
     width: 370px;
     height: 500px;
     background-color: #fff;
     border-radius: 10px;
   }
-  /* animation */
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .4s ease;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
-  }
-
   .modal-header--base {
     padding: 10px 0;
   }

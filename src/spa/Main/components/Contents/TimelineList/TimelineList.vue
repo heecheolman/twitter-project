@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import ProfileImage from '../../../../../../assets/img/default_profile.png';
-import DateCalculator from '../../../../../../lib/DateCalculator';
+import ProfileImage from '../../../../../assets/img/default_profile.png';
+import DateCalculator from '../../../../../lib/DateCalculator';
 import TweetContent from './TweetContent/TweetContent';
 
 export default {
@@ -72,6 +72,7 @@ export default {
 </script>
 
 <style scoped>
+  /* Mobile Device */
   @media screen and (max-width: 425px) {
     .main-wrap .content .content__timeline .timeline-list__list,
     .main-wrap .profile-wrap .profile-wrap__bottom-section .profile-wrap__bottom-section__timeline .timeline-list__list {
